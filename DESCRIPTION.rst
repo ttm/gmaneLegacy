@@ -1,0 +1,18 @@
+Python utilities for the analysis of the GMANE email list database
+==================================================================
+
+This project delivers helper classes for the analysis of the GMANE
+email database.
+
+Functionalities are based on physics articles on interaction networks:
+- Stability in human interaction networks: primitive typology of vertex, prominence of measures and activity statistics: http://arxiv.org/abs/1310.7769
+- A connective differentiation of textual production in interaction networks: http://arxiv.org/abs/1412.7309
+- Versinus: a visualization method for graphs in evolution: http://arxiv.org/abs/1412.7311
+
+With core concepts of 1) analysis of topological structure; 2) analysis of textual production; 3) visualization of evolving structures. Activity distribution along time and among participants are also approached through specific routines and indirectly through 1), 2) and 3).
+
+Ideally, this package should ease:
+- Downloading GMANE email list data.
+- Building elementary data structures with downloaded data.
+- Analysis of data through complex networks and NLP criteria.
+- Visualization through diverse layout methods.
