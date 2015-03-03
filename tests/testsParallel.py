@@ -15,6 +15,6 @@ loads.downloadListIDS()
 # manda baixar async umas 30 listas e ve o que rola
 pool=mp.Pool(processes=100)
 
-args_=tuple((i,1,1000000,100) for i in loads.list_ids)
+args_=tuple((i,1,1000000,100) for i in loads.list_ids[:200])
 #results___=pool.map_async(loads.downloadListMessages,args_)
 results__=[pool.apply_async(loads.downloadListMessages,args=x) for x in args_]

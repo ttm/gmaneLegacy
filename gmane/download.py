@@ -91,14 +91,6 @@ class DownloadGmaneData:
             logging.info("self.list_ids created")
     def downloadedStats(self):
         """Raises elementary info about downloaded lists"""
-        # observa todos os diretorios
-        # tamanho destes arquivos
-        # reporta no total e por lista
-        # número de arquivos, número de arquivos vazios, tamanho médio do arquivo e tamanho total
-        # numero de listas, tamanho maximo de msgs na lista
-        # tamanho maximo de kB
-        # lista com menos arquivos, e com menos kB
-        # talvez fazer um histograma com o tamanho das listas
         try:
             self.downloadedLists
         except AttributeError:
