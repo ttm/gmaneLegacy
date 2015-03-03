@@ -25,7 +25,7 @@ class DownloadGmaneData:
     def correctFilenames(self):
         try:
             self.downloadedLists
-        except NameError:
+        except AttributeError:
             self.getDownloadedLists()
         for elist in self.downloadedLists:
             mfiles=os.listdir(self.BASE_DIR+elist)
@@ -37,7 +37,7 @@ class DownloadGmaneData:
         """Remove empty messages from the beggining or end of each list"""
         try:
             self.downloadedLists
-        except NameError:
+        except AttributeError:
             self.getDownloadedLists()
         for elist in self.downloadedLists:
             mfiles=os.listdir(self.BASE_DIR+elist)
@@ -48,23 +48,26 @@ class DownloadGmaneData:
             try:
                 findex=-sizes_[::-1].index(False)
             except ValueError:
-                logging.info("no empty messages for list {}".format(elist))
+                logging.info("no messages for list {}".format(elist))
+                for ind, filename in enumerate(mfiles):
+                    logging.info("removing file {}/{} of size {}".format(elist,filename,sizes[ind]))
+                    os.remove("{}{}/{}".format(self.BASE_DIR,elist,filename))
             else:
-                if sum(sizes_[findex:])==-findex:
+                if (findex>0) and (sum(sizes_[findex:])==-findex):
                     # remove todos os arquivos de findex até o final
                     for ind,filename in enumerate(mfiles[findex:]):
-                        logging.info("removing file {} of size {}".format(filename,sizes[findex+ind]))
+                        logging.info("removing file {}/{} of size {}".format(elist,filename,sizes[findex+ind]))
                         os.remove("{}{}/{}".format(self.BASE_DIR,elist,filename))
-                    logging.info("file {} have size {}".format(mfiles[findex-1],sizes[findex-1]))
+                    logging.info("file {}/{} have size {}".format(elist,mfiles[findex-1],sizes[findex-1]))
                 else:
                     logging.info("no empty suffix for list {}".format(elist))
             # remove prefix
                 findex=sizes_.index(False)
                 if findex and (sum(sizes_[:findex])==findex):
                     for ind,filename in enumerate(mfiles[:findex]):
-                        logging.info("removing file {} of size {}".format(filename,sizes[ind]))
+                        logging.info("removing file {}/{} of size {}".format(elist,filename,sizes[ind]))
                         os.remove("{}{}/{}".format(self.BASE_DIR,elist,filename))
-                    logging.info("file {} have size {}".format(mfiles[findex],sizes[findex]))
+                    logging.info("file {}/{} have size {}".format(elist,mfiles[findex],sizes[findex]))
                 else:
                     logging.info("no empty prefix for list {}".format(elist))
 
@@ -98,7 +101,7 @@ class DownloadGmaneData:
         # talvez fazer um histograma com o tamanho das listas
         try:
             self.downloadedLists
-        except NameError:
+        except AttributeError:
             self.getDownloadedLists()
         stats={}
         sizes_all=[]
@@ -114,22 +117,20 @@ class DownloadGmaneData:
             stats[elist]["average_B"]=n.mean(sizes)
             stats[elist]["std_B"]=n.std(sizes)
             stats[elist]["count_empty"]=sum(sizes_)
-        lists=sorted(stats.items(),key=lambda tlist: tlist["count_msgs"])
+        lists=sorted(stats.items(),key=lambda tlist: tlist[1]["count_msgs"],reverse=True)
+        stats["all"]={}
         stats["all"]["count_msgs"]=len(sizes_all)
         stats["all"]["total_B"]=sum(sizes_all)
         stats["all"]["average_B"]=n.mean(sizes_all)
         stats["all"]["std_B"]=n.std(sizes_all)
         stats["all"]["count_empty"]=sum([i==0 for i in sizes_all])
-        with f=open(self.BASE_DIR+"stats.txt","w"):
+        with open(self.BASE_DIR+"stats.txt","w") as f:
             f.write("overall downloaded GMANE database stats:\n")
-            f.writelines(stats["all"].items())
-            f.write("stats per list:\n")
-            f.writelines(lists[::-1])
+            f.writelines(["{}: {}\n".format(i[0],i[1]) for i in stats['all'].items()])
+            f.write("\nstats per list:\n")
+            f.write("\n".join([str(i) for i in lists]))
+        logging.info("see file {}".format(self.BASE_DIR+"stats.txt"))
         self.stats=stats
-
-
-        
-
     def downloadListMessages(self,list_id=None,start=1,end=10,threshold=5000,replace=False):
         """Download messages form a GMANE email list"""
         self.current_list=list_id
@@ -150,6 +151,8 @@ class DownloadGmaneData:
                         afile = "{}{}/{}".format(self.BASE_DIR,list_id,str(ii))
                         os.remove(afile)
                     self._empty_messages_count=0
+                    with open(self.BASE_DIR+"finishedLists.txt","a") as f:
+                        f.write(list_id+"\n")
                     break
             else:
                 logging.info("{} exists".format(afile))
