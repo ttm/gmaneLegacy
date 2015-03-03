@@ -1,5 +1,6 @@
 from lxml import html
 import requests, urllib, os, pickle, logging
+import numpy as n
 
 class DownloadGmaneData:
     """Class for loading Gmane data
@@ -85,6 +86,50 @@ class DownloadGmaneData:
             with open(self.BASE_DIR+"lists.pickle","wb") as f:
                 pickle.dump(list_ids,f)
             logging.info("self.list_ids created")
+    def downloadedStats(self):
+        """Raises elementary info about downloaded lists"""
+        # observa todos os diretorios
+        # tamanho destes arquivos
+        # reporta no total e por lista
+        # número de arquivos, número de arquivos vazios, tamanho médio do arquivo e tamanho total
+        # numero de listas, tamanho maximo de msgs na lista
+        # tamanho maximo de kB
+        # lista com menos arquivos, e com menos kB
+        # talvez fazer um histograma com o tamanho das listas
+        try:
+            self.downloadedLists
+        except NameError:
+            self.getDownloadedLists()
+        stats={}
+        sizes_all=[]
+        for elist in self.downloadedLists:
+            stats[elist]={}
+            mfiles=os.listdir(self.BASE_DIR+elist)
+            mfiles.sort()
+            sizes=[os.path.getsize("{}{}/{}".format(self.BASE_DIR,elist,i)) for i in mfiles]
+            sizes_all+=sizes
+            sizes_=[i==0 for i in sizes]
+            stats[elist]["count_msgs"]=len(mfiles)
+            stats[elist]["total_B"]=sum(sizes)
+            stats[elist]["average_B"]=n.mean(sizes)
+            stats[elist]["std_B"]=n.std(sizes)
+            stats[elist]["count_empty"]=sum(sizes_)
+        lists=sorted(stats.items(),key=lambda tlist: tlist["count_msgs"])
+        stats["all"]["count_msgs"]=len(sizes_all)
+        stats["all"]["total_B"]=sum(sizes_all)
+        stats["all"]["average_B"]=n.mean(sizes_all)
+        stats["all"]["std_B"]=n.std(sizes_all)
+        stats["all"]["count_empty"]=sum([i==0 for i in sizes_all])
+        with f=open(self.BASE_DIR+"stats.txt","w"):
+            f.write("overall downloaded GMANE database stats:\n")
+            f.writelines(stats["all"].items())
+            f.write("stats per list:\n")
+            f.writelines(lists[::-1])
+        self.stats=stats
+
+
+        
+
     def downloadListMessages(self,list_id=None,start=1,end=10,threshold=5000,replace=False):
         """Download messages form a GMANE email list"""
         self.current_list=list_id
