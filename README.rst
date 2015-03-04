@@ -22,10 +22,10 @@ Usage example
 =================
 
 .. code::
-    >>> import gmane as g
-    >>> dl=g.DownloadGmaneData() # saves into ~/.gmane/
-    >>> dl.downloadListsIDS() # acquires all GMANE list_ids
-    >>> dl.downloadListMessages(dl.list_ids[100])
-    >>> dl.cleanDownloadedLists()
-    >>> dl.downloadedStats() # creates ~/.gmane/stats.txt
+    import gmane as g
+    dl=g.DownloadGmaneData() # saves into ~/.gmane/
+    dl.downloadListsIDS() # acquires all GMANE list_ids
+    dl.downloadListMessages(dl.list_ids[100])
+    dl.cleanDownloadedLists()
+    dl.downloadedStats() # creates ~/.gmane/stats.txt
 
