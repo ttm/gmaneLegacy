@@ -5,13 +5,18 @@ import numpy as n
 class DownloadGmaneData:
     """Class for downloading Gmane data
 
+    initialize with a basedir to store email messages
+    and with a logging_file to store download information:
+    dl=DownloadGmaneData() # OR
+    dl=DownloadGmaneData("~/gmane2/","dl.log")
+
     Methods
     =======
-    cleanDownloadedLists() :: cleans lists from empty messages at the end and at the beggining of non-empty messages (empty messages in between are left for coherence).
     downloadListIDS(load_local=True) :: retrieves all self.list_ids from Gmane
-    getDownloadedLists() :: retrieves all list_ids whose messages have been downloaded
-    downloadedStats() :: raises elementary info about downloaded lists in BASE_DIR/stats.txt
     downloadListMessages(list_id) :: downloads messages from a GMANE email list with list_id (use self.list_ids[n] if id not at hand)
+    getDownloadedLists() :: retrieves all list_ids whose messages have been downloaded
+    cleanDownloadedLists() :: cleans lists from empty messages at the end and at the beggining of non-empty messages (empty messages in between are left for coherence).
+    downloadedStats() :: raises elementary info about downloaded lists in BASE_DIR/stats.txt
 
     Deprecated methods
     ==================
@@ -24,6 +29,7 @@ class DownloadGmaneData:
         self._empty_messages_count=0
         logging.basicConfig(filename=logging_file,format='%(asctime)s: %(message)s',level=logging.DEBUG)
     def correctFilenames(self):
+        """Ensure that all message filenames are 8 digit integers"""
         try:
             self.downloadedLists
         except AttributeError:
