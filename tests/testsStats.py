@@ -5,6 +5,6 @@ from IPython.lib.deepreload import reload as dreload
 #importlib.reload(g.download)
 dreload(g)
 
-loads2=g.DownloadGmaneData('/.gmane2/')
-loads2.downloadedStats()
+dl=g.DownloadGmaneData('/.gmane2/')
+dl.downloadedStats()
 # read BASE_DIR/stats.txt

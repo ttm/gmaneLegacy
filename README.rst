@@ -1,3 +1,4 @@
+==================================================================
 Python utilities for the analysis of the GMANE email list database
 ==================================================================
 
@@ -16,3 +17,15 @@ Ideally, this package should ease:
 - Building elementary data structures with downloaded data.
 - Analysis of data through complex networks and NLP criteria.
 - Visualization through diverse layout methods.
+
+Usage example
+=================
+
+.. highlight:: python
+    >>> import gmane as g
+    >>> dl=g.DownloadGmaneData() # saves into ~/.gmane/
+    >>> dl.downloadListsIDS() # acquires all GMANE list_ids
+    >>> dl.downloadListMessages(dl.list_ids[100])
+    >>> dl.cleanDownloadedLists()
+    >>> dl.downloadedStats() # creates ~/.gmane/stats.txt
+

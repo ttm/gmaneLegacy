@@ -1,8 +1,8 @@
 import gmane as g, importlib
 dreload(g)
-dloads=g.DownloadGmaneData('/.gmane2/')
-#dloads.downloadListIDS()
-#dloads.getDownloadedLists()
-#dloads.correctFilenames()
-dloads.cleanDownloadedLists()
+dl=g.DownloadGmaneData('/.gmane2/')
+dl.downloadListIDS()
+dl.getDownloadedLists()
+dl.correctFilenames()
+dl.cleanDownloadedLists()
 
