@@ -21,6 +21,7 @@ Ideally, this package should ease:
 Usage example
 =================
 Download messages from one GMANE list:
+
 .. code:: python
 
     import gmane as g
