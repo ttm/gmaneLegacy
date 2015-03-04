@@ -3,21 +3,22 @@ import requests, urllib, os, pickle, logging
 import numpy as n
 
 class DownloadGmaneData:
-    """Class for loading Gmane data
+    """Class for downloading Gmane data
 
     Methods
     =======
-    downloadLists(count=-1) :: downloads all GMANE lists IDs
-    downloadList(list_id,count=10,offset=0) :: downloads
-    at most count messages from list with list_id and offset.
-    updateList(list_id,count=-1) :: downloads new messages from
-    list
-    loadList(list_id,count=-1) :: loads list messages saved locally
-    saveState() :: saves current state in a binary python file.
-    loadState() :: saves current state in a binary python file.
+    cleanDownloadedLists() :: cleans lists from empty messages at the end and at the beggining of non-empty messages (empty messages in between are left for coherence).
+    downloadListIDS(load_local=True) :: retrieves all self.list_ids from Gmane
+    getDownloadedLists() :: retrieves all list_ids whose messages have been downloaded
+    downloadedStats() :: raises elementary info about downloaded lists in BASE_DIR/stats.txt
+    downloadListMessages(list_id) :: downloads messages from a GMANE email list with list_id (use self.list_ids[n] if id not at hand)
+
+    Deprecated methods
+    ==================
+    correctFilenames() :: corrects the filenames to be 8 digit integers
     """
-    def __init__(self,basedir="/.gmane/",logging_file="download.log"):
-        self.BASE_DIR=os.path.expanduser("~")+basedir
+    def __init__(self,basedir="~/.gmane/",logging_file="download.log"):
+        self.BASE_DIR=basedir.replace("~",os.path.expanduser("~"))
         if not os.path.isdir(self.BASE_DIR):
             os.mkdir(self.BASE_DIR)
         self._empty_messages_count=0
@@ -72,6 +73,7 @@ class DownloadGmaneData:
                     logging.info("no empty prefix for list {}".format(elist))
 
     def getDownloadedLists(self):
+        """Retrieves all list_ids from Gmane"""
         dirs=[i for i in os.listdir(self.BASE_DIR) if os.path.isdir(self.BASE_DIR+i)]
         self.downloadedLists=dirs
     def downloadListIDS(self,count=-1,load_local=True):
@@ -90,7 +92,7 @@ class DownloadGmaneData:
                 pickle.dump(list_ids,f)
             logging.info("self.list_ids created")
     def downloadedStats(self):
-        """Raises elementary info about downloaded lists"""
+        """Raises elementary info about downloaded lists in BASE_DIR/stats.txt"""
         try:
             self.downloadedLists
         except AttributeError:
