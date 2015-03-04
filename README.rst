@@ -21,7 +21,7 @@ Ideally, this package should ease:
 Usage example
 =================
 
-.. code::
+::
     import gmane as g
     dl=g.DownloadGmaneData() # saves into ~/.gmane/
     dl.downloadListsIDS() # acquires all GMANE list_ids
