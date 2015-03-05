@@ -1,3 +1,4 @@
+from .downloadMessages import DownloadGmaneData
 import mailbox, os
 
 class LoadMessages:
@@ -22,10 +23,14 @@ class LoadMessages:
     Only M[0] is on self.messages, which is used for analysis.
     All M[1] were found empty to date, but it is wise to check.
     """
-    def __init__(self,list_id=None,n_messages=-1,offset=0,basedir="~/.gmane/",loggin_file="load.log"):
+    def __init__(self,list_id=None,n_messages=None,offset=0,basedir="~/.gmane/",loggin_file="load.log"):
         self._BASE_DIR=basedir.replace("~",os.path.expanduser("~"))
         if not os.path.isdir(self._BASE_DIR):
             os.mkdir(self._BASE_DIR)
+        if not list_id:
+            dl=DownloadGmaneData() # saves into ~/.gmane/
+            dl.getDownloadedLists()
+            list_id=dl.downloaded_lists[0]
         self.list_id=list_id
         self.n_messages=n_messages
         self.offset=offset
@@ -34,7 +39,7 @@ class LoadMessages:
         mfiles=os.listdir(self._BASE_DIR+self.list_id)
         messages=[]
         messagesB=[]
-        if self.n_messages != -1:
+        if self.n_messages:
             tend=self.offset+self.n_messages
         else:
             tend=None
@@ -46,5 +51,5 @@ class LoadMessages:
                     messagesB.append(mbox)
         self.messages=messages
         self.messagesB=messagesB
-        if self.n_messages==-1:
+        if not self.n_messages:
             self.n_messages=len(messages)

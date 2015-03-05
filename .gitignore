@@ -1,4 +1,6 @@
 *.swp
+venv/
+ipython_log*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

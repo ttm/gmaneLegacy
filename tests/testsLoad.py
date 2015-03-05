@@ -1,9 +1,9 @@
-import gmane as g, importlib
+import gmane as g#, importlib
 import multiprocessing as mp
 from IPython.lib.deepreload import reload as dreload
 #importlib.reload(g)
 #importlib.reload(g.download)
-dreload(g)
+dreload(g,exclude=["pytz"])
 
 lm=g.LoadMessages("gmane.ietf.rfc822",10,basedir="~/.gmane2/")
 
