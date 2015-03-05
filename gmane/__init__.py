@@ -1,4 +1,4 @@
-from .download import *
+from .downloadMessages import *
 from .loadMessages import *
 def main3():
     """Foo2 function"""
