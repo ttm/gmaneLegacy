@@ -28,6 +28,27 @@ Download messages from one GMANE list:
     dl=g.DownloadGmaneData() # saves into ~/.gmane/
     dl.downloadListsIDS() # acquires all GMANE list_ids
     dl.downloadListMessages(dl.list_ids[100])
-    dl.cleanDownloadedLists()
+    dl.cleanDownloadedLists() # remove empty messages for coherence
     dl.downloadedStats() # creates ~/.gmane/stats.txt
+
+    # to load message contents to Python objects:
+    # load 10 messages from list with list_id gmane.ietf.rfc822
+    lm=g.LoadMessages("gmane.ietf.rfc822",10)
+
+    # or access the structures downloaded to your filesystem
+    dl=g.DownloadGmaneData()
+    dl.getDownloadedLists()
+    lms=[]
+    # and download all messages from 5 lists
+    for list_id in dl.downloaded_lists[:5]:
+        lms.append(g.LoadMessages(list_id))
+
+    # to download first three lists with the greated number
+    # of downloaded messages:
+    dl.downloadedStats() # might take a while
+    lms2=[]
+    for list_stat in dl.lists[:3]:
+        list_id=list_stat[0]
+        lms2.append(g.LoadMessages(list_id,basedir="~/.gmane2/"))
+
 

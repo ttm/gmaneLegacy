@@ -5,7 +5,7 @@ from IPython.lib.deepreload import reload as dreload
 #importlib.reload(g.download)
 dreload(g)
 
-lm=g.LoadMessages("gmane.ietf.rfc822",basedir="~/.gmane2/")
+lm=g.LoadMessages("gmane.ietf.rfc822",10,basedir="~/.gmane2/")
 
 dl=g.DownloadGmaneData('~/.gmane2/')
 dl.getDownloadedLists()

@@ -23,10 +23,12 @@ class LoadMessages:
     All M[1] were found empty to date, but it is wise to check.
     """
     def __init__(self,list_id=None,n_messages=-1,offset=0,basedir="~/.gmane/",loggin_file="load.log"):
+        self._BASE_DIR=basedir.replace("~",os.path.expanduser("~"))
+        if not os.path.isdir(self._BASE_DIR):
+            os.mkdir(self._BASE_DIR)
         self.list_id=list_id
         self.n_messages=n_messages
         self.offset=offset
-        self._BASE_DIR=basedir.replace("~",os.path.expanduser("~"))
         self.loadMessages()
     def loadMessages(self):
         mfiles=os.listdir(self._BASE_DIR+self.list_id)
