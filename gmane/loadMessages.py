@@ -35,6 +35,7 @@ class LoadMessages:
         self.n_messages=n_messages
         self.offset=offset
         self.loadMessages()
+        self.n_empty=0
     def loadMessages(self):
         mfiles=os.listdir(self._BASE_DIR+self.list_id)
         mfiles.sort()
@@ -50,6 +51,8 @@ class LoadMessages:
                 messages.append(mbox[0])
                 if len(mbox.keys())>1:
                     messagesB.append(mbox)
+            else:
+                self.n_empty+=1
         self.messages=messages
         self.messagesB=messagesB
         if not self.n_messages:

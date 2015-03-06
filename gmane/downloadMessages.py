@@ -112,19 +112,19 @@ class DownloadGmaneData:
             sizes=[os.path.getsize("{}{}/{}".format(self._BASE_DIR,elist,i)) for i in mfiles]
             sizes_all+=sizes
             sizes_=[i==0 for i in sizes]
-            stats[elist]["count_msgs"]=len(mfiles)
+            stats[elist]["n_messages"]=len(mfiles)
             stats[elist]["total_B"]=sum(sizes)
             stats[elist]["average_B"]=n.mean(sizes)
             stats[elist]["std_B"]=n.std(sizes)
-            stats[elist]["count_empty"]=sum(sizes_)
-        lists=sorted(stats.items(),key=lambda tlist: tlist[1]["count_msgs"],reverse=True)
+            stats[elist]["n_empty"]=sum(sizes_)
+        lists=sorted(stats.items(),key=lambda tlist: tlist[1]["n_messages"],reverse=True)
         stats["all"]={}
         stats["all"]["n_lists"]=len(self.downloaded_lists)
-        stats["all"]["count_msgs"]=len(sizes_all)
+        stats["all"]["n_messages"]=len(sizes_all)
         stats["all"]["total_B"]=sum(sizes_all)
         stats["all"]["average_B"]=n.mean(sizes_all)
         stats["all"]["std_B"]=n.std(sizes_all)
-        stats["all"]["count_empty"]=sum([i==0 for i in sizes_all])
+        stats["all"]["n_empty"]=sum([i==0 for i in sizes_all])
         with open(self._BASE_DIR+"stats.txt","w") as f:
             f.write("overall downloaded GMANE database stats:\n")
             f.writelines(["{}: {}\n".format(i[0],i[1]) for i in stats['all'].items()])

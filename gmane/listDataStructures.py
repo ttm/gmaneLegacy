@@ -33,10 +33,10 @@ class ListDataStructures:
     This is the correspondence:
     mm changed to messages
     ids to message_ids
-    vz to empty_ids
     aa to author_messages
     N to n_messages
     ids_r to responses
+    vz to spurious_empty_ids
     """
     def __init__(self, messagesLoaded=None,text="yes"):
         if not messagesLoaded:
@@ -44,17 +44,17 @@ class ListDataStructures:
         self.messagesLoaded=messagesLoaded
         self.messages=messages={}
         self.message_ids=message_ids=[]
-        self.empty_ids=empty_ids=[]
         self.author_messages=author_messages={}
         self.n_messages=len(messagesLoaded.messages)
         self.responses=responses={}
         self.raw_clean_authors=raw_clean_authors=[]
         self.raw_clean_dates=raw_clean_dates=[]
         self.raw_clean_references=raw_clean_references=[]
+        self.spurious_empty_ids=spurious_empty_ids=[]
         self.spurious_authors=spurious_authors=[]
         for message in messagesLoaded.messages:
             if not message.keys(): # if message is empty
-                empty_ids.append(i)
+                spurious_empty_ids.append(i)
             else:
                 author_=message['from']
                 if "replace" not in dir(author_):
