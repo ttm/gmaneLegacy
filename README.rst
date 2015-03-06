@@ -43,12 +43,19 @@ Download messages from one GMANE list:
     for list_id in dl.downloaded_lists[:5]:
         lms.append(g.LoadMessages(list_id))
 
-    # to download first three lists with the greated number
+    # to load first three lists with the greated number
     # of downloaded messages:
     dl.downloadedStats() # might take a while
-    lms2=[]
+    load_msgs=[]
     for list_stat in dl.lists[:3]:
         list_id=list_stat[0]
-        lms2.append(g.LoadMessages(list_id,basedir="~/.gmane2/"))
+        load_msgs.append(g.LoadMessages(list_id))
 
+    # to make basic datastructures of a list with
+    # greatest number of messages:
+    ds=g.MessageDataStructures(load_msgs[0])
+    mm=ds.messages
+    ids=ds.message_ids
+    print("first: ", mm[ids[0]][2], "last:", mm[ids[-1]][2])
 
+    # Enjoy!
