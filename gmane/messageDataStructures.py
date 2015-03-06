@@ -1,5 +1,7 @@
 #from .loadMessages import LoadMessages
 import dateutil.parser
+import parsedatetime as pdt
+parser=pdt.Calendar()
 import pytz
 
 class MessageDataStructures:
@@ -21,6 +23,7 @@ class MessageDataStructures:
     self.n_authors # number of authors 
     self.responses for accessing responses to a message by the message_id
     self.raw_clean_autors keep both the original author field and cleaned email address used as author ID
+    self.spurious_author should keep only messages with no true sender
     self.raw_clean_dates keep both the original date field and compatibilized with dateutil.parser
 
     Precedent implementation variable names
@@ -48,11 +51,16 @@ class MessageDataStructures:
         self.raw_clean_authors=raw_clean_authors=[]
         self.raw_clean_dates=raw_clean_dates=[]
         self.raw_clean_references=raw_clean_references=[]
+        self.spurious_authors=spurious_authors=[]
         for message in messagesLoaded.messages:
             if not message.keys(): # if message is empty
                 empty_ids.append(i)
             else:
                 author_=message['from']
+                if "replace" not in dir(author_):
+                    spurious_authors.append(message)
+                    continue
+
                 author=author_.replace('"','')
                 author=author.split("<")[-1][:-1]
                 if " " in author: 
@@ -61,21 +69,9 @@ class MessageDataStructures:
                 if author not in author_messages:
                     author_messages[author]=[]
                 date_=message['date']
-                date=date_
-#                date=date_.replace("METDST","MEST")
-#                date=date.replace("MET DST","MEST")
-#                #date=date.replace(" CST"," (CST)")
-#                date=date.replace("(GMT Standard Time)","")
-#                date=date.replace(" CDT"," (CDT)")
-#                date=date.replace(" GMT","")
-#                date=date.replace("(WET DST)","")
-#                date=date.replace(" PST (-0800)","")
-#                date=date.replace("-0600 CST","-0600")
-#                #print date
-#                if "GMT-" in date:
-#                    index=date[::-1].index("-")
-#                    date=date[:-index-1]+")"
-#                if 'added' in date: date = date.split(" (")[0]
+                date = date_.split(" (")[0]
+                if date.split(" ")[-1].islower():
+                    date=date.replace(date.split(" ")[-1],date.split(" ")[-1].upper())
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
                     date=pytz.UTC.localize(date)

@@ -37,6 +37,7 @@ class LoadMessages:
         self.loadMessages()
     def loadMessages(self):
         mfiles=os.listdir(self._BASE_DIR+self.list_id)
+        mfiles.sort()
         messages=[]
         messagesB=[]
         if self.n_messages:
