@@ -1,16 +1,16 @@
-#from .loadMessages import LoadMessages
 import dateutil.parser
 import parsedatetime as pdt
 parser=pdt.Calendar()
 import pytz
 
-class MessageDataStructures:
+class ListDataStructures:
     """Basic datastructures driven from Gmane email messages.
 
     Usage
     =====
     Initialize with a LoadMessages() instance.
     If not interested in the textual content, use test="no"
+    to avoid the overhead.
 
     Attributes
     ==========
@@ -40,7 +40,7 @@ class MessageDataStructures:
     """
     def __init__(self, messagesLoaded=None,text="yes"):
         if not messagesLoaded:
-            messagesLoaded=LoadMessages()
+            messagesLoaded=g.LoadMessages()
         self.messagesLoaded=messagesLoaded
         self.messages=messages={}
         self.message_ids=message_ids=[]
