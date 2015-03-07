@@ -107,5 +107,5 @@ class ListDataStructures:
                     raise TypeError("argument text accepts only 'yes' and 'no'values")
                 author_messages[author].append( (message["message-id"], id_ant, date)  )
                 message_ids.append(message['message-id'])
-                self.n_empty=len(empty_ids)
+                self.n_empty=len(spurious_empty_ids)
                 self.n_authors=len(author_messages)

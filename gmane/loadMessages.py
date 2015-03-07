@@ -34,8 +34,8 @@ class LoadMessages:
         self.list_id=list_id
         self.n_messages=n_messages
         self.offset=offset
-        self.loadMessages()
         self.n_empty=0
+        self.loadMessages()
     def loadMessages(self):
         mfiles=os.listdir(self._BASE_DIR+self.list_id)
         mfiles.sort()

@@ -26,6 +26,6 @@ for list_stat in dl.lists[:10]:
             networks[-1].g.number_of_edges(),
             data_structs[-1].n_messages,
             load_msgs[-1].n_messages,
-            list_stat[1]["count_msgs"],list_stat[1]["count_empty"],
-            len(data_structs[-1].empty_ids)))
+            list_stat[1]["n_messages"],list_stat[1]["n_empty"],
+            len(data_structs[-1].spurious_empty_ids)))
  
