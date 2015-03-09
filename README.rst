@@ -64,4 +64,6 @@ Download messages from one GMANE list:
     print("number of nodes: {}, number of edges: {}".format(
     nw.g.number_of_nodes(), nw.g.number_of_edges()))
 
+    nm=g.NetworkMeasures(nw)
+
     # Enjoy!

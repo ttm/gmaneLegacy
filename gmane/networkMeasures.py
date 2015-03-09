@@ -16,6 +16,9 @@ class NetworkMeasures:
         """Make the network measures"""
         # fazer condicional para cada medida, se não estiver na exclude[],
         # fazer medida de tempo e guardar como tupla no
+        self.N=network.g.number_of_nodes()
+        self.E=network.g.number_of_edges()
+        self.E_=network.gu.number_of_edges()
         timings=[]
         if "weighted_directed_betweenness" not in exclude:
             T=t.time()
