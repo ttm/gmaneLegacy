@@ -12,6 +12,9 @@ class InteractionNetwork:
         if not listStructures:
             g.listDataStructures()
         g=x.DiGraph()
+        self.makeGraph(listStructures, g)
+    def makeGraph(self,listStructures, g):
+        """Make the interaction digraph"""
         for tid in listStructures.message_ids:
             m=listStructures.messages[tid]
             if m[0] in g.nodes(): # author
@@ -30,3 +33,4 @@ class InteractionNetwork:
         # no selfloops, as interest is on interaction
         g.remove_edges_from(g.selfloop_edges())
         self.g=g
+        self.gu=g.to_undirected()

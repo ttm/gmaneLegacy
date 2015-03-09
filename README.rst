@@ -59,9 +59,9 @@ Download messages from one GMANE list:
     print("first: ", mm[ids[0]][2], "last:", mm[ids[-1]][2])
     
     # build the interaction network of the messages:
-    network=g.InteractionNetwok(ds)
+    nw=g.InteractionNetwok(ds)
 
     print("number of nodes: {}, number of edges: {}".format(
-    network.g.number_of_nodes(), network.g.number_of_edges()))
+    nw.g.number_of_nodes(), nw.g.number_of_edges()))
 
     # Enjoy!
