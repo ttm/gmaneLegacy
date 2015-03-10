@@ -1,5 +1,6 @@
 import sys
 from scipy import special
+from numpy import array as A
 class NetworkPartitioning:
     network_count=0
     def __init__(self,networkMeasures=None):
@@ -18,19 +19,25 @@ class NetworkPartitioning:
         binomial_distribution=self.makeBinomialDistribution(
                    prob, max_degree_possible, incident_degrees_)
 
-        sectorialized_degrees= self.sectorializeDegrees(
+        sectorialized_degrees= self.newSectorializeDegrees(
          empirical_distribution, binomial_distribution, incident_degrees_)
 
         sectorialized_agents= self.sectorializeAgents(
              sectorialized_degrees, networkMeasures.degrees)
         NetworkPartitioning.network_count+=1 # to keep track of how may partitions have been done
 
-        self.incident_degrees_=incident_degrees_
-        self.sectorialized_agents =sectorialized_agents 
-        self.sectorialized_degrees=sectorialized_degrees
-        self.binomial_distribution=binomial_distribution
-        self.empirical_distribution=empirical_distribution
+        self.makeSelf("incident_degrees_     ",incident_degrees_     ,
+                      "sectorialized_agents  ",sectorialized_agents  ,
+                      "sectorialized_degrees ",sectorialized_degrees ,
+                      "binomial_distribution ",binomial_distribution ,
+                      "prob"                  ,prob,
+                      "max"                   ,(max_degree_possible, max_degree_empirical),
+                      "empirical_distribution",empirical_distribution,
+                      "binomial_distribution" ,binomial_distribution)
 
+    def makeSelf(self, *args):
+        for signifier, signified  in zip(args[::2], args[1::2]):
+            exec("self.{} = {}".format(signifier, signified))
 
     def basicMeasures(self,networkMeasures):
         nm=networkMeasures
@@ -68,11 +75,21 @@ class NetworkPartitioning:
         hubs=[x for x in agent_degrees
                      if agent_degrees[x] in sectorialized_degrees[2]]
         return periphery, intermediary, hubs
+    def newSectorializeDegrees(self,empirical_distribution,binomial_distribution,incident_degrees_):
+        distribution_compare = A(empirical_distribution) < A(binomial_distribution)
+        self.istribution_compare=distribution_compare
+        tindex= list(distribution_compare      ).index(True)
+        tindex2=list(distribution_compare[::-1]).index(True)
+        periphery_degrees=incident_degrees_[:tindex]
+        intermediary_degrees=incident_degrees_[tindex:-tindex2]
+        hub_degrees=         incident_degrees_[-tindex2:]
+        return periphery_degrees, intermediary_degrees, hub_degrees
     def sectorializeDegrees(self,empirical_distribution,binomial_distribution,incident_degrees_):
         periphery_degrees=[]
         intermediary_degrees=[]
         hub_degrees=[]
         lock=0
+        lock2=0
         for incident_prob, binomial_prob, degree in zip(
   empirical_distribution, binomial_distribution, incident_degrees_):
             if incident_prob < binomial_prob:
@@ -80,6 +97,7 @@ class NetworkPartitioning:
                 lock=1
             elif (incident_prob > binomial_prob) and lock:
                 hub_degrees.append(degree)
+
             else:
                 periphery_degrees.append(degree)
         return periphery_degrees, intermediary_degrees, hub_degrees
@@ -141,7 +159,4 @@ class NetworkPartitioning:
         n_intermediarios=sum([gi<g2 for gi in graus_incidentes])-n_perifericos
         n_hubs=g.number_of_nodes()-(n_perifericos+n_intermediarios)
         self.dist=(n_perifericos,n_intermediarios,n_hubs)
-
-
-
 """

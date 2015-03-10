@@ -66,4 +66,9 @@ Download messages from one GMANE list:
 
     nm=g.NetworkMeasures(nw)
 
+    np=g.NetworkPartitioning(nm)
+    sa=np.sectorialized_agents
+    print("{} agents in periphery,\
+{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+
     # Enjoy!
