@@ -61,7 +61,7 @@ class NetworkMeasures:
             timings.append((t.time()-T,"weighted_clustering"))
         if "clustering" not in exclude:
             T=t.time()
-            self.clustering=x.clustering( network.gu )
+            self.clusterings=x.clustering( network.gu )
             timings.append((t.time()-T,"clustering"))
         if "triangles" not in exclude:
             T=t.time()
@@ -88,15 +88,15 @@ class NetworkMeasures:
         timings.append((t.time()-T,"radius_diameter_center_periphery"))
 
         T=t.time()
-        self.degree=g.degree()
-        self.in_degree=g.in_degree()
-        self.out_degree=g.out_degree()
+        self.degrees=g.degree()
+        self.in_degrees=g.in_degree()
+        self.out_degrees=g.out_degree()
         timings.append((t.time()-T,"in_out_total_degrees"))
 
         T=t.time()
-        self.strength=     g.degree(weight="weight")
-        self.in_strength= g.in_degree(weight="weight")
-        self.out_strength=g.out_degree(weight="weight")
+        self.strengths=     g.degree(weight="weight")
+        self.in_strengths= g.in_degree(weight="weight")
+        self.out_strengths=g.out_degree(weight="weight")
         timings.append((t.time()-T,"in_out_total_strengths"))
         self.timings=timings
 

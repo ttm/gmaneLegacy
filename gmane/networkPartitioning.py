@@ -1,4 +1,7 @@
-class PartitionNetwork:
+import sys
+from scipy import special
+class NetworkPartitioning:
+    network_count=0
     def __init__(self,networkMeasures=None):
         if not networkMeasures:
             networkMeasures=g.NetworkMeasures()
@@ -15,11 +18,19 @@ class PartitionNetwork:
         binomial_distribution=self.makeBinomialDistribution(
                    prob, max_degree_possible, incident_degrees_)
 
-        sectorialized_degrees= sectorializeDegrees(
-                       empirical_distribution, binomial_distribution)
+        sectorialized_degrees= self.sectorializeDegrees(
+         empirical_distribution, binomial_distribution, incident_degrees_)
 
-        sectorialized_agents= sectorializeDegrees(
-                       sectorialized_degrees, networkMeasures.degrees)
+        sectorialized_agents= self.sectorializeAgents(
+             sectorialized_degrees, networkMeasures.degrees)
+        NetworkPartitioning.network_count+=1 # to keep track of how may partitions have been done
+
+        self.incident_degrees_=incident_degrees_
+        self.sectorialized_agents =sectorialized_agents 
+        self.sectorialized_degrees=sectorialized_degrees
+        self.binomial_distribution=binomial_distribution
+        self.empirical_distribution=empirical_distribution
+
 
     def basicMeasures(self,networkMeasures):
         nm=networkMeasures
@@ -28,8 +39,8 @@ class PartitionNetwork:
         prob=nm.E/(nm.N*(nm.N-1)) # edge probability
         return prob, max_degree_empirical, max_degree_possible
     def makeDegreeLists(self, networkMeasures):
-        incident_degrees=networkMeasures.degrees.values()
-        incident_degrees_=set(networkMeasures.degrees.values())
+        incident_degrees=[i for i in networkMeasures.degrees.values()]
+        incident_degrees_=list(set(networkMeasures.degrees.values()))
         incident_degrees_.sort()
         return incident_degrees, incident_degrees_
     def makeEmpiricalDistribution(self, incident_degrees, incident_degrees_, N):
@@ -41,7 +52,7 @@ class PartitionNetwork:
         """If max_degree_possible == max_degree_empirical, makeBinomial ==1"""
         binomial_distribution=[] # occurance probability of degrees 
         for degree in incident_degrees_:
-            if binomial_distributon[-1]==0.0:
+            if len(binomial_distribution) and binomial_distribution[-1]==0.0:
                 binomial_distribution.append(0.0)
             else:
                 n_occurrences=special.binom(max_degree_possible,degree)
@@ -49,7 +60,7 @@ class PartitionNetwork:
                 binomial_distribution.append(prob_degree)
         return binomial_distribution
 
-    def sectorializeNetwork(self,sectorilized_degrees,agent_degrees):
+    def sectorializeAgents(self,sectorialized_degrees,agent_degrees):
         periphery=[x for x in agent_degrees
                      if agent_degrees[x] in sectorialized_degrees[0]]
         intermediary=[x for x in agent_degrees
@@ -72,7 +83,7 @@ class PartitionNetwork:
             else:
                 periphery_degrees.append(degree)
         return periphery_degrees, intermediary_degrees, hub_degrees
-
+"""
         self.perifericos=perifericos=[]
         self.intermediarios=intermediarios=[]
         self.hubs=hubs=[]
@@ -133,4 +144,4 @@ class PartitionNetwork:
 
 
 
-
+"""
