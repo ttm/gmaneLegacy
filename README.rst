@@ -70,5 +70,8 @@ Download messages from one GMANE list:
     sa=np.sectorialized_agents
     print("{} agents in periphery,\
 {} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+    sa=np.sectorialized_agents__ # smoothed histogram
+    print("{} agents in periphery,\
+{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
 
     # Enjoy!
