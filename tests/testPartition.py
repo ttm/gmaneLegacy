@@ -2,10 +2,10 @@ import multiprocessing as mp
 import  importlib
 from IPython.lib.deepreload import reload as dreload
 import gmane as g
-importlib.reload(g.loadMessages)
-importlib.reload(g.listDataStructures)
-importlib.reload(g.interactionNetwork)
-importlib.reload(g.networkMeasures)
+#importlib.reload(g.loadMessages)
+#importlib.reload(g.listDataStructures)
+#importlib.reload(g.interactionNetwork)
+#importlib.reload(g.networkMeasures)
 importlib.reload(g.networkPartitioning)
 dreload(g,exclude="pytz")
 
@@ -24,3 +24,8 @@ print("network mesaures")
 np=g.NetworkPartitioning(nm)
 print("partitioned network")
 
+np2=g.NetworkPartitioning(nm,2)
+print("partitioned network")
+
+np3=g.NetworkPartitioning(nm,3)
+print("partitioned network")
