@@ -100,4 +100,12 @@ class NetworkMeasures:
         timings.append((t.time()-T,"in_out_total_strengths"))
         self.timings=timings
 
+        T=t.time()
+        self.edges=     g.edges(data=True)
+        self.nodes=     g.nodes(data=True)
+        timings.append((t.time()-T,"edges and nodes"))
+        self.timings=timings
+
+
+
 

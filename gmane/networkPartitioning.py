@@ -3,15 +3,17 @@ from scipy import special, stats
 from numpy import array as A
 class NetworkPartitioning:
     network_count=0
-    def __init__(self,networkMeasures=None, minimum_incidence=1):
+    def __init__(self,networkMeasures=None, minimum_incidence=1,metric="strength"):
         if not networkMeasures:
             networkMeasures=g.NetworkMeasures()
+        self.metric=metric
+        metric_=self.standardizeName(metric)
 
         prob, max_degree_empirical, max_degree_possible = \
-                self.basicMeasures( networkMeasures )
+                self.basicMeasures( networkMeasures , metric_)
 
-        incident_degrees, incident_degrees_ = \
-                  self.makeDegreeLists( networkMeasures)
+        incident_degrees, incident_degrees_, agent_degrees = \
+                  self.makeDegreeLists( networkMeasures, metric_)
 
         empirical_distribution = self.makeEmpiricalDistribution(
             incident_degrees, incident_degrees_, networkMeasures.N )
@@ -38,11 +40,12 @@ class NetworkPartitioning:
              sectorialized_degrees_, networkMeasures.degrees)
 
         sectorialized_agents__= self.sectorializeAgents(
-             sectorialized_degrees__, networkMeasures.degrees)
+             sectorialized_degrees__, agent_degrees)
 
         NetworkPartitioning.network_count+=1 # to keep track of how may partitions have been done
 
         self.makeSelf("incident_degrees_     ",incident_degrees_     ,
+                      "incident_degrees     ",incident_degrees     ,
                       "sectorialized_agents  ",sectorialized_agents  ,
                       "sectorialized_agents_  ",sectorialized_agents_  ,
                       "sectorialized_agents__  ",sectorialized_agents__  ,
@@ -54,6 +57,7 @@ class NetworkPartitioning:
                       "max"                   ,(max_degree_possible, max_degree_empirical),
                       "empirical_distribution",empirical_distribution,
                       "binomial",binomial,
+                      "metric_",metric_,
                       "minimum_incidence",minimum_incidence,
                       "binomial_distribution" ,binomial_distribution)
 
@@ -67,18 +71,39 @@ class NetworkPartitioning:
                 #exec("self.{} = ".format(signifier), signified)
             #except:
             #    self.binomial=signified
+    def standardizeName(self,name):
+        if name in (["s","strength","st"]+["f","força","forca","fo"]):
+            name_="s"
+        if name in (["d","degree","dg"]+["g","grau","gr"]):
+            name_="d"
+        return name_
 
-    def basicMeasures(self,networkMeasures):
+    def basicMeasures(self,networkMeasures,metric_):
         nm=networkMeasures
-        max_degree_empirical=max(nm.degrees.values())
-        max_degree_possible=2*(nm.N-1) # max d given N
-        prob=nm.E/(nm.N*(nm.N-1)) # edge probability
+        if metric_=="s":
+            edge_weights=[i[2]["weight"] for i in nm.edges]
+            average_edge_weight=sum(edge_weights)/nm.E
+            max_degree_empirical=round(max(nm.strengths.values()) / average_edge_weight)
+            max_degree_possible =2*(nm.N-1) # max d given N
+            prob=nm.E/(nm.N*(nm.N-1)) # edge probability
+            self.average_edge_weight=average_edge_weight
+        elif metric_=="d":
+            max_degree_empirical=max(nm.degrees.values())
+            max_degree_possible=2*(nm.N-1) # max d given N
+            prob=nm.E/(nm.N*(nm.N-1)) # edge probability
         return prob, max_degree_empirical, max_degree_possible
-    def makeDegreeLists(self, networkMeasures):
-        incident_degrees=[i for i in networkMeasures.degrees.values()]
-        incident_degrees_=list(set(networkMeasures.degrees.values()))
-        incident_degrees_.sort()
-        return incident_degrees, incident_degrees_
+    def makeDegreeLists(self, networkMeasures,metric_):
+        if metric_=="s":
+            agent_degrees={i:round(j/self.average_edge_weight) for i,j in networkMeasures.strengths.items()}
+            incident_degrees=[round(i/self.average_edge_weight) for i in networkMeasures.strengths.values()]
+            incident_degrees_=list(set(incident_degrees))
+            incident_degrees_.sort()
+        elif metric_=="d":
+            agent_degrees=networkMeasures.degrees
+            incident_degrees=[i for i in networkMeasures.degrees.values()]
+            incident_degrees_=list(set(incident_degrees))
+            incident_degrees_.sort()
+        return incident_degrees, incident_degrees_, agent_degrees
     def makeEmpiricalDistribution(self, incident_degrees, incident_degrees_, N):
         empirical_distribution=[]
         for degree in incident_degrees_:
@@ -95,20 +120,6 @@ class NetworkPartitioning:
                 prob_degree=n_occurrences *  (prob**degree)*((1-prob)**(max_degree_possible-degree))
                 binomial_distribution.append(prob_degree)
         return binomial_distribution
-
-    def makeBinomialDistribution(self,prob,max_degree_possible,incident_degrees_):
-        """If max_degree_possible == max_degree_empirical, makeBinomial ==1"""
-        binomial_distribution=[] # occurance probability of degrees 
-        for degree in incident_degrees_:
-            if len(binomial_distribution) and binomial_distribution[-1]==0.0:
-                binomial_distribution.append(0.0)
-            else:
-                n_occurrences=special.binom(max_degree_possible,degree)
-                prob_degree=n_occurrences *  (prob**degree)*((1-prob)**(max_degree_possible-degree))
-                binomial_distribution.append(prob_degree)
-        return binomial_distribution
-
-
 
     def sectorializeAgents(self,sectorialized_degrees,agent_degrees):
         periphery=[x for x in agent_degrees
@@ -161,6 +172,7 @@ class NetworkPartitioning:
         # calcula probabilidades em cada bin
         # compara as probabilidades
         distribution_compare = list(A(empirical_probs) < A(binomial_probs))
+        self.binomial_probs=binomial_probs
         self.distribution_compare0=distribution_compare
         tindex= distribution_compare.index(True)
         tindex2=distribution_compare[::-1].index(True)
