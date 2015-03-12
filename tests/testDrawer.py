@@ -51,8 +51,8 @@ for i in range(50):
     nd.drawNetwork( iN,nm ,"seq3/im{:09}.png".format(i))
     nd2.drawNetwork( iN,nm,"seq4/im{:09}.png".format(i))
 print("please wait while images become movies")
-os.system("avconv -f image2 -i seq3/im%09d.png -vcodec mpeg4 -y movie3.mp4")
-os.system("avconv -f image2 -i seq4/im%09d.png -vcodec mpeg4 -y movie4.mp4")
+os.system("avconv -f image2 -i seq3/im%09d.png -vcodec mpeg4 -y movie5-15-80.mp4")
+os.system("avconv -f image2 -i seq4/im%09d.png -vcodec mpeg4 -y movieErdosSectorialiation.mp4")
 
 
 

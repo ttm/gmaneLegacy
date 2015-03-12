@@ -88,6 +88,6 @@ Download messages from one GMANE list:
 
     # see testDrawer to make movies.
     # further movie and analysis facilities
-    # is ** under construction **
+    # are ** under construction **
 
     # Enjoy!
