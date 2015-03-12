@@ -52,29 +52,36 @@ class NetworkDrawer:
         out_measures=network_measures.out_strengths
         min_out=max(out_measures.values())/3+.1
 
-        clustering=network_measures.weighted_clustering
+        self.clustering=clustering=network_measures.weighted_clustering
         A=x.to_agraph(network.g)
         A.node_attr['style']='filled'
         A.graph_attr["bgcolor"]="black"
         A.graph_attr["pad"]=.1
         A.graph_attr["size"]="9.5,12"
+        A.graph_attr["fontsize"]="25"
         cm=p.cm.Reds(range(2**10)) # color table
+        self.cm=cm
         nodes=A.nodes()
-        ii=0
-        colors=[]
+        self.colors=colors=[]
+        self.inds=inds=[]
+        self.poss=poss=[]
         for node in nodes:
             n_=A.get_node(node)
             ind_author=self.authors.index(n_)
-            n_.attr['fillcolor']= '#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]])
+            inds.append(inds)
+            colors.append(        '#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]]))
+            #n_.attr['fillcolor']= '#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]])
+            n_.attr['fillcolor']= colors[-1]
             n_.attr['fixedsize']=True
-            n_.attr['width']=  abs(.07*(in_measures[n_]/min_in+0.5))
-            n_.attr['height']= abs(.07*(out_measures[n_]/min_out+0.5))
-            pos="%f,%f"%tuple(self.posXY[ind_author]); ii+=1
+            n_.attr['width']=  abs(.6*(in_measures[n_]/min_in+  .05))
+            n_.attr['height']= abs(.6*(out_measures[n_]/min_out+.05))
+            pos="%f,%f"%tuple(self.posXY[ind_author])
+            poss.append(pos)
             n_.attr["pos"]=pos
             n_.attr["pin"]=True
-            n_.attr["fontsize"]=15
+            n_.attr["fontsize"]=25
             n_.attr["fontcolor"]="white"
-            colors.append('#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]]))
+            n_.attr["label"]=""
 
         weights=[s[2]["weight"] for s in network_measures.edges]
         self.weights=weights
@@ -85,8 +92,8 @@ class NetworkDrawer:
         for e in edges:
             factor=float(e.attr['weight'])
             self.weights_.append(factor)
-            e.attr['penwidth']=.2*factor
-            e.attr["arrowsize"]=.5
+            e.attr['penwidth']=.34*factor
+            e.attr["arrowsize"]=1.5
             e.attr["arrowhead"]="lteeoldiamond"
             w=factor/max_weight # factor em [0-1]
 
@@ -116,10 +123,10 @@ class NetworkDrawer:
 
         A.graph_attr["fontcolor"]="white"
         #A.draw('%s' % (nome,)) # twopi ou circo
-        #A.draw('%s.png' % ("example",), prog="neato") # twopi ou circo
-        A.layout()
-        A.draw('%s.png' % ("example",)) # twopi ou circo
-        print('scrita figura: %s' % (nome,)) # printando nome
+        A.draw('%s.png' % ("example",), prog="neato") # twopi ou circo
+        #A.layout()
+        #A.draw('%s.png' % ("example",)) # twopi ou circo
+        print('scrita figura: %s' % ("onome",)) # printando nome
         ################
         # remoção de todos os vertices auxiliares
         self.A=A
@@ -132,21 +139,25 @@ class NetworkDrawer:
         size_periphery=self.k1
         size_intermediary=self.k2-self.k1
         size_hubs=self.network_measures.N-self.k2
-
-        xh=n.linspace(0,0.5,endpoint=True)
+        if size_hubs%2==1:
+            size_hubs+=1
+            size_intermediary-=1
+        xh=n.linspace(0,0.5,size_hubs,endpoint=False)[::-1]
         thetah=2*n.pi*xh
         yh=n.sin(thetah)
 
-        xi=n.linspace(1,0.5, endpoint=False)[::-1]
+        xi=n.linspace(1,0.5, size_intermediary, endpoint=True)
         thetai=2*n.pi*xi
         yi=n.sin(thetai)
 
-        xp=n.linspace(.95,0.4)
-        yp=n.linspace(.1,1.25)
+        xp=n.linspace(.95,0.4, size_periphery)[::-1]
+        yp=n.linspace(.1,1.25, size_periphery)[::-1]
 
         self.pos=((xp,yp),(xi,yi),(xh,yh))
-        self.posX=posX=n.hstack((xp,xi,xh))
-        self.posY=posY=n.hstack((yp,yi,yh))
+        XFACT=7
+        YFACT=3
+        self.posX=posX=n.hstack((xp,xi,xh))*XFACT
+        self.posY=posY=n.hstack((yp,yi,yh))*YFACT
         self.posXY=n.vstack((posX.T,posY.T)).T
         # use with self.authors and self.measures
         p.clf()

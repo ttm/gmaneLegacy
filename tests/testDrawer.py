@@ -1,14 +1,14 @@
 import multiprocessing as mp
-import  importlib
-from IPython.lib.deepreload import reload as dreload
+#import  importlib
+#from IPython.lib.deepreload import reload as dreload
 import gmane as g
 #importlib.reload(g.loadMessages)
 #importlib.reload(g.listDataStructures)
 #importlib.reload(g.interactionNetwork)
-importlib.reload(g.networkMeasures)
-importlib.reload(g.networkPartitioning)
-importlib.reload(g.networkDrawer)
-dreload(g,exclude="pytz")
+#importlib.reload(g.networkMeasures)
+#importlib.reload(g.networkPartitioning)
+#importlib.reload(g.networkDrawer)
+#dreload(g,exclude="pytz")
 
 dl=g.DownloadGmaneData('~/.gmane2/')
 dl.downloadedStats() # might take a while
