@@ -39,20 +39,20 @@ class ListDataStructures:
     vz to spurious_empty_ids
     """
     def __init__(self, messagesLoaded=None,text="yes"):
-        if not messagesLoaded:
-            messagesLoaded=g.LoadMessages()
+        if "messages" in dir(messagesLoaded):
+            messagesLoaded=messagesLoaded.messages
         self.messagesLoaded=messagesLoaded
         self.messages=messages={}
         self.message_ids=message_ids=[]
         self.author_messages=author_messages={}
-        self.n_messages=len(messagesLoaded.messages)
+        self.n_messages=len(messagesLoaded)
         self.responses=responses={}
         self.raw_clean_authors=raw_clean_authors=[]
         self.raw_clean_dates=raw_clean_dates=[]
         self.raw_clean_references=raw_clean_references=[]
         self.spurious_empty_ids=spurious_empty_ids=[]
         self.spurious_authors=spurious_authors=[]
-        for message in messagesLoaded.messages:
+        for message in messagesLoaded:
             if not message.keys(): # if message is empty
                 spurious_empty_ids.append(i)
             else:

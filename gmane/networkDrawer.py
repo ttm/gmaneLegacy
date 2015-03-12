@@ -9,6 +9,7 @@ class NetworkDrawer:
         self.drawer_count+=1
         metric_=self.standardizeName(metric)
         self.metric_=metric_
+        self.draw_count=0
 
     def standardizeName(self,name):
         if name in (["s","strength","st"]+["f","força","forca","fo"]):
@@ -44,7 +45,7 @@ class NetworkDrawer:
         print("fractions ={:0.4f}, {:0.4f}, {:0.4f}".format(k1/total, (k2-k1)/total, 1-k2/total))
         self.makeXY()
 
-    def drawNetwork(self,network,network_measures):
+    def drawNetwork(self, network,network_measures,filename="example.png"):
         p.clf()
 
         in_measures=network_measures.in_strengths
@@ -57,7 +58,7 @@ class NetworkDrawer:
         A.node_attr['style']='filled'
         A.graph_attr["bgcolor"]="black"
         A.graph_attr["pad"]=.1
-        A.graph_attr["size"]="9.5,12"
+        #A.graph_attr["size"]="9.5,12"
         A.graph_attr["fontsize"]="25"
         cm=p.cm.Reds(range(2**10)) # color table
         self.cm=cm
@@ -118,20 +119,19 @@ class NetworkDrawer:
 
             e.attr["color"]=corRGB
 
-        label="imagem: %i, |g|= %i, |e|= %i"%(10,network_measures.N,network_measures.E)
+        label="m: %i, N = %i, E = %i"%(self.draw_count,network_measures.N,network_measures.E)
         A.graph_attr["label"]=label
 
         A.graph_attr["fontcolor"]="white"
         #A.draw('%s' % (nome,)) # twopi ou circo
-        A.draw('%s.png' % ("example",), prog="neato") # twopi ou circo
+        A.draw(filename, prog="neato") # twopi ou circo
         #A.layout()
         #A.draw('%s.png' % ("example",)) # twopi ou circo
-        print('scrita figura: %s' % ("onome",)) # printando nome
+        #print('escrita figura: %s' % ("onome",)) # printando nome
         ################
         # remoção de todos os vertices auxiliares
         self.A=A
-
-
+        self.draw_count+=1
 
     def updateNetwork(self,network,networkMeasures=None):
         pass
@@ -160,6 +160,6 @@ class NetworkDrawer:
         self.posY=posY=n.hstack((yp,yi,yh))*YFACT
         self.posXY=n.vstack((posX.T,posY.T)).T
         # use with self.authors and self.measures
-        p.clf()
-        p.plot(posX,posY)
-        p.savefig("numberMarkerSubmarkerCountInfo.png")
+        #p.clf()
+        #p.plot(posX,posY)
+        #p.savefig("numberMarkerSubmarkerCountInfo.png")
