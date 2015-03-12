@@ -86,7 +86,8 @@ Download messages from one GMANE list:
     nd.drawNetwork( iN,nm ,"test.png")
     nd2.drawNetwork( iN,nm,"test2.png")
 
-    # see testDrawer to make movies.
+    # see testDrawer to make movies:
+    # http://youtu.be/TxCpFqwTVeU
     # further movie and analysis facilities
     # are ** under construction **
 
