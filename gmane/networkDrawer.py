@@ -1,8 +1,7 @@
 import sys
 import collections as c
 from scipy import special, stats
-from numpy import array as A, linspace, sin, pi as PI, hstack, vstack
-import pylab as p, networkx as x
+import numpy as n, pylab as p, networkx as x
 
 class NetworkDrawer:
     drawer_count=0
@@ -93,7 +92,7 @@ class NetworkDrawer:
 
             cor=p.cm.Spectral(int(w*255))
             self.cor=cor
-            cor256=255*A(cor[:-1])
+            cor256=255*n.array(cor[:-1])
 
             r0=int(cor256[0]/16)
             r1=int(cor256[0]-r0*16)
@@ -117,7 +116,9 @@ class NetworkDrawer:
 
         A.graph_attr["fontcolor"]="white"
         #A.draw('%s' % (nome,)) # twopi ou circo
-        A.draw('%s.png' % ("example",), prog="neato") # twopi ou circo
+        #A.draw('%s.png' % ("example",), prog="neato") # twopi ou circo
+        A.layout()
+        A.draw('%s.png' % ("example",)) # twopi ou circo
         print('scrita figura: %s' % (nome,)) # printando nome
         ################
         # remoção de todos os vertices auxiliares
@@ -132,21 +133,21 @@ class NetworkDrawer:
         size_intermediary=self.k2-self.k1
         size_hubs=self.network_measures.N-self.k2
 
-        xh=linspace(0,0.5,endpoint=True)
-        thetah=2*PI*xh
-        yh=sin(thetah)
+        xh=n.linspace(0,0.5,endpoint=True)
+        thetah=2*n.pi*xh
+        yh=n.sin(thetah)
 
-        xi=linspace(1,0.5, endpoint=False)[::-1]
-        thetai=2*PI*xi
-        yi=sin(thetai)
+        xi=n.linspace(1,0.5, endpoint=False)[::-1]
+        thetai=2*n.pi*xi
+        yi=n.sin(thetai)
 
-        xp=linspace(.95,0.4)
-        yp=linspace(.1,1.25)
+        xp=n.linspace(.95,0.4)
+        yp=n.linspace(.1,1.25)
 
         self.pos=((xp,yp),(xi,yi),(xh,yh))
-        self.posX=posX=hstack((xp,xi,xh))
-        self.posY=posY=hstack((yp,yi,yh))
-        self.posXY=vstack((posX.T,posY.T)).T
+        self.posX=posX=n.hstack((xp,xi,xh))
+        self.posY=posY=n.hstack((yp,yi,yh))
+        self.posXY=n.vstack((posX.T,posY.T)).T
         # use with self.authors and self.measures
         p.clf()
         p.plot(posX,posY)
