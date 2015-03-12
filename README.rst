@@ -64,14 +64,30 @@ Download messages from one GMANE list:
     print("number of nodes: {}, number of edges: {}".format(
     nw.g.number_of_nodes(), nw.g.number_of_edges()))
 
-    nm=g.NetworkMeasures(nw)
+    nm=g.NetworkMeasures(nw) # take measures
+    np=g.NetworkPartitioning(nm) # partition in primitive typology
+    sa=np.sectorialized_agents # get members of each sector
+    print("{} agents in periphery,\
+{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+    sa=np.sectorialized_agents__ # smoothed histogram for classification
+    print("{} agents in periphery,\
+{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
 
-    np=g.NetworkPartitioning(nm)
-    sa=np.sectorialized_agents
-    print("{} agents in periphery,\
-{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
-    sa=np.sectorialized_agents__ # smoothed histogram
-    print("{} agents in periphery,\
-{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+    # draw
+    nd=g.NetworkDrawer()
+    print("drawer started")
+    nd.makeLayout(nm)
+    print("gave (x,y) for each author with 5-15-80")
+    nd2=g.NetworkDrawer()
+    print("drawer two started")
+    nd2.makeLayout(nm,np)
+    print("gave (x,y) for each author with \
+    sectors by comparison with Erdos-Renyi")
+    nd.drawNetwork( iN,nm ,"test.png")
+    nd2.drawNetwork( iN,nm,"test2.png")
+
+    # see testDrawer to make movies.
+    # further movie and analysis facilities
+    # is ** under construction **
 
     # Enjoy!
