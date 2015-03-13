@@ -1,4 +1,12 @@
 *.swp
+*.png
+*.mpeg
+*.mp4
+*.avi
+*.jpeg
+seq*
+evolution/
+*.dot
 venv/
 ipython_log*
 

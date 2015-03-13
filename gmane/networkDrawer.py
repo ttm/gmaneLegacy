@@ -24,7 +24,7 @@ class NetworkDrawer:
         if self.metric_=="s":
             measures_=network_measures.strengths
         elif self.metric_=="d":
-            measures_=network_measures.degree
+            measures_=network_measures.degrees
         else:
             print("not known metric to make layout")
         self.ordered_measures=ordered_measures = c.OrderedDict(sorted(measures_.items(), key=lambda x: x[1]))
@@ -45,8 +45,31 @@ class NetworkDrawer:
         print("fractions ={:0.4f}, {:0.4f}, {:0.4f}".format(k1/total, (k2-k1)/total, 1-k2/total))
         self.makeXY()
 
-    def drawNetwork(self, network,network_measures,filename="example.png",label="auto"):
+    def drawNetwork(self, network,network_measures,filename="example.png",label="auto",network_partitioning=None):
         p.clf()
+
+        if self.metric_=="s":
+            measures_=network_measures.strengths
+        elif self.metric_=="d":
+            measures_=network_measures.degree
+        else:
+            print("not known metric to make layout")
+        ordered_measures = c.OrderedDict(sorted(measures_.items(), key=lambda x: x[1]))
+        measures=list(ordered_measures.values())
+        authors=  list(ordered_measures.keys())
+
+        total=network_measures.N
+        if not network_partitioning:
+            k1=k1=round(total*.80)
+            k2=k2=round(total*.95)
+            periphery=authors[:k1]
+            intermediary=authors[k1:k2]
+            hubs=authors[k2:]
+        else:
+            sectors=network_partitioning.sectorialized_agents__
+            k1=k1=len(sectors[0])
+            k2=k2=k1+len(sectors[1])
+            periphery,intermediary,hubs=(set(iii) for iii in sectors)
 
         in_measures=network_measures.in_strengths
         min_in=max(in_measures.values())/3+0.1
@@ -80,6 +103,12 @@ class NetworkDrawer:
             n_.attr['fixedsize']=True
             n_.attr['width']=  abs(.6*(in_measures[n_]/min_in+  .05))
             n_.attr['height']= abs(.6*(out_measures[n_]/min_out+.05))
+            if n_ in hubs:
+                n_.attr["shape"] = "hexagon"
+            elif n_ in intermediary:
+                pass
+            else:
+                n_.attr["shape"] = "diamond"
             pos="%f,%f"%tuple(self.posXY[ind_author])
             poss.append(pos)
             n_.attr["pos"]=pos

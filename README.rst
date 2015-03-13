@@ -86,7 +86,10 @@ Download messages from one GMANE list:
 
     # see testDrawer to make movies:
     # http://youtu.be/TxCpFqwTVeU
-    # further movie and analysis facilities
-    # are ** under construction **
+
+    lm=lms[0] # loaded messages from list with most messages
+    ne=g.NetworkEvolution(step_size=10)
+    ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
+    # ne.makeVideo() use this to avoid evolving again just to make video
 
     # Enjoy!

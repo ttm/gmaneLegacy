@@ -19,5 +19,5 @@ print("loaded messages")
 #ne.makeVideo(framerate=12)
 
 ne=g.NetworkEvolution(step_size=10)
-ne.evolveRaw(lm.messages)
-#ne.makeVideo()
+ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
+ne.makeVideo()

@@ -12,7 +12,7 @@ class NetworkEvolution:
         self.write_analysis=write_analysis
         self.make_pca      =make_pca
         self.write_pca     =write_pca
-    def evolveRaw(self, loaded_messages,offset=0,tdir="evolution",clean_dir=True,print_status=True,imagerate=18):
+    def evolveRaw(self, loaded_messages,offset=0,tdir="evolution",clean_dir=True,print_status=True,imagerate=18,erdos_sectors=True,minimum_incidence=2):
         if len(loaded_messages)<self.window_size:
             raise ValueError("incoming messages smaller than window_size [({}-{})/{}]".format(
                 len(loaded_messages), offset, self.window_size))
@@ -28,6 +28,10 @@ class NetworkEvolution:
             ds=ListDataStructures(messages)
             iN=InteractionNetwork(ds)
             nm=NetworkMeasures(iN)
+            if erdos_sectors:
+                np=NetworkPartitioning(nm,minimum_incidence)
+            else:
+                np=None
             with open("{}/im{:09}.pickle".format(tdir,counter),"wb") as f:
                 pickle.dump(nm,f)
             if "drawer" not in dir(self):
@@ -36,7 +40,7 @@ class NetworkEvolution:
             label="T{}W{}S{}R{}M{}N{}E{}".format(
                 len(loaded_messages), self.window_size, self.step_size, 
                 imagerate, pointer,nm.N,nm.E)
-            self.drawer.drawNetwork( iN,nm ,"{}/im{:09}.png".format(tdir,counter), label)
+            self.drawer.drawNetwork( iN,nm ,"{}/im{:09}.png".format(tdir,counter), label,np)
             if print_status:
                 print("analysed {}-{} / {}".format(
                     pointer,pointer+self.window_size,len(loaded_messages)))
@@ -49,7 +53,7 @@ class NetworkEvolution:
         self.makeVideo(tdir,videoname,imagerate)
 
     def makeVideo(self,tdir="evolution",videoname="fooname",imagerate=18):
-        command="avconv -f image2 -framerate {} -i {}/im%09d.png -y {}/{}.avi".format(
+        command="avconv -f image2 -framerate {} -i {}/im%09d.png -qscale 1 -b 65536k -y {}/{}.avi".format(
                 imagerate, tdir, tdir, videoname)
         os.system(command)
     def setDrawer(self,messages=None,network_measures=None, network_partitioning=None,tdir="."):
