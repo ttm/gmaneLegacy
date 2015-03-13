@@ -45,7 +45,7 @@ class NetworkDrawer:
         print("fractions ={:0.4f}, {:0.4f}, {:0.4f}".format(k1/total, (k2-k1)/total, 1-k2/total))
         self.makeXY()
 
-    def drawNetwork(self, network,network_measures,filename="example.png"):
+    def drawNetwork(self, network,network_measures,filename="example.png",label="auto"):
         p.clf()
 
         in_measures=network_measures.in_strengths
@@ -60,6 +60,10 @@ class NetworkDrawer:
         A.graph_attr["pad"]=.1
         #A.graph_attr["size"]="9.5,12"
         A.graph_attr["fontsize"]="25"
+        if label=="auto":
+            label=self.makeLabel()
+        A.graph_attr["label"]=label
+        A.graph_attr["fontcolor"]="white"
         cm=p.cm.Reds(range(2**10)) # color table
         self.cm=cm
         nodes=A.nodes()
@@ -119,14 +123,22 @@ class NetworkDrawer:
 
             e.attr["color"]=corRGB
 
-        label="m: %i, N = %i, E = %i"%(self.draw_count,network_measures.N,network_measures.E)
-        A.graph_attr["label"]=label
-
-        A.graph_attr["fontcolor"]="white"
         A.draw(filename, prog="neato") # twopi ou circo
         ################
         self.A=A
         self.draw_count+=1
+    def makeLabel(self):
+        label=""
+        if "window_size" in dir(self):
+            label+="w: {}, ".format(self.window_size)
+            #m: %i, N = %i, E = %i"%(self.draw_count*self.step_size,self.network_measures.N,self.network_measures.E)
+        if "step_size" in dir(self):
+            label+="m: {} ,".format(self.draw_count*self.step_size+self.offset)
+        else:
+            label+="m: %i, ".format(self.draw_count)
+            #self.network_measures.N,self.network_measures.E)
+        label+="N = %i, E = %i"%(self.network_measures.N,self.network_measures.E)
+        return label
 
     def updateNetwork(self,network,networkMeasures=None):
         pass
