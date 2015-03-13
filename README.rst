@@ -67,11 +67,9 @@ Download messages from one GMANE list:
     nm=g.NetworkMeasures(nw) # take measures
     np=g.NetworkPartitioning(nm) # partition in primitive typology
     sa=np.sectorialized_agents # get members of each sector
-    print("{} agents in periphery,\
-{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+    print("{} agents in periphery, {} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
     sa=np.sectorialized_agents__ # smoothed histogram for classification
-    print("{} agents in periphery,\
-{} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
+    print("{} agents in periphery, {} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))
 
     # draw
     nd=g.NetworkDrawer()

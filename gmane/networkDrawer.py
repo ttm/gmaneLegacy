@@ -123,13 +123,8 @@ class NetworkDrawer:
         A.graph_attr["label"]=label
 
         A.graph_attr["fontcolor"]="white"
-        #A.draw('%s' % (nome,)) # twopi ou circo
         A.draw(filename, prog="neato") # twopi ou circo
-        #A.layout()
-        #A.draw('%s.png' % ("example",)) # twopi ou circo
-        #print('escrita figura: %s' % ("onome",)) # printando nome
         ################
-        # remoção de todos os vertices auxiliares
         self.A=A
         self.draw_count+=1
 
@@ -159,7 +154,3 @@ class NetworkDrawer:
         self.posX=posX=n.hstack((xp,xi,xh))*XFACT
         self.posY=posY=n.hstack((yp,yi,yh))*YFACT
         self.posXY=n.vstack((posX.T,posY.T)).T
-        # use with self.authors and self.measures
-        #p.clf()
-        #p.plot(posX,posY)
-        #p.savefig("numberMarkerSubmarkerCountInfo.png")
