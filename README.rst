@@ -6,9 +6,9 @@ This project delivers helper classes for the analysis of the GMANE
 email database.
 
 Functionalities are based on physics articles on interaction networks:
-- Stability in human interaction networks: primitive typology of vertex, prominence of measures and activity statistics: http://arxiv.org/abs/1310.7769
-- A connective differentiation of textual production in interaction networks: http://arxiv.org/abs/1412.7309
-- Versinus: a visualization method for graphs in evolution: http://arxiv.org/abs/1412.7311
+[1] Stability in human interaction networks: primitive typology of vertex, prominence of measures and activity statistics: http://arxiv.org/abs/1310.7769
+[2] A connective differentiation of textual production in interaction networks: http://arxiv.org/abs/1412.7309
+[3] Versinus: a visualization method for graphs in evolution: http://arxiv.org/abs/1412.7311
 
 With core concepts of 1) analysis of topological structure; 2) analysis of textual production; 3) visualization of evolving structures. Activity distribution along time and among participants are also approached through specific routines and indirectly through 1), 2) and 3).
 
@@ -17,6 +17,9 @@ Ideally, this package should ease:
 - Building elementary data structures with downloaded data.
 - Analysis of data through complex networks and NLP criteria.
 - Visualization through diverse layout methods.
+
+PS.
+Implemented measures of symmetry in network agents activity by hand (not found in network and numeric packages) according to [1].
 
 Usage example
 =================
@@ -64,7 +67,7 @@ Download messages from one GMANE list:
     print("number of nodes: {}, number of edges: {}".format(
     nw.g.number_of_nodes(), nw.g.number_of_edges()))
 
-    nm=g.NetworkMeasures(nw) # take measures
+    nm=g.NetworkMeasures(nw) # take measures, including symmetry related measures
     np=g.NetworkPartitioning(nm) # partition in primitive typology
     sa=np.sectorialized_agents # get members of each sector
     print("{} agents in periphery, {} are intermediary and {} hubs".format(sa[0],sa[1],sa[2]))

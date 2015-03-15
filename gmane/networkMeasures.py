@@ -1,4 +1,4 @@
-import networkx as x, time as t
+import networkx as x, time as t, numpy as n
 class NetworkMeasures:
     """Extracts measures for incoming network.
 
@@ -102,9 +102,62 @@ class NetworkMeasures:
 
         T=t.time()
         self.edges=     g.edges(data=True)
+        self.edges=     g.edges(data=True)
+        self.nodes=     g.nodes(data=True)
         self.nodes=     g.nodes(data=True)
         timings.append((t.time()-T,"edges and nodes"))
         self.timings=timings
+
+        self.nodes_= sorted(g.nodes(), key=lambda x : self.degrees[x])
+
+        # symmetry measures
+        self.asymmetries=asymmetries=[]
+        self.disequilibrium=disequilibriums=[]
+        self.asymmetries_edge_mean=asymmetries_edge_mean=[]
+        self.asymmetries_edge_std=asymmetries_edge_std=[]
+        self.disequilibrium_edge_mean=disequilibrium_edge_mean=[]
+        self.disequilibrium_edge_std=disequilibrium_edge_std=[]
+        for node in self.nodes_:
+            if not self.degrees[node]:
+                asymmetries.append(0.)
+                disequilibriums.append( 0.)
+                asymmetries_edge_mean.append(0.)
+                asymmetries_edge_std .append(0.)    
+                disequilibrium_edge_mean.append(0.)
+                disequilibrium_edge_std.append(0.)
+            else:
+                asymmetries.append(
+                    (self.in_degrees[node]-self.out_degrees[node])/self.degrees[node])
+                disequilibriums.append( 
+                    (self.in_strengths[node]-self.out_strengths[node])/self.strengths[node])
+                edge_asymmetries=ea=[]
+                edge_disequilibriums=ed=[]
+                predecessors=g.predecessors(node)
+                successors=g.successors(node)
+                for pred in predecessors:
+                    if pred in successors:
+                        ea.append( 0. )
+                        ed.append((g[pred][node]['weight']-g[node][pred]['weight'])/self.strengths[node])
+                    else:
+                        ea.append( 1. )
+                        ed.append(g[pred][node]['weight']/self.strengths[node])
+                for suc in successors:
+                    if suc in predecessors:
+                        pass
+                    else:
+                        ea.append(-1.)
+                        ed.append(-g[node][suc]['weight']/self.strengths[node])
+
+
+                asymmetries_edge_mean.append(   n.mean(ea))
+                asymmetries_edge_std .append(   n.std(ea))  
+                disequilibrium_edge_mean.append(n.mean(ed))
+                disequilibrium_edge_std.append( n.std(ed)) 
+
+
+
+
+
 
 
 
