@@ -2,12 +2,16 @@ import numpy as n, pylab as p
 from scipy import stats
 
 class NetworkPCA:
-    def __init__(self,network_measures,network_partitioning=None,measures="all"):
+    """PCA cases of interest  for observing stability in interaction networks.
+
+
+        1) Primacy of centrality measures for dispersion; and
+        2) precedence of symmetry over clustering;
+        3) average of all basic centrality measures for first compoment
+    """
+    def __init__(self,network_measures,network_partitioning=None,tdir=".",tname="sample.png", measures="all"):
         # enable selection of measures input as string
         # through measures variable and exec() or eval() methods.
-        verification="""\n1) Primacy of centrality measures for dispersion
-        and 2) precedence of symmetry over clustering 3) average of all basic centrality measures for first compoment\n"""
-        print("making three simples PCA for verifying"+verification)
         self.M1=n.array(( network_measures.weighted_clusterings_,
                     network_measures.degrees_,
                     network_measures.weighted_directed_betweenness_
@@ -41,8 +45,9 @@ class NetworkPCA:
                     ))
         self.pca3=PCA(self.M3)
         if network_partitioning:
-            self.pca2.plot("pca2.png",network_partitioning)
-            self.pca3.plot("pca3.png",network_partitioning)
+            self.pca1.plot(tname.replace(".","_1."),network_partitioning,tdir=tdir)
+            self.pca2.plot(tname.replace(".","_2."),network_partitioning,tdir=tdir)
+            self.pca3.plot(tname.replace(".","_3."),network_partitioning,tdir=tdir)
 
 class PCA:
     """Apply PCA to incoming datatable M (metrics x observations)
@@ -134,7 +139,6 @@ class PCA:
         if not network_partitioning:
             p.plot(self.x,self.y,"go", ms=3.9,label="intermediary")
         else:
-            print("PCA plot with partitions is under construction")
             n_periphery=   len(network_partitioning.sectorialized_agents__[0])
             n_intermediary=len(network_partitioning.sectorialized_agents__[1])
             n_hubs=        len(network_partitioning.sectorialized_agents__[2])

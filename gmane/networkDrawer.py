@@ -76,7 +76,7 @@ class NetworkDrawer:
         out_measures=network_measures.out_strengths
         min_out=max(out_measures.values())/3+.1
 
-        self.clustering=clustering=network_measures.weighted_clustering
+        self.clustering=clustering=network_measures.weighted_clusterings
         A=x.to_agraph(network.g)
         A.node_attr['style']='filled'
         A.graph_attr["bgcolor"]="black"

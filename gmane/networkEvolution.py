@@ -4,6 +4,7 @@ from .interactionNetwork import *
 from .networkMeasures import *
 from .networkPartitioning import *
 from .networkDrawer import *
+from .pca import *
 class NetworkEvolution:
     def __init__(self, window_size=200, step_size=3, make_analysis=True, write_analysis=True, make_pca=True, write_pca=True):
         self.window_size=window_size
@@ -34,6 +35,9 @@ class NetworkEvolution:
                 np=None
             with open("{}/im{:09}.pickle".format(tdir,counter),"wb") as f:
                 pickle.dump(nm,f)
+            with open("{}/pca{:09}.pickle".format(tdir,counter),"wb") as f:
+                npca=NetworkPCA(nm,np,tdir=tdir,tname="pca{:09}".format(counter))
+                pickle.dump(npca,f)
             if "drawer" not in dir(self):
                 print("runing self.setDrawer to enable images and movie")
                 self.setDrawer(loaded_messages,tdir=tdir)
