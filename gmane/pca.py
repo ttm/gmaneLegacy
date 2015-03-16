@@ -2,7 +2,7 @@ import numpy as n, pylab as p
 from scipy import stats
 
 class NetworkPCA:
-    def __init__(self,network_measures,measures="all"):
+    def __init__(self,network_measures,network_partitioning=None,measures="all"):
         # enable selection of measures input as string
         # through measures variable and exec() or eval() methods.
         verification="""\n1) Primacy of centrality measures for dispersion
@@ -40,6 +40,9 @@ class NetworkPCA:
                     network_measures.disequilibrium_edge_std,
                     ))
         self.pca3=PCA(self.M3)
+        if network_partitioning:
+            self.pca2.plot("pca2.png",network_partitioning)
+            self.pca3.plot("pca3.png",network_partitioning)
 
 class PCA:
     """Apply PCA to incoming datatable M (metrics x observations)
@@ -90,7 +93,7 @@ class PCA:
         self.eig_vectors_=n.array([100*self.eig_vectors[:,i]/n.abs(self.eig_vectors[:,i]).sum() for i in range(self.eig_vectors.shape[1])]).T
         # retaining only some eigenvectors
         self.feature_vec=self.eig_vectors[:,:final_dimensions]
-        self.feature_vec_=n.array([self.feature_vec[:,i]/(self.feature_vec[:,i]).sum() for i in range(self.feature_vec.shape[1])]).T
+        self.feature_vec_=n.array([100*self.feature_vec[:,i]/n.abs(self.feature_vec[:,i]).sum() for i in range(self.feature_vec.shape[1])]).T
 
         self.final_data=n.dot(M.T,self.feature_vec)
         self.x=self.final_data[:,0]
@@ -103,36 +106,42 @@ class PCA:
         label2="PC2"
         title="Vertex position in principal components (PCA)"
         if labels=="full":
-            foo=self.feature_vec[:,0]
-            foo_=("%.2f, "*len(foo)) % tuple(foo)
+            #foo=self.feature_vec[:,0]
+            #foo_=("%.2f, "*len(foo)) % tuple(foo)
             foo=self.feature_vec_[:,0]
             foo__=("%.2f, "*len(foo)) % tuple(foo)
-            label1+=" " + foo_ + foo__
+            label1+=" " + foo__
 
-            foo=self.feature_vec[:,1]
-            foo_=("%.2f, "*len(foo)) % tuple(foo)
+            #foo=self.feature_vec[:,1]
+            #foo_=("%.2f, "*len(foo)) % tuple(foo)
             foo=self.feature_vec_[:,1]
             foo__=("%.2f, "*len(foo)) % tuple(foo)
-            label2+=" " + foo_+foo__
+            label2+=" " +foo__
 
-            foo=(self.eig_values[:4]/self.eig_values.sum())*100
-            foo_=r"$\lambda = $"+("%.2f, "*len(foo) % tuple(foo))
-            foo=(self.eig_values_[:4])*100
+            #foo=(self.eig_values[:4]/self.eig_values.sum())*100
+            #foo_=r"$\lambda = $"+("%.2f, "*len(foo) % tuple(foo))
+            foo=(self.eig_values_[:4])
             foo__=r"$\lambda = $"+("%.2f, "*len(foo) % tuple(foo))
-            title+=foo_+foo__
+            title+=" "+foo__
 
         p.xlabel(label1, fontsize=10)
         p.ylabel(label2, fontsize=10)
         #p.title(foo_)
         p.title(title)
 
-        p.legend(loc="upper right")
         p.ylim(min(self.y)-1,max(self.y)+1)
         p.xlim(min(self.x)-1,max(self.x)+1)
         if not network_partitioning:
             p.plot(self.x,self.y,"go", ms=3.9,label="intermediary")
         else:
             print("PCA plot with partitions is under construction")
+            n_periphery=   len(network_partitioning.sectorialized_agents__[0])
+            n_intermediary=len(network_partitioning.sectorialized_agents__[1])
+            n_hubs=        len(network_partitioning.sectorialized_agents__[2])
+            p.plot(self.x[:n_periphery],self.y[:n_periphery],"bo", ms=3.9,label="perihpery")
+            p.plot(self.x[n_periphery:n_periphery+n_intermediary],self.y[n_periphery:n_periphery+n_intermediary],"go", ms=3.9,label="intermediary")
+            p.plot(self.x[-n_hubs:],self.y[-n_hubs:],"ro", ms=3.9,label="hubs")
+        #p.legend()
         p.savefig("{}/{}".format(tdir,tname))
         x=self.M[0]
         y=self.M[1]

@@ -43,26 +43,14 @@ print("made interaction network")
 nm=g.NetworkMeasures(iN)
 print("network mesaures")
 
-
-# Make network partitioning
-np=g.NetworkPartitioning(nm)
-print("partitioned network")
-np2=g.NetworkPartitioning(nm,2)
-print("partitioned network")
-np3=g.NetworkPartitioning(nm,3)
-print("partitioned network")
-
-
-np_=g.NetworkPartitioning(nm, 1,"g")
-print("partitioned network")
-np2_=g.NetworkPartitioning(nm,2,"g")
-print("partitioned network")
-np3_=g.NetworkPartitioning(nm,3,"g")
-print("partitioned network")
-
 # Make PCA of degree, betweenness and clustering
+# with in, out and total degree and strengths
+# and with symmetry related measures
 npca=g.NetworkPCA(nm)
 
+# Make network partitioning
+np=g.NetworkPartitioning(nm,3,"g")
+print("partitioned network")
 
-# Plot with partitions
-
+# Plot PCA with partitions
+npca=g.NetworkPCA(nm,np)
