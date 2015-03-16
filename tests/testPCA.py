@@ -2,6 +2,7 @@ import gmane as g, numpy as n, os, pylab as p
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
+importlib.reload(g.networkMeasures)
 importlib.reload(g.pca)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
@@ -28,9 +29,40 @@ M=n.vstack((xx,yy))
 pca=g.PCA(M)
 pca.plot()
 
-# Make network
-# Make network measures
-# Make network partition
+###  Make network PCA with partitions ###
+dl=g.DownloadGmaneData('~/.gmane2/')
+dl.downloadedStats() # might take a while
+print("made liststats")
+
+lm=g.LoadMessages(dl.lists[0][0],basedir="~/.gmane2/")
+print("loaded messages")
+ds=g.ListDataStructures(lm)
+print("made datastructures")
+iN=g.InteractionNetwork(ds)
+print("made interaction network")
+nm=g.NetworkMeasures(iN)
+print("network mesaures")
+
+
+# Make network partitioning
+np=g.NetworkPartitioning(nm)
+print("partitioned network")
+np2=g.NetworkPartitioning(nm,2)
+print("partitioned network")
+np3=g.NetworkPartitioning(nm,3)
+print("partitioned network")
+
+
+np_=g.NetworkPartitioning(nm, 1,"g")
+print("partitioned network")
+np2_=g.NetworkPartitioning(nm,2,"g")
+print("partitioned network")
+np3_=g.NetworkPartitioning(nm,3,"g")
+print("partitioned network")
+
 # Make PCA of degree, betweenness and clustering
+npca=g.NetworkPCA(nm)
+
+
 # Plot with partitions
 

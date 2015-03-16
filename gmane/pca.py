@@ -1,5 +1,46 @@
 import numpy as n, pylab as p
 from scipy import stats
+
+class NetworkPCA:
+    def __init__(self,network_measures,measures="all"):
+        # enable selection of measures input as string
+        # through measures variable and exec() or eval() methods.
+        verification="""\n1) Primacy of centrality measures for dispersion
+        and 2) precedence of symmetry over clustering 3) average of all basic centrality measures for first compoment\n"""
+        print("making three simples PCA for verifying"+verification)
+        self.M1=n.array(( network_measures.weighted_clusterings_,
+                    network_measures.degrees_,
+                    network_measures.weighted_directed_betweenness_
+                    ))
+        self.pca1=PCA(self.M1)
+        self.M2=n.array(( network_measures.weighted_clusterings_,
+                    network_measures.strengths_,
+                    network_measures.in_strengths_,
+                    network_measures.out_strengths_,
+                    network_measures.degrees_,
+                    network_measures.in_degrees_,
+                    network_measures.out_degrees_,
+                    network_measures.weighted_directed_betweenness_
+                    ))
+        self.pca2=PCA(self.M2)
+
+        self.M3=n.array(( network_measures.weighted_clusterings_,
+                    network_measures.strengths_,
+                    network_measures.in_strengths_,
+                    network_measures.out_strengths_,
+                    network_measures.degrees_,
+                    network_measures.in_degrees_,
+                    network_measures.out_degrees_,
+                    network_measures.weighted_directed_betweenness_,
+                    network_measures.asymmetries,
+                    network_measures.asymmetries_edge_mean,
+                    network_measures.asymmetries_edge_std,
+                    network_measures.disequilibrium,
+                    network_measures.disequilibrium_edge_mean,
+                    network_measures.disequilibrium_edge_std,
+                    ))
+        self.pca3=PCA(self.M3)
+
 class PCA:
     """Apply PCA to incoming datatable M (metrics x observations)
 
