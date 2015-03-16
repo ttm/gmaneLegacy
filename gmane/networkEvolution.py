@@ -34,7 +34,8 @@ class NetworkEvolution:
             else:
                 np=None
             with open("{}/im{:09}.pickle".format(tdir,counter),"wb") as f:
-                pickle.dump(nm,f)
+                tall=[iN,nm,np.sectorialized_agents__]
+                pickle.dump(tall,f)
             with open("{}/pca{:09}.pickle".format(tdir,counter),"wb") as f:
                 npca=NetworkPCA(nm,np,tdir=tdir,tname="pca{:09}".format(counter))
                 pickle.dump(npca,f)

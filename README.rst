@@ -87,13 +87,16 @@ Download messages from one GMANE list:
     nd.drawNetwork( iN,nm ,"test.png")
     nd2.drawNetwork( iN,nm,"test2.png")
 
+    # see testDrawer to make movies:
+    # http://youtu.be/TxCpFqwTVeU
+
     # make basic PCA plots of network measures:
     npca=g.NetworkPCA(nm)
     # Plot PCA with a colored primitive sectors 
     npca=g.NetworkPCA(nm,np)
 
-    # see testDrawer to make movies:
-    # http://youtu.be/TxCpFqwTVeU
+    # Evolves network with measures, partitions,
+    # PCA, principal components and versinus plots saved to disk
     lm=lms[0] # loaded messages from list with most messages
     ne=g.NetworkEvolution(step_size=10)
     ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
