@@ -14,7 +14,11 @@ or
 For greater control of customization (and debugging), clone the repo and install with pip with -e:
 
     $ git clone https://github.com/ttm/gmane.git
+
     $ pip install -e <path_to_repo>
+
+This install method is especially useful with
+reload function from IPython.lib.deepreload and the standard importlib.
 
 Functionalities are based on physics articles on interaction networks:
 [1] Stability in human interaction networks: primitive typology of vertex, prominence of measures and activity statistics: http://arxiv.org/abs/1310.7769
