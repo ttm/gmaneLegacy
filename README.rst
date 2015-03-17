@@ -4,13 +4,17 @@ Python utilities for the analysis of the GMANE email list database
 
 This project delivers helper classes for the analysis of the GMANE
 email database. Install with:
-    pip install gmane
+
+    $ pip install gmane
 
 or
-    python setup.py install
 
+    $ python setup.py install
 
+For greater control of customization (and debugging), clone the repo and install with pip with -e:
 
+    $ git clone https://github.com/ttm/gmane.git
+    $ pip install -e <path_to_repo>
 
 Functionalities are based on physics articles on interaction networks:
 [1] Stability in human interaction networks: primitive typology of vertex, prominence of measures and activity statistics: http://arxiv.org/abs/1310.7769
