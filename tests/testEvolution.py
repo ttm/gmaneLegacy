@@ -1,10 +1,10 @@
 import gmane as g, os
 ENV=os.environ["PATH"]
-#import  importlib
+import  importlib
 #from IPython.lib.deepreload import reload as dreload
-#importlib.reload(g.networkDrawer)
-#importlib.reload(g.networkEvolution)
-#dreload(g,exclude="pytz")
+importlib.reload(g.networkDrawer)
+importlib.reload(g.networkEvolution)
+dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
 dl=g.DownloadGmaneData('~/.gmane2/')
@@ -20,4 +20,4 @@ print("loaded messages")
 
 ne=g.NetworkEvolution(step_size=10)
 ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
-ne.makeVideo()
+#ne.makeVideo()

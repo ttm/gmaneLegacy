@@ -4,6 +4,8 @@ from .interactionNetwork import *
 from .networkMeasures import *
 from .networkPartitioning import *
 from .networkDrawer import *
+from .agentStatistics import *
+from .timeStatistics import *
 from .pca import *
 class NetworkEvolution:
     def __init__(self, window_size=200, step_size=3, make_analysis=True, write_analysis=True, make_pca=True, write_pca=True):
@@ -27,6 +29,8 @@ class NetworkEvolution:
             messages=loaded_messages[pointer:pointer+self.window_size]
 
             ds=ListDataStructures(messages)
+            ts=TimeStatistics(ds)
+            ps=AgentStatistics(ds)
             iN=InteractionNetwork(ds)
             nm=NetworkMeasures(iN)
             if erdos_sectors:
@@ -34,7 +38,7 @@ class NetworkEvolution:
             else:
                 np=None
             with open("{}/im{:09}.pickle".format(tdir,counter),"wb") as f:
-                tall=[iN,nm,np.sectorialized_agents__]
+                tall=[ds,ts,ps,iN,nm,np.sectorialized_agents__]
                 pickle.dump(tall,f)
             with open("{}/pca{:09}.pickle".format(tdir,counter),"wb") as f:
                 npca=NetworkPCA(nm,np,tdir=tdir,tname="pca{:09}".format(counter))
@@ -64,6 +68,8 @@ class NetworkEvolution:
     def setDrawer(self,messages=None,network_measures=None, network_partitioning=None,tdir="."):
         if messages:
             ds=ListDataStructures(messages)
+            ts=TimeStatistics(ds)
+            ps=AgentStatistics(ds)
             iN=InteractionNetwork(ds)
             nm=NetworkMeasures(iN)
             np=NetworkPartitioning(nm,3)
@@ -77,4 +83,5 @@ class NetworkEvolution:
         drawer.window_size=self.window_size
         self.drawer=drawer
         self.drawer=drawer
+        self.overall=(ds,ts,ps,iN,nm,np)
 

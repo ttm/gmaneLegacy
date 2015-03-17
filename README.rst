@@ -113,9 +113,6 @@ Download messages from one GMANE list:
     nd.drawNetwork( iN,nm ,"test.png")
     nd2.drawNetwork( iN,nm,"test2.png")
 
-    # see testDrawer to make movies:
-    # http://youtu.be/TxCpFqwTVeU
-
     # make basic PCA plots of network measures:
     npca=g.NetworkPCA(nm)
     # Plot PCA with a colored primitive sectors 
@@ -127,6 +124,9 @@ Download messages from one GMANE list:
     ne=g.NetworkEvolution(step_size=10)
     ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
     # ne.makeVideo() use this to avoid evolving again just to make video
+
+    # see testDrawer.py or g.NetworkEvolution to make movies:
+    # https://www.youtube.com/watch?v=iS8NwEy291g
 
     # Enjoy!
 
