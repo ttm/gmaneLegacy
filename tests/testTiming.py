@@ -19,5 +19,5 @@ print("loaded messages")
 ds=g.ListDataStructures(lm)
 print("made datastructures")
 nt=g.NetworkTiming(ds)
-print("made overall timing")
+print("made overall activity statistics along time")
 

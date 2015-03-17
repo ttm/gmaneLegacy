@@ -60,6 +60,10 @@ Download messages from one GMANE list:
     mm=ds.messages
     ids=ds.message_ids
     print("first: ", mm[ids[0]][2], "last:", mm[ids[-1]][2])
+
+    # circular (directional) statistics for time activity:
+    nt=g.NetworkTiming(ds)
+    print("made overall circular activity statistics along time")
     
     # build the interaction network of the messages:
     nw=g.InteractionNetwok(ds)
