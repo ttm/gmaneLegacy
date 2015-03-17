@@ -76,9 +76,16 @@ Download messages from one GMANE list:
     ids=ds.message_ids
     print("first: ", mm[ids[0]][2], "last:", mm[ids[-1]][2])
 
-    # circular (directional) statistics for time activity:
+    # circular (directional) statistics for activity along time
+    # (hours of the day, days of the week, days of the month, etc):
+    # mean_vec, mean_angle, size_mean_vec, circular_mean,
+    # circular_variance, circular dispersion
+    # and histograms
     ts=g.TimeStatistics(ds)
     print("made overall circular activity statistics along time")
+
+    ps=g.AgentStatistics(ds)
+    print("made overall activity statistics among participants")
     
     # build the interaction network of the messages:
     nw=g.InteractionNetwok(ds)

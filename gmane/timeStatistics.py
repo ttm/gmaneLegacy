@@ -7,11 +7,18 @@ def circularStatistics(population, period):
     vec_n=n.e**(j*pop_)
     mean_vec=vec_n.sum()/len(vec_n) # first moment
     mean_angle=n.arctan2(mean_vec.real,mean_vec.imag)
-    size_mean_vec=(mean_vec.real**2+mean_vec.imag**2)**0.5
+    size_mean_vec=n.abs(mean_vec)
     variance_unity_radius=1-size_mean_vec
+    std_unity_radius=n.log(-2*size_mean_vec)
     circular_mean=mean_angle*(period/(2*n.pi))
     circular_variance=variance_unity_radius*(period/(2*n.pi))
-    return mean_vec, mean_angle, size_mean_vec, circular_mean, circular_variance
+    circular_std=std_unity_radius*(period/(2*n.pi))
+
+    second_moment=(vec_n**2).sum()/len(vec_n)
+    size_second_moment=n.abs(second_moment)
+    circular_dispersion=(1-size_second_moment)/(2*(size_mean_vec**2))
+
+    return mean_vec, mean_angle, size_mean_vec, circular_mean, circular_variance, circular_dispersion
 
 class TimeStatistics:
     def __init__(self,list_datastructures=None):

@@ -8,4 +8,5 @@ from .networkDrawer import *
 from .networkEvolution import *
 from .pca import *
 from .timeStatistics import *
+from .agentStatistics import *
 
