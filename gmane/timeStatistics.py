@@ -13,7 +13,7 @@ def circularStatistics(population, period):
     circular_variance=variance_unity_radius*(period/(2*n.pi))
     return mean_vec, mean_angle, size_mean_vec, circular_mean, circular_variance
 
-class NetworkTiming:
+class TimeStatistics:
     def __init__(self,list_datastructures=None):
         if not list_datastructures:
             print("input datastructures, please")

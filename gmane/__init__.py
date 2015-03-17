@@ -7,5 +7,5 @@ from .networkPartitioning import *
 from .networkDrawer import *
 from .networkEvolution import *
 from .pca import *
-from .networkTiming import *
+from .timeStatistics import *
 
