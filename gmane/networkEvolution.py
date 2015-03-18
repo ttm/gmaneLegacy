@@ -33,16 +33,16 @@ class NetworkEvolution:
             ps=AgentStatistics(ds)
             iN=InteractionNetwork(ds)
             nm=NetworkMeasures(iN)
-            if erdos_sectors:
-                np=NetworkPartitioning(nm,minimum_incidence)
-            else:
-                np=None
+            np=NetworkPartitioning(nm,minimum_incidence)
+            npca=NetworkPCA(nm,np,tdir=tdir,tname="pca{:09}".format(counter))
+            del np.binomial
             with open("{}/im{:09}.pickle".format(tdir,counter),"wb") as f:
-                tall=[ds,ts,ps,iN,nm,np.sectorialized_agents__]
+                tall=dict(ds=ds,ts=ts,ps=ps,iN=iN,nm=nm,
+                        agents=np.sectorialized_agents__,
+                        minimum_incidence=np.minimum_incidence,
+                        np=np,
+                        npca=npca)
                 pickle.dump(tall,f)
-            with open("{}/pca{:09}.pickle".format(tdir,counter),"wb") as f:
-                npca=NetworkPCA(nm,np,tdir=tdir,tname="pca{:09}".format(counter))
-                pickle.dump(npca,f)
             if "drawer" not in dir(self):
                 print("runing self.setDrawer to enable images and movie")
                 self.setDrawer(loaded_messages,tdir=tdir)
