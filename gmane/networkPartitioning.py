@@ -1,6 +1,66 @@
 import sys
 from scipy import special, stats
 from numpy import array as A
+
+def compoundPartitioning(agents):
+    """Compute and return sections with compound criteria
+
+    agents is a dict with keys "d", "id", "od", "s", "is", "os"
+    with sectorialized_agents__ with each of these criteria
+    """
+    exc_h=set(agents["g"][2]) &
+          set(agents["ig"][2]) &
+          set(agents["og"][2]) &
+          set(agents["s"][2]) &
+          set(agents["is"][2]) &
+          set(agents["os"][2])
+    exc_i=set(agents["g"] [1]) &
+          set(agents["ig"][1]) &
+          set(agents["og"][1]) &
+          set(agents["s"] [1]) &
+          set(agents["is"][1]) &
+          set(agents["os"][1])
+    exc_p=set(agents["g"] [0]) &
+          set(agents["ig"][0]) &
+          set(agents["og"][0]) &
+          set(agents["s"] [0]) &
+          set(agents["is"][0]) &
+          set(agents["os"][0])
+    exc=exc_p,exc_i,exc_h
+
+    inc_h=set(agents["g"][2])  |
+          set(agents["ig"][2]) |
+          set(agents["og"][2]) |
+          set(agents["s"][2])  |
+          set(agents["is"][2]) |
+          set(agents["os"][2])
+    inc_i=set(agents["g"] [1]) |
+          set(agents["ig"][1]) |
+          set(agents["og"][1]) |
+          set(agents["s"] [1]) |
+          set(agents["is"][1]) |
+          set(agents["os"][1])
+    inc_p=set(agents["g"] [0]) |
+          set(agents["ig"][0]) |
+          set(agents["og"][0]) |
+          set(agents["s"] [0]) |
+          set(agents["is"][0]) |
+          set(agents["os"][0])
+
+    excc_h=exc[2]
+    excc_i=set(agents["g"][2]) &
+          set(agents["ig"][2]) &
+          set(agents["og"][2]) &
+          set(agents["s"][2]) &
+          set(agents["is"][2]) &
+          set(agents["os"][2])
+
+
+
+    inc=inc_p,inc_i,inc_h
+
+
+
 class NetworkPartitioning:
     network_count=0
     def __init__(self,networkMeasures=None, minimum_incidence=1,metric="strength"):
@@ -23,21 +83,21 @@ class NetworkPartitioning:
 
         binomial=stats.binom(max_degree_possible,prob)
 
-        sectorialized_degrees= self.sectorializeDegrees(
-         empirical_distribution, binomial_distribution, incident_degrees_)
+        #sectorialized_degrees= self.sectorializeDegrees(
+        # empirical_distribution, binomial_distribution, incident_degrees_)
 
-        sectorialized_degrees_= self.newSectorializeDegrees(
-         empirical_distribution, binomial_distribution, incident_degrees_)
+        #sectorialized_degrees_= self.newSectorializeDegrees(
+        # empirical_distribution, binomial_distribution, incident_degrees_)
 
         sectorialized_degrees__= self.newerSectorializeDegrees(
               empirical_distribution, binomial, incident_degrees_,
               max_degree_empirical,minimum_incidence,networkMeasures.N )
 
-        sectorialized_agents= self.sectorializeAgents(
-             sectorialized_degrees, networkMeasures.degrees)
+        #sectorialized_agents= self.sectorializeAgents(
+        #     sectorialized_degrees, networkMeasures.degrees)
 
-        sectorialized_agents_= self.sectorializeAgents(
-             sectorialized_degrees_, networkMeasures.degrees)
+        #sectorialized_agents_= self.sectorializeAgents(
+        #     sectorialized_degrees_, networkMeasures.degrees)
 
         sectorialized_agents__= self.sectorializeAgents(
              sectorialized_degrees__, agent_degrees)
@@ -46,11 +106,11 @@ class NetworkPartitioning:
 
         self.makeSelf("incident_degrees_     ",incident_degrees_     ,
                       "incident_degrees     ",incident_degrees     ,
-                      "sectorialized_agents  ",sectorialized_agents  ,
-                      "sectorialized_agents_  ",sectorialized_agents_  ,
+                      #"sectorialized_agents  ",sectorialized_agents  ,
+                      #"sectorialized_agents_  ",sectorialized_agents_  ,
                       "sectorialized_agents__  ",sectorialized_agents__  ,
-                      "sectorialized_degrees ",sectorialized_degrees ,
-                      "sectorialized_degrees_ ",sectorialized_degrees_ ,
+                      #"sectorialized_degrees ",sectorialized_degrees ,
+                      #"sectorialized_degrees_ ",sectorialized_degrees_ ,
                       "sectorialized_degrees__ ",sectorialized_degrees__ ,
                       "binomial_distribution ",binomial_distribution ,
                       "prob"                  ,prob,
@@ -74,35 +134,60 @@ class NetworkPartitioning:
     def standardizeName(self,name):
         if name in (["s","strength","st"]+["f","força","forca","fo"]):
             name_="s"
-        if name in (["d","degree","dg"]+["g","grau","gr"]):
+        elif name in (["is","in_strength","ist"]+["fe","força_e","forca_e","fe"]):
+            name_="is"
+        elif name in (["os","out_strength","ost"]+["fs","força_s","forca_s","fs"]):
+            name_="os"
+        elif name in (["d","degree","dg"]+["g","grau","gr"]):
             name_="d"
+        elif name in (["id","in_degree","idg"]+["ge","grau_e","gre"]):
+            name_="id"
+        elif name in (["od","out_degree","odg"]+["gs","grau_s","grs"]):
+            name_="od"
         return name_
 
     def basicMeasures(self,networkMeasures,metric_):
         nm=networkMeasures
-        if metric_=="s":
+        if metric_ in ("s","is","os"):
             edge_weights=[i[2]["weight"] for i in nm.edges]
             average_edge_weight=sum(edge_weights)/nm.E
-            max_degree_empirical=round(max(nm.strengths.values()) / average_edge_weight)
-            max_degree_possible =2*(nm.N-1) # max d given N
-            prob=nm.E/(nm.N*(nm.N-1)) # edge probability
             self.average_edge_weight=average_edge_weight
+        if metric_=="s":
+            max_degree_empirical=round(max(nm.strengths_) / average_edge_weight)
+        elif metric_=="is":
+            max_degree_empirical=round(2*max(nm.in_strengths_) / average_edge_weight)
+        elif metric_=="os":
+            max_degree_empirical=round(2*max(nm.out_strengths_) / average_edge_weight)
         elif metric_=="d":
-            max_degree_empirical=max(nm.degrees.values())
-            max_degree_possible=2*(nm.N-1) # max d given N
-            prob=nm.E/(nm.N*(nm.N-1)) # edge probability
+            max_degree_empirical=max(nm.degrees_)
+        elif metric_=="id":
+            max_degree_empirical=2*max(nm.in_degrees_)
+        elif metric_=="od":
+            max_degree_empirical=2*max(nm.out_degrees_)
+        prob=nm.E/(nm.N*(nm.N-1)) # edge probability
+        max_degree_possible=2*(nm.N-1) # max d given N
         return prob, max_degree_empirical, max_degree_possible
     def makeDegreeLists(self, networkMeasures,metric_):
         if metric_=="s":
             agent_degrees={i:round(j/self.average_edge_weight) for i,j in networkMeasures.strengths.items()}
-            incident_degrees=[round(i/self.average_edge_weight) for i in networkMeasures.strengths.values()]
-            incident_degrees_=list(set(incident_degrees))
-            incident_degrees_.sort()
+            incident_degrees=agent_degrees.values()
+        elif metric_=="is":
+            agent_degrees={i:round((2*j)/self.average_edge_weight) for i,j in networkMeasures.in_strengths.items()}
+            incident_degrees=list(agent_degrees.values())
+        elif metric_=="os":
+            agent_degrees={i:round((2*j)/self.average_edge_weight) for i,j in networkMeasures.out_strengths.items()}
+            incident_degrees=list(agent_degrees.values())
         elif metric_=="d":
             agent_degrees=networkMeasures.degrees
-            incident_degrees=[i for i in networkMeasures.degrees.values()]
-            incident_degrees_=list(set(incident_degrees))
-            incident_degrees_.sort()
+            incident_degrees=networkMeasures.degrees_
+        elif metric_=="id":
+            agent_degrees={i:(2*j) for i,j in networkMeasures.in_degrees.items()}
+            incident_degrees=list(agent_degrees.values())
+        elif metric_=="od":
+            agent_degrees={i:(2*j) for i,j in networkMeasures.out_degrees.items()}
+            incident_degrees=list(agent_degrees.values())
+        incident_degrees_=list(set(incident_degrees))
+        incident_degrees_.sort()
         return incident_degrees, incident_degrees_, agent_degrees
     def makeEmpiricalDistribution(self, incident_degrees, incident_degrees_, N):
         empirical_distribution=[]
@@ -174,11 +259,17 @@ class NetworkPartitioning:
         distribution_compare = list(A(empirical_probs) < A(binomial_probs))
         self.binomial_probs=binomial_probs
         self.distribution_compare0=distribution_compare
-        tindex= distribution_compare.index(True)
-        tindex2=distribution_compare[::-1].index(True)
-        periphery_degrees=incident_degrees_[:tindex]
-        intermediary_degrees=incident_degrees_[tindex:-tindex2]
-        hub_degrees=         incident_degrees_[-tindex2:]
+        if sum(distribution_compare):
+            tindex= distribution_compare.index(True)
+            tindex2=distribution_compare[::-1].index(True)
+            periphery_degrees=incident_degrees_[:tindex]
+            intermediary_degrees=incident_degrees_[tindex:-tindex2]
+            hub_degrees=         incident_degrees_[-tindex2:]
+        else:
+            periphery_degrees=incident_degrees_[:]
+            intermediary_degrees=[]
+            hub_degrees=[]
+
         return periphery_degrees, intermediary_degrees, hub_degrees
 
     def newSectorializeDegrees(self,empirical_distribution,binomial_distribution,incident_degrees_):
@@ -207,62 +298,3 @@ class NetworkPartitioning:
             else:
                 periphery_degrees.append(degree)
         return periphery_degrees, intermediary_degrees, hub_degrees
-"""
-        self.perifericos=perifericos=[]
-        self.intermediarios=intermediarios=[]
-        self.hubs=hubs=[]
-        self.quebras=quebras=[]
-        setor="periferico"
-        for grau in graus:
-            prob_i=sum([o==grau for o in graus_incidentes])/len(ordenacao)
-            if prob_i > 0:
-                prob_r=pg[grau]
-                incidente_maior=prob_i>=prob_r
-                #print("\ngrau: %i; pi: %f; pr: %f; im: %i" % (grau, prob_i,prob_r,incidente_maior))
-                if incidente_maior:
-                    if setor in ("periferico", "hub"):
-                        pass
-                    else:
-                        setor = "hub"
-                else:
-                    if setor == "hub":
-                        print("QUEBRA DA ESTRUTURA - grau",grau)
-                        quebras.append("grau %i" % (grau,))
-                        intermediarios+=hubs
-                        hubs=[]
-                    if setor == "intermediario":
-                        pass
-                    else:
-                        setor = "intermediario"
-                if setor == "periferico":
-                    perifericos.append(grau)
-                elif setor == "intermediario":
-                        intermediarios.append(grau)
-                elif setor == "hub":
-                    hubs.append(grau)
-                else:
-                    print("grau nao categorizado")
-
-                #print setor
-
-        # 2 graus de quebra:
-        if len(intermediarios)>0:
-            self.g1=g1=intermediarios[0] # grau minimo dos intermediarios
-            if len(hubs)>0:
-                self.g2=g2=hubs[0] # grau minimo dos hubs
-            else:
-                print(u"DEGENERADO, não há hubs", "grau")
-                self.g1=g1=0
-                self.g2=g2=grau_max+1
-        else:
-            print(u"DEGENERADO, não há intermediário", "grau")
-            # ajustando de forma que sejam todos intermediários
-            self.g1=g1=0 # grau minimo dos intermediarios
-            self.g2=g2=grau_max +1# grau minimo dos hubs
-
-# contando os vertices em cada setor
-        n_perifericos=sum([gi<g1 for gi in graus_incidentes])
-        n_intermediarios=sum([gi<g2 for gi in graus_incidentes])-n_perifericos
-        n_hubs=g.number_of_nodes()-(n_perifericos+n_intermediarios)
-        self.dist=(n_perifericos,n_intermediarios,n_hubs)
-"""
