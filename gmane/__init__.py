@@ -10,4 +10,5 @@ from .pca import *
 from .timeStatistics import *
 from .agentStatistics import *
 from .evolutionTimelines import *
+from .tableHelpers import *
 
