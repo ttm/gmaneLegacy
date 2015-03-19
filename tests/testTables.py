@@ -19,3 +19,19 @@ partial_labels=["u.","b.","q."]
 datarow_labels=["ELE","LAD"]
 tstring3=g.parcialSums(row_labels,sequences,partials,partial_labels,datarow_labels)
 
+dl=g.DownloadGmaneData('~/.gmane2/')
+dl.downloadedStats() # might take a while
+
+lm=g.LoadMessages(dl.lists[0][0],basedir="~/.gmane2/")
+print("loaded messages")
+ds=g.ListDataStructures(lm)
+print("made datastructures")
+ts=g.TimeStatistics(ds)
+print("made overall activity statistics along time")
+
+
+hi=ts.hours["histogram"]/ts.hours["histogram"].sum()
+row_labels=list(range(24))
+tstring4=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],partial_labels=["h","2h","3h","4h","6h","12h"],datarow_labels=["LOOB"])
+
+g.writeTex(tstring4,"aqui.tex")

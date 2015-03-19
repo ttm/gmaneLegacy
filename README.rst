@@ -84,6 +84,12 @@ Download messages from one GMANE list:
     ts=g.TimeStatistics(ds)
     print("made overall circular activity statistics along time")
 
+    # make latex tables to observe distributions within bins of interest
+    hi=100*ts.hours["histogram"]/ts.hours["histogram"].sum()
+    row_labels=list(range(24))
+    tstring=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],partial_labels=["h","2h","3h","4h","6h","12h"],datarow_labels=["APACHE"])
+    g.writeTex(tstring,"here.tex")
+
     ps=g.AgentStatistics(ds)
     print("made overall activity statistics among participants")
     

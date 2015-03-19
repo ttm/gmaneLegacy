@@ -54,8 +54,13 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
     ltable=header+ltable+footer
     return ltable
 
+def pcaTable(pca_evolution):
+    """Make table with PCA formation mean and std"""
+    pass
 
-
+def writeTex(string,filename):
+    with open(filename,"w") as f:
+        f.write(string)
 
 
 
