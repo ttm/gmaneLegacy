@@ -162,6 +162,14 @@ class NetworkMeasures:
         timings.append((t.time()-T,"radius_diameter_center_periphery"))
         self.timings=timings
 
+        T=t.time()
+        self.n_connected_components=x.number_connected_components(gu)
+        nodes=[]
+        nodes_components=[foo.nodes() for foo in x.connected_component_subgraphs(gu)][:1]
+        for nodes_ in nodes_components: nodes+=nodes_
+        self.periphery_=nodes
+        self.timings=timings
+
 
 
 

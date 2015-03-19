@@ -8,56 +8,68 @@ def compoundPartitioning(agents):
     agents is a dict with keys "d", "id", "od", "s", "is", "os"
     with sectorialized_agents__ with each of these criteria
     """
-    exc_h=set(agents["g"][2]) &
-          set(agents["ig"][2]) &
-          set(agents["og"][2]) &
-          set(agents["s"][2]) &
-          set(agents["is"][2]) &
-          set(agents["os"][2])
-    exc_i=set(agents["g"] [1]) &
-          set(agents["ig"][1]) &
-          set(agents["og"][1]) &
-          set(agents["s"] [1]) &
-          set(agents["is"][1]) &
-          set(agents["os"][1])
-    exc_p=set(agents["g"] [0]) &
-          set(agents["ig"][0]) &
-          set(agents["og"][0]) &
-          set(agents["s"] [0]) &
-          set(agents["is"][0]) &
-          set(agents["os"][0])
+    exc_h=set( agents["d"][-1][2]) & \
+          set(agents["id"][-1][2]) & \
+          set(agents["od"][-1][2]) & \
+          set( agents["s"][-1][2]) &  \
+          set(agents["is"][-1][2]) & \
+          set(agents["os"][-1][2])
+    exc_i=set( agents["d"][-1][1]) & \
+          set(agents["id"][-1][1]) & \
+          set(agents["od"][-1][1]) & \
+          set( agents["s"][-1][1]) & \
+          set(agents["is"][-1][1]) & \
+          set(agents["os"][-1][1])
+    exc_p=set( agents["d"][-1][0]) & \
+          set(agents["id"][-1][0]) & \
+          set(agents["od"][-1][0]) & \
+          set( agents["s"][-1][0]) & \
+          set(agents["is"][-1][0]) & \
+          set(agents["os"][-1][0])
     exc=exc_p,exc_i,exc_h
 
-    inc_h=set(agents["g"][2])  |
-          set(agents["ig"][2]) |
-          set(agents["og"][2]) |
-          set(agents["s"][2])  |
-          set(agents["is"][2]) |
-          set(agents["os"][2])
-    inc_i=set(agents["g"] [1]) |
-          set(agents["ig"][1]) |
-          set(agents["og"][1]) |
-          set(agents["s"] [1]) |
-          set(agents["is"][1]) |
-          set(agents["os"][1])
-    inc_p=set(agents["g"] [0]) |
-          set(agents["ig"][0]) |
-          set(agents["og"][0]) |
-          set(agents["s"] [0]) |
-          set(agents["is"][0]) |
-          set(agents["os"][0])
+    inc_h=set( agents["d"][-1][2])  | \
+          set(agents["id"][-1][2]) | \
+          set(agents["od"][-1][2]) | \
+          set( agents["s"][-1][2])  | \
+          set(agents["is"][-1][2]) | \
+          set(agents["os"][-1][2])
+    inc_i=set( agents["d"][-1][1]) | \
+          set(agents["id"][-1][1]) | \
+          set(agents["od"][-1][1]) | \
+          set( agents["s"][-1][1]) | \
+          set(agents["is"][-1][1]) | \
+          set(agents["os"][-1][1])
+    inc_p=set( agents["d"][-1][0]) | \
+          set(agents["id"][-1][0]) | \
+          set(agents["od"][-1][0]) | \
+          set( agents["s"][-1][0]) | \
+          set(agents["is"][-1][0]) | \
+          set(agents["os"][-1][0])
+    inc=inc_p, inc_i, inc_h
 
+    total=set(agents["d"][-1][0]+agents["d"][-1][1]+agents["d"][-1][2])
     excc_h=exc[2]
-    excc_i=set(agents["g"][2]) &
-          set(agents["ig"][2]) &
-          set(agents["og"][2]) &
-          set(agents["s"][2]) &
-          set(agents["is"][2]) &
-          set(agents["os"][2])
+    excc_p=inc[0]
+    excc_i=total - (exc[2] & inc[0])
+    excc=excc_p,excc_i,excc_h
 
+    incc_h=inc[2]
+    incc_p=excc[0]
+    incc_i=total-(incc_h & incc_p)
+    incc=incc_p,incc_i,incc_h
 
+    exce_h=exc[2]
+    exce_i=inc[1]
+    exce_p=total-(exce_h & exce_i)
+    exce=exce_p,exce_i,exce_h
 
-    inc=inc_p,inc_i,inc_h
+    ince_h=inc[2]
+    ince_i=exc[1]
+    ince_p=total-(ince_h & ince_i)
+    ince=ince_p,ince_i,ince_h
+
+    return dict(total=total, exc=exc, inc=inc, excc=excc, incc=incc, exce=exce, ince=ince)
 
 
 
@@ -170,7 +182,7 @@ class NetworkPartitioning:
     def makeDegreeLists(self, networkMeasures,metric_):
         if metric_=="s":
             agent_degrees={i:round(j/self.average_edge_weight) for i,j in networkMeasures.strengths.items()}
-            incident_degrees=agent_degrees.values()
+            incident_degrees=list(agent_degrees.values())
         elif metric_=="is":
             agent_degrees={i:round((2*j)/self.average_edge_weight) for i,j in networkMeasures.in_strengths.items()}
             incident_degrees=list(agent_degrees.values())

@@ -21,6 +21,8 @@ class NetworkEvolution:
                 len(loaded_messages), offset, self.window_size))
         pointer=offset
         self.offset=offset
+        self.minimum_incidence=minimum_incidence
+        self.tdir=tdir
         counter=0
 
         if tdir: os.system("mkdir {}".format(tdir))
@@ -57,9 +59,18 @@ class NetworkEvolution:
             counter+=1
             # make pca 
             # write pca with cpickle
+        self.saveOverallInfo()
         videoname="evoT{}W{}O{}S{}R{}".format(
                 len(loaded_messages), self.window_size, offset, self.step_size, imagerate)
         self.makeVideo(tdir,videoname,imagerate)
+    def saveOverallInfo(self):
+        with open("{}/overallInfo.pickle".format(self.tdir),"wb") as f:
+            tdict=dict( window_size=self.window_size,
+                         step_size =self.step_size,
+                            offset =self.offset,
+                  minimum_incidece =self.minimum_incidence )
+            del self.overall[-1].binomial
+            pickle.dump((tdict,self.overall),f)
 
     def makeVideo(self,tdir="evolution",videoname="fooname",imagerate=18):
         command="avconv -f image2 -framerate {} -i {}/im%09d.png -qscale 1 -b 65536k -y {}/{}.avi".format(
