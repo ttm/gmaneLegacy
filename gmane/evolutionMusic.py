@@ -53,7 +53,7 @@ class EvolutionMusic:
     self.degrees_[1],[0,2,4,6,8,10],ambit=24,rythmic_pattern=[1],f0=110)
 
         #UTILS.write(line2+line3[:len(line2)]+line4,"mixY.wav")
-        UTILS.write(line3[:len(line2)]+line4,"mixY.wav")
+        UTILS.write(line2+line3[:len(line2)]+line4,"mixY.wav")
         # coloca cada um em uma oitava e escala
         # une os vetores de frequencia
         # junta duração
