@@ -41,6 +41,8 @@ setup(
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
+        'Intended Audience :: Education',
+        'Intended Audience :: Religion',
         'Intended Audience :: Other Audience',
         'Topic :: Scientific/Engineering :: Physics',
         'Topic :: Scientific/Engineering :: Visualization',
@@ -63,7 +65,7 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='complexity networks human interaction physics data mining analysis',
+    keywords='complexity networks human interaction physics data mining analysis visualization',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().

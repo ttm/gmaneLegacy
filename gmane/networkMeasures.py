@@ -42,6 +42,7 @@ class NetworkMeasures:
 
         T=t.time()
         self.strengths=     g.degree(weight="weight")
+        self.nodes__= sorted(g.nodes(), key=lambda x : self.strengths[x])
         self.strengths_=[self.strengths[i] for i in self.nodes_]
         self.in_strengths= g.in_degree(weight="weight")
         self.in_strengths_=[self.in_strengths[i] for i in self.nodes_]

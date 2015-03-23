@@ -87,7 +87,8 @@ Download messages from one GMANE list:
     # make latex tables to observe distributions within bins of interest
     hi=100*ts.hours["histogram"]/ts.hours["histogram"].sum()
     row_labels=list(range(24))
-    tstring=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],partial_labels=["h","2h","3h","4h","6h","12h"],datarow_labels=["APACHE"])
+    tstring=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],
+                partial_labels=["h","2h","3h","4h","6h","12h"],datarow_labels=["APACHE"])
     g.writeTex(tstring,"here.tex")
 
     ps=g.AgentStatistics(ds)
