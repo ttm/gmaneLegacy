@@ -13,7 +13,7 @@ os.environ["PATH"]=ENV
 #dl.downloadedStats() # might take a while
 #print("made liststats")
 
-lm=g.LoadMessages("gmane.linux.audio.users",4000,basedir="/disco/.gmane/")
+lm=g.LoadMessages("gmane.linux.audio.users",14000,basedir="/disco/.gmane/")
 #lm=g.LoadMessages("gmane.linux.audio.users",800,basedir="/disco/.gmane/")
 print("loaded messages")
 #

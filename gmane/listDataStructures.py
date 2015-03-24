@@ -72,6 +72,7 @@ class ListDataStructures:
                 date = date_.split(" (")[0]
                 if date.split(" ")[-1].islower():
                     date=date.replace(date.split(" ")[-1],date.split(" ")[-1].upper())
+                date=date.replace("GMT","")
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
                     date=pytz.UTC.localize(date)

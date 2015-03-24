@@ -126,7 +126,7 @@ Download messages from one GMANE list:
     npca=g.NetworkPCA(nm,np)
 
     # Evolves network with measures, partitions,
-    # PCA, principal components and versinus plots saved to disk
+    # PCA, principal components and Versinus plots saved to disk
     lm=lms[0] # loaded messages from list with most messages
     ne=g.NetworkEvolution(step_size=10)
     ne.evolveRaw(lm.messages,imagerate=4,erdos_sectors=True)
@@ -134,6 +134,16 @@ Download messages from one GMANE list:
     # see testDrawer.py or g.NetworkEvolution to make movies:
     # https://www.youtube.com/watch?v=iS8NwEy291g
 
+    # after making network evolution measurements and video,
+    # you can both make music:
+    em=g.EvolutionMusic()
+    print("music is done")
+    # avconv -i mixY.wav -i evo[..<depends on the evolution done>..].avi final.avi
+    # delivers you the final.avi animation with a soundtrack relative to network measures
+    # currently it is the 'four hubs dance' by default:
+    # https://www.youtube.com/watch?v=YxDiwzAUPeU
+
+    # and further analysis of measures and Erdos sectors:
     et=g.EvolutionTimelines()
     print("Written png files with network measures along evolution timeline")
 

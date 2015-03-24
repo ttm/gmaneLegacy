@@ -45,13 +45,14 @@ class EvolutionMusic:
         line1=self.sy2.sonicLine2(
    self.degrees_[-1],tmean=.3)
         line2=self.sy2.sonicLine2(
-   self.degrees_[-2],tmean=.7)
+   self.degrees_[-2],tmean=.7,DUR=1)
 
         sy.adsrSetup(A=5,D=20,S=-20,R=100)
         sy.tab=sy.tables.square
         line4=self.sy2.sonicLine1(
   self.degrees_[0],[0,2,4,6,8,10],ambit=12,rythmic_pattern=[0,0,1,1],f0=440)
         sy.adsrSetup(A=5,D=20,S=-15,R=730)
+        # Adicionar vibrato proporcional
         sy.tab=sy.tables.saw
         line3=self.sy2.sonicLine1(
     self.degrees_[1],[0,2,4,6,8,10],ambit=12,rythmic_pattern=[1],f0=110)
