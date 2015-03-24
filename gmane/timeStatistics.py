@@ -1,4 +1,4 @@
-import numpy as n, calendar
+import numpy as n, calendar, datetime
 
 def circularStatistics(population, period):
     pop=n.array(population)
@@ -126,7 +126,8 @@ class TimeStatistics:
         if truncate:
             delta=self.datetimes[-1]-self.datetimes[0]
             if delta.days > year:
-                max_date=self.datetimes[-1]-(delta%year)
+                delta_=(delta.total_seconds()/(24*60*60))%year
+                max_date=self.datetimes[-1]-datetime.timedelta(delta_%year)
             else:
                 max_date=self.datetimes[-1]
             samples=[i.month for i in self.datetimes if i <= max_date]

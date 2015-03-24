@@ -42,20 +42,26 @@ class EvolutionMusic:
         self.degrees__=(self.degrees_.T+self.off).T
 
         self.sy2.setupEngine(self.samplerate,total_time,self.T)
+        line1=self.sy2.sonicLine2(
+   self.degrees_[-1],tmean=.3)
         line2=self.sy2.sonicLine2(
-   self.degrees_[-1],self.degrees_[-2])
+   self.degrees_[-2],tmean=.7)
 
         sy.adsrSetup(A=5,D=20,S=-20,R=100)
         sy.tab=sy.tables.square
         line4=self.sy2.sonicLine1(
-  self.degrees_[0],[0,2,3,4,6,8,9,10],ambit=24,rythmic_pattern=[0,0,1,1],f0=440)
+  self.degrees_[0],[0,2,4,6,8,10],ambit=12,rythmic_pattern=[0,0,1,1],f0=440)
+        sy.adsrSetup(A=5,D=20,S=-15,R=730)
         sy.tab=sy.tables.saw
-        sy.adsrSetup(A=5,D=20,S=-10,R=530)
         line3=self.sy2.sonicLine1(
-    self.degrees_[1],[0,2,4,6,8,10],ambit=24,rythmic_pattern=[1],f0=110)
+    self.degrees_[1],[0,2,4,6,8,10],ambit=12,rythmic_pattern=[1],f0=110)
 
         #UTILS.write(line2+line3[:len(line2)]+line4,"mixY.wav")
-        UTILS.write(line2+line3[:len(line2)]+line4,"mixY.wav")
+        llen=len(line4)
+        UTILS.write(line1[:llen]+
+                    line2[:llen]+
+                    line3[:llen]+
+                    line4[:llen],self.tdir+"mixY.wav")
         # coloca cada um em uma oitava e escala
         # une os vetores de frequencia
         # junta duração
