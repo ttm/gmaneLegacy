@@ -118,7 +118,7 @@ class TimeStatistics:
         mean_month_size=n.mean([calendar.monthrange(xx.year, xx.month)[1]
             for xx in self.datetimes])
         mean_month_size=n.round(mean_month_size)
-        histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size))[0]
+        histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size+1))[0]
         max_discrepancy=histogram.max()/histogram.min()
         # medidas circulares
         circular_measures=circularStatistics(samples,1)
