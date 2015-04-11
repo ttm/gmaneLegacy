@@ -187,7 +187,14 @@ VE3=[]
 VA1=[]
 VA2=[]
 VA3=[]
-for ne in NEs:
+labels1=["$cc$","$k$","$bt$","$\\lambda$"]
+labels2=["$cc$","$s$","$s^{in}$","$s^{out}$",
+         "$k$","$k^{in}$","$k^{out}$","$bt$","$\\lambda$"]
+labels3=["$cc$","$s$","$s^{in}$","$s^{out}$",
+         "$k$","$k^{in}$","$k^{out}$","$bt$",
+         "$asy$", "$\\mu_{asy}$","$\\sigma_{asy}$",
+         "$dis$","$\\mu_{dis}$","$\\sigma_{dis}$","$\\lambda$"]
+for lid, ne in zip(dl.downloaded_lists,NEs):
     evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))
     evec2=n.abs(n.array([pca.pca2.eig_vectors_ for pca in ne.networks_pcas]))
     evec3=n.abs(n.array([pca.pca3.eig_vectors_ for pca in ne.networks_pcas]))
@@ -203,27 +210,38 @@ for ne in NEs:
     VA2.append(eval2)
     VA3.append(eval3)
 
-    evec1.mean(0)
-    evec1.std(0)
-    eval1.mean(0)
-    eval1.std(0)
+    m1= evec1.mean(0)
+    s1= evec1.std(0)
+    m1_=eval1.mean(0)
+    s1_=eval1.std(0)
 
-    evec2[:,:,:3].mean(0)
-    evec2[:,:,:3].std(0)
-    eval2[:,:3].mean(0)
-    eval2[:,:3].std(0)
+    m2= evec2[:,:,:3].mean(0)
+    s2= evec2[:,:,:3].std(0)
+    m2_=eval2[:,:3].mean(0)
+    s2_=eval2[:,:3].std(0)
 
-    evec3[:,:,:3].mean(0)
-    evec3[:,:,:3].std(0)
-    eval3[:,:3].mean(0)
-    eval3[:,:3].std(0)
-
-
+    m3= evec3[:,:,:3].mean(0)
+    s3= evec3[:,:,:3].std(0)
+    m3_=eval3[:,:3].mean(0)
+    s3_=eval3[:,:3].std(0)
 
     # make table with each mean and std
+    #t1=n.zeros((m1.shape[0],6))
+    #t1[:,::2]=m1
+    #t1[:,1::2]=s1
+    #t1_=n.zeros(6)
+    #t1_[::2]=m1_
+    #t1_[1::2]=s1_
+    #tab_data=n.vstack((t1,t1_))
+    label=labels[lid]
+    tstring=g.pcaTable(labels1,m1,s1,m1_,s1_)
+    g.writeTex(tstring,TDIR+"tabPCA1{}.tex".format(label))
+    tstring=g.pcaTable(labels2,m2,s2,m2_,s2_)
+    g.writeTex(tstring,TDIR+"tabPCA2{}.tex".format(label))
+    tstring=g.pcaTable(labels3,m3,s3,m3_,s3_)
+    g.writeTex(tstring,TDIR+"tabPCA3{}.tex".format(label))
 
-
-    print(label+"{0:.2f} for making evolved PCA eigen vectors and values as 3d matrices".format(T.time()-TT)); TT=T.time()
+    print(label+"{0:.2f} for making evolved PCA eigen vectors and values, 3d matrices and tex tables".format(T.time()-TT)); TT=T.time()
 # tirar media e desvio da contribuição de cada medida para cada componente
 # e da concentração de dispersão em cada componente
 # fazer tabelas

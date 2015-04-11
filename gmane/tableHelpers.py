@@ -1,3 +1,4 @@
+import numpy as n
 def makeTables(labels,data,two_decimal=False):
     """Returns a latex table of data with Label in first column.
     
@@ -61,9 +62,21 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
     ltable=header+ltable+footer
     return ltable
 
-def pcaTable(pca_evolution):
+def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
     """Make table with PCA formation mean and std"""
-    pass
+
+    header="\\begin{center}\n\\begin{tabular}{l |"+" c |"*6+"}\\hline\n"
+    header+="& \\multicolumn{2}{c|}{PC1}          & \multicolumn{2}{c|}{PC2} & \multicolumn{2}{c|}{PC3}  \\\\\\hline"
+    header+="& $\mu$            & $\sigma$ & $\mu$         & $\sigma$ & $\mu$ & $\sigma$  \\\hline\n"
+    tt=n.zeros((vec_mean.shape[0],6))
+    tt[:,::2]=vec_mean
+    tt[:,1::2]=vec_std
+    tt_=n.zeros(6)
+    tt_[::2]=val_mean
+    tt_[1::2]=val_std
+    tab_data=n.vstack((tt,tt_))
+    table=header + makeTables(labels,tab_data,True)
+    return table
 
 def writeTex(string,filename):
     with open(filename,"w") as f:
