@@ -6,6 +6,7 @@ importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
 importlib.reload(g.timeStatistics)
 importlib.reload(g.tableHelpers)
+importlib.reload(g.networkEvolution)
 #importlib.reload(g.interactionNetwork)
 #importlib.reload(g.networkMeasures)
 dreload(g,exclude="pytz")
@@ -25,6 +26,8 @@ def pRead(tfilename):
     return tobject
 
 #### DATA STRUCTURES
+dss=[]
+PDIR="pickledir/"
 #for lid in dl.downloaded_lists:
 #    print(lid)
 #    label=labels[lid]
@@ -35,8 +38,6 @@ def pRead(tfilename):
 #    pDump(ds,"{}ds{}.pickle".format(PDIR,label))
 #    dss.append(ds)
 
-PDIR="pickledir/"
-dss=[]
 for lid in dl.downloaded_lists:
     label=labels[lid]
     dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
@@ -44,13 +45,13 @@ for lid in dl.downloaded_lists:
 
 ##### TIME STATISTICS
 tss=[]; count=0
-for lid in dl.downloaded_lists:
-    label=labels[lid]
-    ds=dss[count]; count+=1
-    ts=g.TimeStatistics(ds)
-    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
-    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
-    tss.append(ts)
+#for lid in dl.downloaded_lists:
+#    label=labels[lid]
+#    ds=dss[count]; count+=1
+#    ts=g.TimeStatistics(ds)
+#    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
+#    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
+#    tss.append(ts)
 for lid in dl.downloaded_lists:
     label=labels[lid]
     tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
@@ -164,6 +165,20 @@ datarow_labels=["LAU","LAD","MET","CPP"]
 tstring=g.parcialSums(row_labels,data=his,partials=[1,2,3,4,6],partial_labels=["m.","b.","t.","q.","s."], datarow_labels=datarow_labels)
 g.writeTex(tstring,TDIR+"tabMonthsALL.tex")
 
+NEs=[] # for evolutions of the networks
+#for i in order:
+for i, lid in enumerate(dl.downloaded_lists):
+    label=labels[lid]
+    ds=dss[i]
+    NEs.append(
+            g.NetworkEvolution(window_size=1000,step_size=1000))
+    NEs[-1].evolveDataStructures(ds)
+    pDump(NEs[-1],"{}neP{}.pickle".format(PDIR,label))
+    print(label+"{0:.2f} for evolving and PICKLE pickle dumping PCA structures".format(T.time()-TT)); TT=T.time()
+for lid in dl.downloaded_lists:
+    label=labels[lid]
+    NEs.append(pRead("{}neP{}.pickle".format(PDIR,label)))
+    print(label+"{0:.2f} for PICKLE loading evolved PCA structures".format(T.time()-TT)); TT=T.time()
 
 
 

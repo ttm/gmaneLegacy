@@ -7,6 +7,7 @@ from .networkDrawer import *
 from .agentStatistics import *
 from .timeStatistics import *
 from .pca import *
+import time as TT
 class NetworkEvolution:
     def __init__(self, window_size=200, step_size=3, make_analysis=True, write_analysis=True, make_pca=True, write_pca=True):
         self.window_size=window_size
@@ -15,24 +16,41 @@ class NetworkEvolution:
         self.write_analysis=write_analysis
         self.make_pca      =make_pca
         self.write_pca     =write_pca
-    def evolveDataStructures(self,list_structures,tdir="evolution",clean_dir=True,minimum_incidence=2):
+    def evolveDataStructures(self,list_structures):
         """Use snapshots to make networks and PCA of each"""
-        # make network from data_structures messages
 
+        # make network from data_structures messages
         pointer=0
         class list_structures_:
             messages=list_structures.messages
-        interaction_networks=[]
-        networks_measures=[]
-        networks_pcas=[]
-        while pointer+self.window_size<len(list_structures.n_messages):
+        self.interaction_networks=[]
+        self.networks_measures=[]
+        self.networks_pcas=[]
+        while pointer+self.window_size<list_structures.n_messages:
+            T=TT.time()
             list_structures_.message_ids=list_structures.message_ids[pointer:pointer+self.window_size]
             iN=InteractionNetwork(list_structures_)
-            nm=NetworkMeasures(iN)
+            nm=NetworkMeasures(iN,exclude=[
+#                "weighted_directed_betweenness",
+                "unweighted_directed_betweenness",
+                "weighted_undirected_betweenness",
+                "unweighted_undirected_betweenness",
+                "weiner",
+                "closeness",
+                "transitivity",
+                "rich_club",
+#                "weighted_clustering",
+                "triangles",
+                "n_weakly_connected_components",
+                "n_strongly_connected_components", 
+                ])
             npca=NetworkPCA(nm,None)
-            interaction_networks.append(iN)
-            networks_measures.append(nm)
-            networks_pcas.append(npca)
+            self.interaction_networks.append(iN)
+            self.networks_measures.append(nm)
+            self.networks_pcas.append(npca)
+            print("ws: {}, pointer: {}, ss: {}, took: {:.2f}".format(
+                self.window_size, pointer,self.step_size,TT.time()-T))
+            pointer+=self.step_size
         # of chunks of size window_size
         # and separation step_size
         # make pca of each
