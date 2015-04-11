@@ -1,4 +1,4 @@
-import gmane as g, os, pickle, time as T
+import gmane as g, os, pickle, time as T, numpy as n
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
@@ -167,20 +167,66 @@ g.writeTex(tstring,TDIR+"tabMonthsALL.tex")
 
 NEs=[] # for evolutions of the networks
 #for i in order:
-for i, lid in enumerate(dl.downloaded_lists):
-    label=labels[lid]
-    ds=dss[i]
-    NEs.append(
-            g.NetworkEvolution(window_size=1000,step_size=1000))
-    NEs[-1].evolveDataStructures(ds)
-    pDump(NEs[-1],"{}neP{}.pickle".format(PDIR,label))
-    print(label+"{0:.2f} for evolving and PICKLE pickle dumping PCA structures".format(T.time()-TT)); TT=T.time()
+#for i, lid in enumerate(dl.downloaded_lists):
+#    label=labels[lid]
+#    ds=dss[i]
+#    NEs.append(
+#            g.NetworkEvolution(window_size=1000,step_size=1000))
+#    NEs[-1].evolveDataStructures(ds)
+#    pDump(NEs[-1],"{}neP{}.pickle".format(PDIR,label))
+#    print(label+"{0:.2f} for evolving and PICKLE pickle dumping PCA structures".format(T.time()-TT)); TT=T.time()
 for lid in dl.downloaded_lists:
     label=labels[lid]
     NEs.append(pRead("{}neP{}.pickle".format(PDIR,label)))
     print(label+"{0:.2f} for PICKLE loading evolved PCA structures".format(T.time()-TT)); TT=T.time()
 
+# fazer vetor tridimensional de cada PCA
+VE1=[]
+VE2=[]
+VE3=[]
+VA1=[]
+VA2=[]
+VA3=[]
+for ne in NEs:
+    evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))
+    evec2=n.abs(n.array([pca.pca2.eig_vectors_ for pca in ne.networks_pcas]))
+    evec3=n.abs(n.array([pca.pca3.eig_vectors_ for pca in ne.networks_pcas]))
+    eval1=n.abs(n.array([ pca.pca1.eig_values_ for pca in ne.networks_pcas]))
+    eval2=n.abs(n.array([ pca.pca2.eig_values_ for pca in ne.networks_pcas]))
+    eval3=n.abs(n.array([ pca.pca3.eig_values_ for pca in ne.networks_pcas]))
 
+    VE1.append(evec1)
+    VE2.append(evec2)
+    VE3.append(evec3)
+
+    VA1.append(eval1)
+    VA2.append(eval2)
+    VA3.append(eval3)
+
+    evec1.mean(0)
+    evec1.std(0)
+    eval1.mean(0)
+    eval1.std(0)
+
+    evec2[:,:,:3].mean(0)
+    evec2[:,:,:3].std(0)
+    eval2[:,:3].mean(0)
+    eval2[:,:3].std(0)
+
+    evec3[:,:,:3].mean(0)
+    evec3[:,:,:3].std(0)
+    eval3[:,:3].mean(0)
+    eval3[:,:3].std(0)
+
+
+
+    # make table with each mean and std
+
+
+    print(label+"{0:.2f} for making evolved PCA eigen vectors and values as 3d matrices".format(T.time()-TT)); TT=T.time()
+# tirar media e desvio da contribuição de cada medida para cada componente
+# e da concentração de dispersão em cada componente
+# fazer tabelas
 
 
 
