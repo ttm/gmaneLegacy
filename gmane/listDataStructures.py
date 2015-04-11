@@ -72,7 +72,11 @@ class ListDataStructures:
                 date = date_.split(" (")[0]
                 if date.split(" ")[-1].islower():
                     date=date.replace(date.split(" ")[-1],date.split(" ")[-1].upper())
-                date=date.replace("GMT","")
+                if date.split(" ")[-1].isupper() and date.split(" ")[-1].isalpha():
+                    date=date.replace(date.split(" ")[-1],"")
+                #date=date.replace("GMT","")
+                #date=date.replace(" CST","")
+                #date=date.replace(" CDT","")
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
                     date=pytz.UTC.localize(date)
@@ -88,7 +92,7 @@ class ListDataStructures:
                     responses[id_ant].append( (author,message["message-id"],date) )
                     raw_clean_references.append((message['references'],id_ant))
                 if text=="no":
-                    messages[m["message-id"]]=(au,id_ant,date)
+                    messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
                     t=message.get_payload()
                     #if type(t)==type("astring"):

@@ -28,6 +28,7 @@ class DownloadGmaneData:
             os.mkdir(self._BASE_DIR)
         self._empty_messages_count=0
         logging.basicConfig(filename=logging_file,format='%(asctime)s: %(message)s',level=logging.DEBUG)
+        self.getDownloadedLists()
     def correctFilenames(self):
         """Ensure that all message filenames are 8 digit integers"""
         try:
@@ -36,6 +37,7 @@ class DownloadGmaneData:
             self.getDownloadedLists()
         for elist in self.downloaded_lists:
             mfiles=os.listdir(self._BASE_DIR+elist)
+            mfiles=[i for i in mfiles if i.isdigit()]
             for mfile in mfiles:
                 oldname="{}{}/{}".format(self._BASE_DIR,elist,mfile)
                 newname="{}{}/{}".format(self._BASE_DIR,elist,"%08d"%int(mfile))
@@ -81,6 +83,7 @@ class DownloadGmaneData:
     def getDownloadedLists(self):
         """Retrieves all list_ids from Gmane"""
         dirs=[i for i in os.listdir(self._BASE_DIR) if os.path.isdir(self._BASE_DIR+i)]
+        dirs.sort()
         self.downloaded_lists=dirs
     def downloadListIDS(self,count=-1,load_local=True):
         """Downloads at most count GMANE list_ids"""

@@ -1,4 +1,4 @@
-def makeTables(labels,data,filename=None):
+def makeTables(labels,data,two_decimal=False):
     """Returns a latex table of data with Label in first column.
     
     Returns latex printable or writable to files to
@@ -7,7 +7,14 @@ def makeTables(labels,data,filename=None):
     if len(labels)!=len(data):
         print("input one label per data row")
         return
-    data="".join([(labels[i]+" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
+    if not two_decimal:
+        data="".join([(labels[i]+" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
+    else:
+        if type(data[0][0])==type("astring"):
+            #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else (labels[i]+" & {0:.2f} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data) ])
+        else:
+            data="".join([(labels[i]+" & {0:.2f} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
     return data
 
 def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):

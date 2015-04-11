@@ -9,16 +9,24 @@ def circularStatistics(population, period):
     mean_angle=n.arctan2(mean_vec.real,mean_vec.imag)
     size_mean_vec=n.abs(mean_vec)
     variance_unity_radius=1-size_mean_vec
-    std_unity_radius=n.log(-2*size_mean_vec)
+    std_unity_radius=n.sqrt(-2*n.log(size_mean_vec))
     circular_mean=mean_angle*(period/(2*n.pi))
-    circular_variance=variance_unity_radius*(period/(2*n.pi))
+    circular_variance=variance_unity_radius*(period**2/(2*n.pi))
     circular_std=std_unity_radius*(period/(2*n.pi))
 
     second_moment=(vec_n**2).sum()/len(vec_n)
     size_second_moment=n.abs(second_moment)
     circular_dispersion=(1-size_second_moment)/(2*(size_mean_vec**2))
 
-    return mean_vec, mean_angle, size_mean_vec, circular_mean, circular_variance, circular_dispersion
+    return dict(mean_vec=mean_vec,
+            mean_angle=mean_angle, 
+            size_mean_vec=size_mean_vec,
+            circular_mean=circular_mean, 
+            circular_variance=circular_variance, 
+            circular_std=circular_std, 
+            variance_unity_radius=variance_unity_radius, 
+            std_unity_radius=std_unity_radius,
+            circular_dispersion=circular_dispersion)
 
 class TimeStatistics:
     def __init__(self,list_datastructures=None):
@@ -104,22 +112,22 @@ class TimeStatistics:
         )
     def monthdaysStats(self):
         def aux(xx):
-            return xx.weekday()/(
+            return (xx.day-1)/(
                     calendar.monthrange(xx.year, xx.month)[1] )
         samples=[aux(i) for i in self.datetimes]
-        mean_month_size=n.mean([calendar.monthrange(xx.year, xx.month)
+        mean_month_size=n.mean([calendar.monthrange(xx.year, xx.month)[1]
             for xx in self.datetimes])
         mean_month_size=n.round(mean_month_size)
         histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size))[0]
         max_discrepancy=histogram.max()/histogram.min()
         # medidas circulares
-        circular_measures=circularStatistics(samples,7)
+        circular_measures=circularStatistics(samples,1)
         self.monthdays=dict(
             mean_month_size=mean_month_size,
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
-            circular_measures=circular_measures
+            circular_measures=circular_measures,
         )
     def monthsStats(self,truncate=True):
         year=365.242199 # days
@@ -130,14 +138,14 @@ class TimeStatistics:
                 max_date=self.datetimes[-1]-datetime.timedelta(delta_%year)
             else:
                 max_date=self.datetimes[-1]
-            samples=[i.month for i in self.datetimes if i <= max_date]
+            samples=[i.month-1 for i in self.datetimes if i <= max_date]
         else:
-            samples=[i.month for i in self.datetimes]
+            samples=[i.month-1 for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(13)))[0]
         max_discrepancy=histogram.max()/histogram.min()
         # medidas circulares
         circular_measures=circularStatistics(samples,12)
-        self.weekdays=dict(
+        self.months=dict(
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
@@ -154,10 +162,3 @@ class TimeStatistics:
             histogram=histogram,
             max_discrepancy=max_discrepancy,
         )
-
-
-
-
-
-
-
