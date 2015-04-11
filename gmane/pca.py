@@ -4,7 +4,6 @@ from scipy import stats
 class NetworkPCA:
     """PCA cases of interest  for observing stability in interaction networks.
 
-
         1) Primacy of centrality measures for dispersion; and
         2) precedence of symmetry over clustering;
         3) average of all basic centrality measures for first compoment

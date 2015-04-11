@@ -15,6 +15,29 @@ class NetworkEvolution:
         self.write_analysis=write_analysis
         self.make_pca      =make_pca
         self.write_pca     =write_pca
+    def evolveDataStructures(self,list_structures,tdir="evolution",clean_dir=True,minimum_incidence=2):
+        """Use snapshots to make networks and PCA of each"""
+        # make network from data_structures messages
+
+        pointer=0
+        class list_structures_:
+            messages=list_structures.messages
+        interaction_networks=[]
+        networks_measures=[]
+        networks_pcas=[]
+        while pointer+self.window_size<len(list_structures.n_messages):
+            list_structures_.message_ids=list_structures.message_ids[pointer:pointer+self.window_size]
+            iN=InteractionNetwork(list_structures_)
+            nm=NetworkMeasures(iN)
+            npca=NetworkPCA(nm,None)
+            interaction_networks.append(iN)
+            networks_measures.append(nm)
+            networks_pcas.append(npca)
+        # of chunks of size window_size
+        # and separation step_size
+        # make pca of each
+        # keep both PCAs and networks in class variables and pickle files
+
     def evolveRaw(self, loaded_messages,offset=0,tdir="evolution",clean_dir=True,print_status=True,imagerate=18,erdos_sectors=True,minimum_incidence=2):
         if len(loaded_messages)<self.window_size:
             raise ValueError("incoming messages smaller than window_size [({}-{})/{}]".format(
