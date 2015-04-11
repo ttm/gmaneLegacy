@@ -108,7 +108,7 @@ for i in order:
     data_.append(circMeasures(ts.minutes,False))
     data_.append(circMeasures(ts.hours))
     data_.append(circMeasures(ts.weekdays))
-    data_.append(circMeasures(ts.monthdays,False))
+    data_.append(circMeasures(ts.monthdays))
     data_.append(circMeasures(ts.months))
     tstring=g.makeTables(labels_,data_,True)
     label=labels[dl.downloaded_lists[i]]

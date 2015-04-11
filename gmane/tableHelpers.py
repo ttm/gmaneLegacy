@@ -32,7 +32,7 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
         for partial in partials:
             for line_num in range(len(datarow)):
                 if (line_num%partial)==0:
-                    lines[line_num]+="& \\multirow{{{}}}{{*}}{{ {} }}  ".format(partial,sum(datarow[line_num:line_num+partial]))
+                    lines[line_num]+="& \\multirow{{{:d}}}{{*}}{{ {:.2f} }}  ".format(partial,sum(datarow[line_num:line_num+partial]))
                 else:
                     lines[line_num]+="& "
 
