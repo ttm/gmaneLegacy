@@ -5,6 +5,7 @@ from IPython.lib.deepreload import reload as dreload
 importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
 importlib.reload(g.timeStatistics)
+importlib.reload(g.agentStatistics)
 importlib.reload(g.tableHelpers)
 importlib.reload(g.networkEvolution)
 #importlib.reload(g.interactionNetwork)
@@ -242,9 +243,29 @@ for lid, ne in zip(dl.downloaded_lists,NEs):
     g.writeTex(tstring,TDIR+"tabPCA3{}.tex".format(label))
 
     print(label+"{0:.2f} for making evolved PCA eigen vectors and values, 3d matrices and tex tables".format(T.time()-TT)); TT=T.time()
-# tirar media e desvio da contribuição de cada medida para cada componente
-# e da concentração de dispersão em cada componente
-# fazer tabelas
 
+# user activity
+# make that simple table and point to timelines
+# figure timelines of measures and other stuff
+AEs=[] # agent statistics
+for i, lid in enumerate(dl.downloaded_lists):
+    label=labels[lid]
+    ds=dss[i]
+    AEs.append(
+            g.AgentStatistics(ds))
+    # make .tex table
+    print(label+"{0:.2f} for agent statistics".format(T.time()-TT)); TT=T.time()
 
+data_=[]
+for i in order:
+    ae=AEs[i]
+    h_act="{:.2f}".format(ae.n_msgs_h_)
+    q1="{:.2f} ({:.2f}\\%)".format(ae.q1_*100,ae.Mq1*100)
+    q3="{:.2f} ({:.2f}\\%)".format(ae.q3_*100,ae.Mq3*100)
+    last_d10="{:.2f} ({:.2f}\\%)".format(ae.last_d10_*100,ae.Mlast_d10*100)
+    data_.append([h_act,q1,q3,last_d10])
+labels_=["LAU","LAD","MET","CPP"]
+tstring=g.makeTables(labels_,data_)
+print(tstring)
+g.writeTex(tstring,TDIR+"userTab.tex")
 
