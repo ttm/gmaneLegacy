@@ -269,3 +269,15 @@ tstring=g.makeTables(labels_,data_)
 print(tstring)
 g.writeTex(tstring,TDIR+"userTab.tex")
 
+
+# timelines:
+et=g.EvolutionTimelines()
+
+# adicionar linha preta no exc e inc
+# fazer avulso por grau e exc cascade
+# fazer gerai os plots
+
+# make example timeline 1000-1000
+
+# make all the graphs for lists LAD and CPP
+
