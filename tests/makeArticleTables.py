@@ -2,6 +2,7 @@ import gmane as g, os, pickle, time as T, numpy as n
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
+importlib.reload(g.pca)
 importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
 importlib.reload(g.timeStatistics)
@@ -167,13 +168,12 @@ PDIR="pickledir/"
 #tstring=g.parcialSums(row_labels,data=his,partials=[1,2,3,4,6],partial_labels=["m.","b.","t.","q.","s."], datarow_labels=datarow_labels)
 #g.writeTex(tstring,TDIR+"tabMonthsALL.tex")
 #
-#NEs=[] # for evolutions of the networks
-##for i in order:
+##NEs=[] # for evolutions of the networks
 ##for i, lid in enumerate(dl.downloaded_lists):
 ##    label=labels[lid]
 ##    ds=dss[i]
 ##    NEs.append(
-##            g.NetworkEvolution(window_size=1000,step_size=1000))
+##            g.NetworkEvolution(window_size=1000,step_size=1000,tdir="evoPCA{}".format(label)))
 ##    NEs[-1].evolveDataStructures(ds)
 ##    pDump(NEs[-1],"{}neP{}.pickle".format(PDIR,label))
 ##    print(label+"{0:.2f} for evolving and PICKLE pickle dumping PCA structures".format(T.time()-TT)); TT=T.time()
@@ -271,15 +271,33 @@ PDIR="pickledir/"
 #g.writeTex(tstring,TDIR+"userTab.tex")
 #
 #
-# timelines:
-et=g.EvolutionTimelines(draw=False)
-et.plotSingles()
+#et=g.EvolutionTimelines(draw=False,label="LAU",tdir="./evoPCALAU/")
+#et.plotSingles()
+#sizes=[50,100,250,500,1000,5000,1000]
+#order=[0,1] # CPP e LAD
+#TDIR="evoTimelines"
+#os.system("mkdir {}".format(TDIR))
+#for size in sizes:
+#    for listn in order:
+#        lid=dl.downloaded_lists[listn]
+#        label=labels[lid]
+#        ds=dss[listn]
+#        if size>=250:
+#            step_size=size
+#        else:
+#            step_size=200
+#        tdir="{}/evoTimeline{}-{}".format(TDIR,label,size)
+#        ne=g.NetworkEvolution(window_size=size,step_size=step_size,tdir=tdir)
+#        ne.evolveDataStructures(ds)
+#        et=g.EvolutionTimelines(label=label,tdir=tdir+"/")
 
-# adicionar linha preta no exc e inc OK
-# fazer avulso por grau e exc cascade
-# fazer gerai os plots
 
-# make example timeline 1000-1000
+# Fazer figura com 3 plots:
+# 1) grau x clust
+# 2) PCA1
+# 3) PCA2
 
-# make all the graphs for lists LAD and CPP
+evo=pRead("evoPCALAU/im000000013.pickle")
+g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
+
 

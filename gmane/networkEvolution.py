@@ -93,6 +93,7 @@ class NetworkEvolution:
             self.networks_pcas.append(npca)
             np=NetworkPartitioning(nm,minimum_incidence)
             del np.binomial
+            if self.tdir: os.system("mkdir {}".format(self.tdir))
             with open("{}/im{:09}.pickle".format(self.tdir,counter),"wb") as f:
                 tall=dict(nm=nm,
                         agents=np.sectorialized_agents__,
