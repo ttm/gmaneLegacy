@@ -2,11 +2,12 @@ import pylab as p, matplotlib, os, pickle
 from .networkPartitioning import *
 
 class EvolutionTimelines:
-    def __init__(self,tdir="./evolution/",label="gmaneID"):
+    def __init__(self,tdir="./evolution/",label="gmaneID",draw=True):
         self.tdir=tdir
         self.label=label
         self.getMeasures()
-        self.drawTimelines()
+        if draw:
+            self.drawTimelines()
     def getOverallMeasures(self):
         filenames=os.listdir(self.tdir)
         filenames_=[i for i in filenames if i.endswith(".pickle")]
@@ -23,13 +24,14 @@ class EvolutionTimelines:
                 "d":[],"id":[],"od":[],
                 "exc":[],"excc":[],"exce":[],
                 "inc":[],"incc":[],"ince":[],
-                "nm":[]}
+                "nm":[],"totals":[]}
         for filename in filenames_:
             with open(self.tdir+filename,"rb") as f:
                 data=pickle.load(f)
                 nm=data["nm"]
                 agents["nm"].append(nm)
                 n_agents=nm.N
+                agents["totals"].append(n_agents)
                 minimum_incidence=data["np"].minimum_incidence
                 agents["s"].append(data["np"].sectorialized_agents__)
                 agents["is"].append(
@@ -68,8 +70,15 @@ class EvolutionTimelines:
             ttype_="is"
             p.ylabel(r"fraction of nodes in each section $\rightarrow$")
         if ttype == "out-strength": ttype_="os"
-        if ttype == "exclusivist": ttype_="exc"
-        if ttype == "inclusivist": ttype_="inc"
+        if ttype == "exclusivist":
+            ttype_="exc"
+            not_classified=list([1-sum(self.fractionLengths(i,total)) 
+                for i,total in zip(self.agents[ttype_],self.agents["totals"])])
+            p.plot(list(range(0,ate,step_size)),not_classified,"k")
+        if ttype == "inclusivist":
+            ttype_="inc"
+            super_classified=list([sum(self.fractionLengths(i,total))-1 for i,total in zip(self.agents[ttype_],self.agents["totals"])])
+            p.plot(list(range(0,ate,step_size)),super_classified,"k")
         if ttype == "exclusivist cascade": 
             ttype_="excc"
             p.ylabel(r"fraction of nodes in each section $\rightarrow$")
@@ -82,11 +91,10 @@ class EvolutionTimelines:
         if ttype == "inclusivist externals": 
             ttype_="ince"
             p.xlabel(r"messages $\rightarrow$")
-        fractions=[fractionLengths(i) for i in self.agents[ttype_]]
+        fractions=[self.fractionLengths(i,total) for i,total in zip(self.agents[ttype_],self.agents["totals"])]
         hubs_fractions=[i[2] for i in fractions]
         intermediary_fractions=[i[1] for i in fractions]
         periphery_fractions=[i[0] for i in fractions]
-
         p.plot(list(range(0,ate,step_size)),periphery_fractions,"b")
         p.plot(list(range(0,ate,step_size)),intermediary_fractions,"g")
         p.plot(list(range(0,ate,step_size)),hubs_fractions,"r")
@@ -124,7 +132,25 @@ class EvolutionTimelines:
         p.ylim(min(measures)*.99,max(measures)*1.01)
         p.xlim(-5,ate+5)
 
+    def plotSingles(self):
+        p.clf()
+        fig = matplotlib.pyplot.gcf()
+        fig.set_size_inches(10.5,3.4) ###
+        ate=self.overall[1][0].n_messages-self.overall[0]["window_size"]
+        step_size=self.overall[0]["step_size"]
+        p.suptitle((r"Fraction of participants in each Erdös Sector. Window: %i messages."+"\nPlacement resolution: %i messages. %s") % (self.overall[0]["window_size"],step_size,self.label))
 
+        self.plotFracs("degree",     "221",ate,step_size)
+        self.plotFracs("strength",   "223",ate,step_size)
+        self.plotFracs("exclusivist","222",ate,step_size)
+        self.plotFracs("inclusivist","224",ate,step_size)
+        #fig.set_size_inches(5.5,16.4) ###
+
+        p.subplots_adjust(left=0.05,bottom=0.08,right=0.98,top=0.82,wspace=0.13,hspace=0.43)
+        filename="InText-W{}-S{}.png".format(self.label,self.overall[0]["window_size"],step_size)
+        # legenda no superior direito
+        p.savefig("{}/{}".format(self.tdir,filename))
+        #p.show()
     def plotFirstPage(self):
         p.clf()
         fig = matplotlib.pyplot.gcf()
@@ -163,7 +189,6 @@ class EvolutionTimelines:
     def drawTimelines(self):
         self.plotFirstPage()
 
-def fractionLengths(list_of_lists):
-    llist=[len(i) for i in list_of_lists]
-    total=sum(llist)
-    return [i/total for i in llist]
+    def fractionLengths(self,list_of_lists,total):
+        llist=[len(i) for i in list_of_lists]
+        return [i/total for i in llist]
