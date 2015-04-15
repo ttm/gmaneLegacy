@@ -1,4 +1,41 @@
-import numpy as n
+import numpy as n, string
+def markEntries(table,marker):
+    """Make entries in a table boldface or use other markings"""
+    # open rendered table as text
+    print("YEAH")
+    with open(table,"r") as f:
+        lines=f.read()
+    lines=lines.split("\n")
+    lines[3:-3]=[i.split("&") for i in lines[3:-3]]
+    for i,line in enumerate(lines[3:-3]):
+        i1,i2=line[-1].split("\\\\\\")
+        i2="\\\\\\"+i2
+        lines[i+3]=line[:-1]+[i1,i2]
+    print(lines)
+    print(len(lines[0]))
+    for column in range(1,len(lines[3])-1):
+        print("column")
+        values=[]
+        for linei in range(3,len(lines)-3):
+            if lines[linei][column].strip(): # can be empty
+                value=float(lines[linei][column].split("{")[-1].split("}")[0])
+                values.append(value)
+        print(values)
+        mav=max(values)
+        miv=min(values)
+        print(mav,miv)
+        for linei in range(3,len(lines)-3):
+            if lines[linei][column].strip(): # can be empty
+                orig="{:.2f}".format(mav)
+                tnew="\\{}{{ {} }}".format(marker,mav)
+                print(orig,tnew)
+                lines[linei][column]=lines[linei][column].replace(orig,tnew)
+    lines=lines[:3]+[" & ".join(line[:-1])+line[-1] for line in lines[3:-3]]+lines[-3:]
+    lines=" \n ".join(lines)
+    writeTex(lines,table.replace(".tex","_.tex"))
+    # find maximum and minimum in each row
+    # boldface them all
+    return lines
 def makeTables(labels,data,two_decimal=False):
     """Returns a latex table of data with Label in first column.
     
@@ -45,7 +82,7 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
             if cut:
                 for datarownum in range(len(data)):
                     num=i+(datarownum)*len(partials)
-                    suffix+="\\cline{{{}-{}}}".format(num+1,num+1)
+                    suffix+="\\cline{{{}-{}}}".format(num+2,num+2)
             i+=1
         lines[line_num]+="\\\\{}\n".format(suffix)
     
@@ -57,8 +94,8 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
     if datarow_labels:
         header=((" & \\multicolumn{{%i}}{{c|}}{{{}}}"%(len(partials),))*len(datarow_labels)).format(*datarow_labels)+" \\\\\\hline\n"
         ltable=header+ltable
-    header="\\begin{center}\n\\begin{tabular}{l ||"+" c |"*len(data)*len(partials)+"}\\hline\n"
-    footer="\\end{tabular}\n\\end{center}"
+    header="\\begin{center}\n\\begin{tabular}{| l ||"+" c |"*len(data)*len(partials)+"}\\hline\n"
+    footer="\\hline\\end{tabular}\n\\end{center}"
     ltable=header+ltable+footer
     return ltable
 

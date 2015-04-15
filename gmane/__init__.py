@@ -28,7 +28,7 @@ from .pca import NetworkPCA
 from .timeStatistics import circularStatistics, TimeStatistics
 from .agentStatistics import AgentStatistics
 from .evolutionTimelines import EvolutionTimelines
-from .tableHelpers import makeTables, parcialSums, pcaTable, writeTex
+from .tableHelpers import makeTables, parcialSums, pcaTable, writeTex, markEntries
 from .evolutionMusic import EvolutionMusic
 
 

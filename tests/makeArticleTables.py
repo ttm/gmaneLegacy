@@ -45,9 +45,9 @@ PDIR="pickledir/"
 #    label=labels[lid]
 #    dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
 #    print(label+"{0:.2f} for PICKLE loading data structures".format(T.time()-TT)); TT=T.time()
-#
+
 ###### TIME STATISTICS
-#tss=[]; count=0
+tss=[]; count=0
 ##for lid in dl.downloaded_lists:
 ##    label=labels[lid]
 ##    ds=dss[count]; count+=1
@@ -55,20 +55,20 @@ PDIR="pickledir/"
 ##    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
 ##    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
 ##    tss.append(ts)
-#for lid in dl.downloaded_lists:
-#    label=labels[lid]
-#    tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
-#    print(label+"{0:.2f} for PICKLE loading time statistics".format(T.time()-TT)); TT=T.time()
+for lid in dl.downloaded_lists:
+    label=labels[lid]
+    tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
+    print(label+"{0:.2f} for PICKLE loading time statistics".format(T.time()-TT)); TT=T.time()
 #
 ###pDump([dl,dss,tss],"4listas_.pickle")
 ##f=open("4listas_.pickle","rb")
 ##dl,dss,tss=pickle.load(f)
 ##f.close()
 #
-#order=[2,1,3,0] # LAU LAD MET CPP
-#labels_=[]
-#data_=[]
-#for i in order[:1]:
+order=[2,1,3,0] # LAU LAD MET CPP
+labels_=[]
+data_=[]
+#for i in order:
 ##for i in [0]:
 #    labels_.append(labels[dl.downloaded_lists[i]])
 #    ds=dss[i]
@@ -81,12 +81,12 @@ PDIR="pickledir/"
 #tstring=g.makeTables(labels_,data_)
 #print(tstring)
 #TDIR="tables/"
-#FDIR="figs/"
-#print(label+"{0:.2f} for making overall table".format(T.time()-TT)); TT=T.time()
-#
-#
+TDIR="/home/r/repos/stabilityInteraction/tables/"
+FDIR="figs/"
+print(label+"{0:.2f} for making overall table".format(T.time()-TT)); TT=T.time()
+
 #g.writeTex(tstring,TDIR+"tab1Geral.tex")
-#
+
 #data_=[]
 ## medidas: circular mean, circular std, circular variance, circular dispersion, max/min
 #def circMeasures(tdict,mean=True):
@@ -121,13 +121,14 @@ PDIR="pickledir/"
 #
 ## Make at least time table inline for
 ## hours of the day,
-#row_labels=["{}h".format(i) for i in range(24)]
-#for i in order:
-#    ts=tss[i]
-#    hi=100*ts.hours["histogram"]/ts.hours["histogram"].sum()
-#    tstring=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],partial_labels=["1h","2h","3h","4h","6h","12h"])
-#    label=labels[dl.downloaded_lists[i]]
-#    g.writeTex(tstring,TDIR+"tabHours{}.tex".format(label))
+row_labels=["{}h".format(i) for i in range(24)]
+for i in order:
+    ts=tss[i]
+    hi=100*ts.hours["histogram"]/ts.hours["histogram"].sum()
+    tstring=g.parcialSums(row_labels,data=[hi],partials=[1,2,3,4,6,12],partial_labels=["1h","2h","3h","4h","6h","12h"])
+    label=labels[dl.downloaded_lists[i]]
+    g.writeTex(tstring,TDIR+"tabHours{}.tex".format(label))
+lines=g.markEntries(TDIR+"tabHours{}.tex".format(label),"textbf")
 #
 #his=[100*tss[i].hours["histogram"]/tss[i].hours["histogram"].sum() for i in order]
 #datarow_labels=["LAU","LAD","MET","CPP"]
@@ -297,7 +298,7 @@ PDIR="pickledir/"
 # 2) PCA1
 # 3) PCA2
 
-evo=pRead("evoPCALAU/im000000013.pickle")
-g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
+#evo=pRead("evoPCALAU/im000000013.pickle")
+#g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
 
 
