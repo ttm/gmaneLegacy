@@ -1,4 +1,4 @@
-#from .downloadMessages import *
+from .downloadMessages import *
 __all__=["DownloadGmaneData",
 "LoadMessages",
 "ListDataStructures",
@@ -11,7 +11,7 @@ __all__=["DownloadGmaneData",
 "circularStatistics", "TimeStatistics",
 "AgentStatistics",
 "EvolutionTimelines",
-"makeTables", "parcialSums", "pcaTable", "writeTex",
+"makeTables", "partialSums", "pcaTable", "writeTex",
 "EvolutionMusic"]
 
 
@@ -28,7 +28,7 @@ from .pca import NetworkPCA
 from .timeStatistics import circularStatistics, TimeStatistics
 from .agentStatistics import AgentStatistics
 from .evolutionTimelines import EvolutionTimelines
-from .tableHelpers import makeTables, parcialSums, pcaTable, writeTex, markEntries
+from .tableHelpers import makeTables, partialSums, pcaTable, writeTex, markEntries
 from .evolutionMusic import EvolutionMusic
 
 

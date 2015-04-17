@@ -48,14 +48,18 @@ def makeTables(labels,data,two_decimal=False):
     if not two_decimal:
         data="".join([(labels[i]+" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
     else:
-        if type(data[0][0])==type("astring"):
+        print("BBBBBBBBBBBB",labels)
+        if labels[0]=="$cc$" and len(labels)>10:
+            print("AAAAAAAAAAA",labels)
+            data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$","$bt$") else (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow)) if labels[i] != "$\\sigma_{dis}$" else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif type(data[0][0])==type("astring"):
             #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data) ])
         else:
             data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
     return data
 
-def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
+def partialSums(labels, data, partials,partial_labels="",datarow_labels=""):
     """Returns a latex table with sums of data.
 
     Data is though to be unidimensional. Each row
@@ -102,9 +106,9 @@ def parcialSums(labels, data, partials,partial_labels="",datarow_labels=""):
 def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
     """Make table with PCA formation mean and std"""
 
-    header="\\begin{center}\n\\begin{tabular}{l |"+" c |"*6+"}\\hline\n"
-    header+="& \\multicolumn{2}{c|}{PC1}          & \multicolumn{2}{c|}{PC2} & \multicolumn{2}{c|}{PC3}  \\\\\\hline"
-    header+="& $\mu$            & $\sigma$ & $\mu$         & $\sigma$ & $\mu$ & $\sigma$  \\\hline\n"
+    header="\\begin{center}\n\\begin{tabular}{| l |"+" c |"*6+"}\\cline{2-7}\n"
+    header+="\\multicolumn{1}{c|}{} & \\multicolumn{2}{c|}{PC1}          & \multicolumn{2}{c|}{PC2} & \multicolumn{2}{c|}{PC3}  \\\\\\cline{2-7}"
+    header+="\\multicolumn{1}{c|}{} & $\mu$            & $\sigma$ & $\mu$         & $\sigma$ & $\mu$ & $\sigma$  \\\\\\hline\n"
     tt=n.zeros((vec_mean.shape[0],6))
     tt[:,::2]=vec_mean
     tt[:,1::2]=vec_std
@@ -112,7 +116,8 @@ def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
     tt_[::2]=val_mean
     tt_[1::2]=val_std
     tab_data=n.vstack((tt,tt_))
-    table=header + makeTables(labels,tab_data,True)
+    footer="\\hline\\end{tabular}\n\\end{center}"
+    table=header + makeTables(labels,tab_data,True) + footer
     return table
 
 def writeTex(string,filename):

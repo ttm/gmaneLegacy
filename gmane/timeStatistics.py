@@ -53,7 +53,10 @@ class TimeStatistics:
         #count_obs60=[obs60.count(i) for i in set(obs60)]
         obs24=n.random.randint(0,24,self.n_observations)
         #count_obs24=[obs24.count(i) for i in set(obs24)]
-        obs12=n.random.randint(0,12,self.n_observations)
+        obs12=n.random.randint(0,12,len(self.months.samples))
+        obs30=n.random.randint(0,30,self.n_observations)
+        #count_obs12=[obs12.count(i) for i in set(obs12)]
+        obs7=n.random.randint(0,7,self.n_observations)
         #count_obs12=[obs12.count(i) for i in set(obs12)]
         
     def secondsStats(self):
@@ -66,6 +69,7 @@ class TimeStatistics:
         seconds=dict(
             circular_measures=circular_measures,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs60,
             samples=seconds,
             histogram=histogram)
         self.seconds=seconds
@@ -80,6 +84,7 @@ class TimeStatistics:
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs60,
             circular_measures=circular_measures
         )
         self.minutes=minutes
@@ -95,6 +100,7 @@ class TimeStatistics:
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs24,
             circular_measures=circular_measures
         )
         self.hours=hours
@@ -108,6 +114,7 @@ class TimeStatistics:
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs7,
             circular_measures=circular_measures
         )
     def monthdaysStats(self):
@@ -127,6 +134,7 @@ class TimeStatistics:
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs30,
             circular_measures=circular_measures,
         )
     def monthsStats(self,truncate=True):
@@ -149,6 +157,7 @@ class TimeStatistics:
             samples=samples,
             histogram=histogram,
             max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs12,
             circular_measures=circular_measures
         )
     def yearsStats(self):
