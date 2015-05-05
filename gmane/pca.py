@@ -45,7 +45,7 @@ class NetworkPCA:
         self.pca3=PCA(self.M3)
         if plot_sym:
             fig = matplotlib.pyplot.gcf()
-            fig.set_size_inches(7.,8.4)
+            fig.set_size_inches(11.,8.4)
             p.suptitle("Symmetry prevalence over clutering for data dispersion")
             p.subplot(311)
             # plot degree x clust
@@ -70,9 +70,9 @@ class NetworkPCA:
             p.plot(network_measures.degrees__[-n_hubs:],network_measures.weighted_clusterings__[-n_hubs:],"ro", ms=3.9,label="hubs")
 
             p.subplot(312)
-            self.pca2.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertex plot in principal components (PCA1)",label1=r"PC1 - degrees and strengths",label2=r"PC2 - clustering")
+            self.pca2.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2=r"PC3 - clustering")
             p.subplot(313)
-            self.pca3.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertex plot in principal components (PCA2)",label1=r"PC1 - degrees and strengths",label2="PC2 - symmetry")
+            self.pca3.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2="PC2 - symmetry")
             p.subplots_adjust(left=0.08,bottom=0.12,right=0.97,top=0.88,wspace=0.13,hspace=0.88)
             p.savefig("{}/{}".format(tdir,tname))
         elif network_partitioning:

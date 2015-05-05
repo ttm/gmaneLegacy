@@ -40,24 +40,49 @@ class TimeStatistics:
         self.makeStatistics()
     def makeStatistics(self):
         """Make statistics from seconds to years"""
+        self.uniformComparisson()
         self.secondsStats()
         self.minutesStats()
         self.hoursStats()
         self.weekdaysStats()
-        self.monthdaysStats()
+        self.monthdaysStats_()
         self.monthsStats()
         self.yearsStats()
-        self.uniformComparisson()
     def uniformComparisson(self):
-        obs60=n.random.randint(0,60,self.n_observations)
-        #count_obs60=[obs60.count(i) for i in set(obs60)]
-        obs24=n.random.randint(0,24,self.n_observations)
-        #count_obs24=[obs24.count(i) for i in set(obs24)]
-        obs12=n.random.randint(0,12,len(self.months.samples))
-        obs30=n.random.randint(0,30,self.n_observations)
-        #count_obs12=[obs12.count(i) for i in set(obs12)]
-        obs7=n.random.randint(0,7,self.n_observations)
-        #count_obs12=[obs12.count(i) for i in set(obs12)]
+        ar=n.random.randint(0,60,(1000,self.n_observations))
+        cc=n.array([n.histogram(i,60)[0] for i in ar])
+        cc_=cc.max(1)/cc.min(1)
+        self.obs60=(cc_.mean(),cc_.std())
+        self.obs60_=cc_
+
+        ar=n.random.randint(0,24,(1000,self.n_observations))
+        cc=n.array([n.histogram(i,24)[0] for i in ar])
+        cc_=cc.max(1)/cc.min(1)
+        self.obs24=(cc_.mean(),cc_.std())
+        self.obs24_=cc_
+
+        ar=n.random.randint(0,30,(1000,self.n_observations))
+        cc=n.array([n.histogram(i,30)[0] for i in ar])
+        cc_=cc.max(1)/cc.min(1)
+        self.obs30=(cc_.mean(),cc_.std())
+        self.obs30_=cc_
+
+        ar=n.random.randint(0,7,(1000,self.n_observations))
+        cc=n.array([n.histogram(i,7)[0] for i in ar])
+        cc_=cc.max(1)/cc.min(1)
+        self.obs7=(cc_.mean(),cc_.std())
+        self.obs7_=cc_
+        
+        #self.obs60=n.random.randint(0,60,(1000, self.n_observations))
+        #self.count_obs60=[obs60.count(i) for i in set(obs60)]
+        #self.obs24=n.random.randint(0,24,self.n_observations)
+        #self.count_obs24=[obs24.count(i) for i in set(obs24)]
+        # IN MONTHs function:
+        #self.obs12=n.random.randint(0,12,len(self.months.samples))
+        #self.obs30=n.random.randint(0,30,self.n_observations)
+        #self.count_obs12=[obs12.count(i) for i in set(obs12)]
+        #self.obs7=n.random.randint(0,7,self.n_observations)
+        #self.count_obs12=[obs12.count(i) for i in set(obs12)]
         
     def secondsStats(self):
         # contagem para histograma
@@ -117,6 +142,28 @@ class TimeStatistics:
             max_discrepancy_=self.obs7,
             circular_measures=circular_measures
         )
+    def monthdaysStats_(self):
+        def aux(xx):
+            #return (xx.day-1)/(
+            #        calendar.monthrange(xx.year, xx.month)[1] )
+            return ((xx.day-1)*24*60+xx.hour*60+xx.minute )/(
+                    calendar.monthrange(xx.year, xx.month)[1]*24*60)
+        samples=[aux(i) for i in self.datetimes]
+        mean_month_size=n.mean([calendar.monthrange(xx.year, xx.month)[1]
+            for xx in self.datetimes])
+        mean_month_size=n.round(mean_month_size)
+        histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size+1))[0]
+        max_discrepancy=histogram.max()/histogram.min()
+        # medidas circulares
+        circular_measures=circularStatistics([i*mean_month_size for i in samples],mean_month_size)
+        self.monthdays=dict(
+            mean_month_size=mean_month_size,
+            samples=samples,
+            histogram=histogram,
+            max_discrepancy=max_discrepancy,
+            max_discrepancy_=self.obs30,
+            circular_measures=circular_measures,
+        )
     def monthdaysStats(self):
         def aux(xx):
             return (xx.day-1)/(
@@ -153,6 +200,14 @@ class TimeStatistics:
         max_discrepancy=histogram.max()/histogram.min()
         # medidas circulares
         circular_measures=circularStatistics(samples,12)
+
+        ar=n.random.randint(0,12,(1000,len(samples)))
+        cc=n.array([n.histogram(i,12)[0] for i in ar])
+        cc_=cc.max(1)/cc.min(1)
+        self.obs12=(cc_.mean(),cc_.std())
+        self.obs12_=cc_
+
+
         self.months=dict(
             samples=samples,
             histogram=histogram,

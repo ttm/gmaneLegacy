@@ -98,7 +98,7 @@ class EvolutionTimelines:
         p.plot(list(range(0,ate,step_size)),periphery_fractions,"b")
         p.plot(list(range(0,ate,step_size)),intermediary_fractions,"g")
         p.plot(list(range(0,ate,step_size)),hubs_fractions,"r")
-        p.ylim(0,1)
+        p.ylim(0,1.)
         p.xlim(-5,ate+5)
     def plotMeasure(self,title,subplot,ate,step_size):
         if subplot=="5,2,10":
@@ -136,7 +136,8 @@ class EvolutionTimelines:
         p.clf()
         fig = matplotlib.pyplot.gcf()
         fig.set_size_inches(10.5,3.4) ###
-        ate=self.overall[1][0].n_messages-self.overall[0]["window_size"]
+        #ate=self.overall[1][0].n_messages-self.overall[0]["window_size"]
+        ate=self.overall[1][0].n_messages
         step_size=self.overall[0]["step_size"]
         p.suptitle((r"Fraction of participants in each Erdös Sector. Window: %i messages."+"\nPlacement resolution: %i messages. %s") % (self.overall[0]["window_size"],step_size,self.label))
 

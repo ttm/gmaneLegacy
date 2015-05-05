@@ -51,22 +51,23 @@ def compoundPartitioning(agents):
     total=set(agents["d"][-1][0]+agents["d"][-1][1]+agents["d"][-1][2])
     excc_h=exc[2]
     excc_p=inc[0]
-    excc_i=total - (exc[2] & inc[0])
+    #excc_i=total - (exc[2] & inc[0])
+    excc_i=total - (exc[2] | inc[0])
     excc=excc_p,excc_i,excc_h
 
     incc_h=inc[2]
     incc_p=excc[0]
-    incc_i=total-(incc_h & incc_p)
+    incc_i=total-(incc_h | incc_p)
     incc=incc_p,incc_i,incc_h
 
     exce_h=exc[2]
     exce_i=inc[1]
-    exce_p=total-(exce_h & exce_i)
+    exce_p=total-(exce_h | exce_i)
     exce=exce_p,exce_i,exce_h
 
     ince_h=inc[2]
     ince_i=exc[1]
-    ince_p=total-(ince_h & ince_i)
+    ince_p=total-(ince_h | ince_i)
     ince=ince_p,ince_i,ince_h
 
     return dict(total=total, exc=exc, inc=inc, excc=excc, incc=incc, exce=exce, ince=ince)

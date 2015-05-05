@@ -48,10 +48,21 @@ def makeTables(labels,data,two_decimal=False):
     if not two_decimal:
         data="".join([(labels[i]+" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
     else:
-        print("BBBBBBBBBBBB",labels)
         if labels[0]=="$cc$" and len(labels)>10:
-            print("AAAAAAAAAAA",labels)
             data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$","$bt$") else (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow)) if labels[i] != "$\\sigma_{dis}$" else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif labels[0]=="$cc$" and len(labels)>5:
+            data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$",) 
+                else 
+                       (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
+                      else 
+                          ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif labels[0]=="$cc$":
+            data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$asdaoijsd$",) 
+                else 
+                       (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
+                      else 
+                          ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+
         elif type(data[0][0])==type("astring"):
             #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data) ])
