@@ -15,46 +15,46 @@ importlib.reload(g.evolutionTimelines)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
-labels={'gmane.comp.gcc.libstdc++.devel':"CPP", 'gmane.linux.audio.devel':"LAD", 'gmane.linux.audio.users':"LAU", 'gmane.politics.organizations.metareciclagem':"MET"}
-#print("initializing")
-dl=g.DownloadGmaneData('~/.gmane4/')
-TT=T.time()
-#print("{0:.2f} for initializing download dir initializing".format(T.time()-TT)); TT=T.time()
-def pDump(tobject,tfilename):
-    with open(tfilename,"wb") as f:
-        pickle.dump(tobject,f,-1)
-def pRead(tfilename):
-    with open(tfilename,"rb") as f:
-        tobject=pickle.load(f)
-    return tobject
-#
-##### DATA STRUCTURES
-dss=[]
-PDIR="pickledir/"
-##for lid in dl.downloaded_lists:
-##    print(lid)
-##    label=labels[lid]
-##    lm=g.LoadMessages(lid,basedir="~/.gmane4/")
-##    print(label+"{0:.2f} for loading messages".format(T.time()-TT)); TT=T.time()
-##    ds=g.ListDataStructures(lm,text="no")
-##    print(label+"{0:.2f} for data structures".format(T.time()-TT)); TT=T.time()
-##    pDump(ds,"{}ds{}.pickle".format(PDIR,label))
-##    dss.append(ds)
-#
-for lid in dl.downloaded_lists:
-    label=labels[lid]
-    dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
-    print(label+"{0:.2f} for PICKLE loading data structures".format(T.time()-TT)); TT=T.time()
-#
-####### TIME STATISTICS
-tss=[]; count=0
-for lid in dl.downloaded_lists:
-    label=labels[lid]
-    ds=dss[count]; count+=1
-    ts=g.TimeStatistics(ds)
-    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
-    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
-    tss.append(ts)
+#labels={'gmane.comp.gcc.libstdc++.devel':"CPP", 'gmane.linux.audio.devel':"LAD", 'gmane.linux.audio.users':"LAU", 'gmane.politics.organizations.metareciclagem':"MET"}
+##print("initializing")
+#dl=g.DownloadGmaneData('~/.gmane4/')
+#TT=T.time()
+##print("{0:.2f} for initializing download dir initializing".format(T.time()-TT)); TT=T.time()
+#def pDump(tobject,tfilename):
+#    with open(tfilename,"wb") as f:
+#        pickle.dump(tobject,f,-1)
+#def pRead(tfilename):
+#    with open(tfilename,"rb") as f:
+#        tobject=pickle.load(f)
+#    return tobject
+##
+###### DATA STRUCTURES
+#dss=[]
+#PDIR="pickledir/"
+###for lid in dl.downloaded_lists:
+###    print(lid)
+###    label=labels[lid]
+###    lm=g.LoadMessages(lid,basedir="~/.gmane4/")
+###    print(label+"{0:.2f} for loading messages".format(T.time()-TT)); TT=T.time()
+###    ds=g.ListDataStructures(lm,text="no")
+###    print(label+"{0:.2f} for data structures".format(T.time()-TT)); TT=T.time()
+###    pDump(ds,"{}ds{}.pickle".format(PDIR,label))
+###    dss.append(ds)
+##
+#for lid in dl.downloaded_lists:
+#    label=labels[lid]
+#    dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
+#    print(label+"{0:.2f} for PICKLE loading data structures".format(T.time()-TT)); TT=T.time()
+##
+######## TIME STATISTICS
+#tss=[]; count=0
+#for lid in dl.downloaded_lists:
+#    label=labels[lid]
+#    ds=dss[count]; count+=1
+#    ts=g.TimeStatistics(ds)
+#    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
+#    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
+#    tss.append(ts)
 ##for lid in dl.downloaded_lists:
 ##    label=labels[lid]
 ##    tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
@@ -87,41 +87,41 @@ TDIR="/home/r/repos/stabilityInteraction/tables/"
 #
 ##g.writeTex(tstring,TDIR+"tab1Geral.tex")
 #
-data_=[]
-## medidas: circular mean, circular std, circular variance, circular dispersion, max/min
-def circMeasures(tdict,mean=True):
-    if mean:
-       return [tdict["circular_measures"]["circular_mean"],
-            tdict["circular_measures"]["std_unity_radius"],
-            tdict["circular_measures"]["variance_unity_radius"],
-            tdict["circular_measures"]["circular_dispersion"],
-            tdict["max_discrepancy"],
-            tdict["max_discrepancy_"][0],
-            tdict["max_discrepancy_"][1],
-        ]
-    else:
-       return ["--//--",
-            tdict["circular_measures"]["std_unity_radius"],
-            tdict["circular_measures"]["variance_unity_radius"],
-            tdict["circular_measures"]["circular_dispersion"],
-            tdict["max_discrepancy"],
-            tdict["max_discrepancy_"][0],
-            tdict["max_discrepancy_"][1],
-        ]
-labels_=["seconds","minutes","hours","weekdays","month days","months"]
-for i in order:
-    ts=tss[i]
-    data_=[]
-    data_.append(circMeasures(ts.seconds,False))
-    data_.append(circMeasures(ts.minutes,False))
-    data_.append(circMeasures(ts.hours))
-    data_.append(circMeasures(ts.weekdays))
-    data_.append(circMeasures(ts.monthdays))
-    data_.append(circMeasures(ts.months))
-    tstring=g.makeTables(labels_,data_,True)
-    label=labels[dl.downloaded_lists[i]]
-    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
-print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
+#data_=[]
+### medidas: circular mean, circular std, circular variance, circular dispersion, max/min
+#def circMeasures(tdict,mean=True):
+#    if mean:
+#       return [tdict["circular_measures"]["circular_mean"],
+#            tdict["circular_measures"]["std_unity_radius"],
+#            tdict["circular_measures"]["variance_unity_radius"],
+#            tdict["circular_measures"]["circular_dispersion"],
+#            tdict["max_discrepancy"],
+#            tdict["max_discrepancy_"][0],
+#            tdict["max_discrepancy_"][1],
+#        ]
+#    else:
+#       return ["--//--",
+#            tdict["circular_measures"]["std_unity_radius"],
+#            tdict["circular_measures"]["variance_unity_radius"],
+#            tdict["circular_measures"]["circular_dispersion"],
+#            tdict["max_discrepancy"],
+#            tdict["max_discrepancy_"][0],
+#            tdict["max_discrepancy_"][1],
+#        ]
+#labels_=["seconds","minutes","hours","weekdays","month days","months"]
+#for i in order:
+#    ts=tss[i]
+#    data_=[]
+#    data_.append(circMeasures(ts.seconds,False))
+#    data_.append(circMeasures(ts.minutes,False))
+#    data_.append(circMeasures(ts.hours))
+#    data_.append(circMeasures(ts.weekdays))
+#    data_.append(circMeasures(ts.monthdays))
+#    data_.append(circMeasures(ts.months))
+#    tstring=g.makeTables(labels_,data_,True)
+#    label=labels[dl.downloaded_lists[i]]
+#    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
+#print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
 ##
 ### Make at least time table inline for
 ### hours of the day,
@@ -146,18 +146,18 @@ print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=
 ##g.writeTex(tstring,TDIR+"tabWeekdays.tex")
 ##
 ## days of the month and
-row_labels=["{}".format(i+1) for i in range(30)]
-for i in order:
-    ts=tss[i]
-    hi=100*ts.monthdays["histogram"]/ts.monthdays["histogram"].sum()
-    tstring=g.partialSums(row_labels,data=[hi],partials=[1,5,10,15],partial_labels=["1 day","5","10","15 days"])
-    label=labels[dl.downloaded_lists[i]]
-    g.writeTex(tstring,TDIR+"tabMonthdays{}.tex".format(label))
-
-his=[100*tss[i].monthdays["histogram"]/tss[i].monthdays["histogram"].sum() for i in order]
-datarow_labels=["LAU","LAD","MET","CPP"]
-tstring=g.partialSums(row_labels,data=his,partials=[1,5,10,15],partial_labels=["1 day","5 days","10 days","15 days"], datarow_labels=datarow_labels)
-g.writeTex(tstring,TDIR+"tabMonthdaysALL.tex")
+#row_labels=["{}".format(i+1) for i in range(30)]
+#for i in order:
+#    ts=tss[i]
+#    hi=100*ts.monthdays["histogram"]/ts.monthdays["histogram"].sum()
+#    tstring=g.partialSums(row_labels,data=[hi],partials=[1,5,10,15],partial_labels=["1 day","5","10","15 days"])
+#    label=labels[dl.downloaded_lists[i]]
+#    g.writeTex(tstring,TDIR+"tabMonthdays{}.tex".format(label))
+#
+#his=[100*tss[i].monthdays["histogram"]/tss[i].monthdays["histogram"].sum() for i in order]
+#datarow_labels=["LAU","LAD","MET","CPP"]
+#tstring=g.partialSums(row_labels,data=his,partials=[1,5,10,15],partial_labels=["1 day","5 days","10 days","15 days"], datarow_labels=datarow_labels)
+#g.writeTex(tstring,TDIR+"tabMonthdaysALL.tex")
 
 ## months of the year
 #row_labels=["Jan","Fev","Mar","Apr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"]
@@ -307,15 +307,37 @@ NEs=[] # for evolutions of the networks
 #g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
 
 # EXTRA plots
-import pylab as p
-p.subplot(411)
-p.plot(tss[0].monthdays["samples"])
-p.subplot(412)
-p.plot(tss[1].monthdays["samples"])
-p.subplot(413)
-p.plot(tss[2].monthdays["samples"])
-p.subplot(414)
-p.plot(tss[3].monthdays["samples"])
-p.suptitle("CPP, LAD, LAU, MET list messages along the months")
-p.savefig(TDIR+"ActvityAlongMonthCycles.png")
+#import pylab as p
+#p.subplot(411)
+#p.plot(tss[0].monthdays["samples"])
+#p.subplot(412)
+#p.plot(tss[1].monthdays["samples"])
+#p.subplot(413)
+#p.plot(tss[2].monthdays["samples"])
+#p.subplot(414)
+#p.plot(tss[3].monthdays["samples"])
+#p.suptitle("CPP, LAD, LAU, MET list messages along the months")
+#p.savefig(TDIR+"ActvityAlongMonthCycles.png")
 
+
+# Facebook
+import social as S, os
+ENV=os.environ["PATH"]
+import  importlib
+from IPython.lib.deepreload import reload as dreload
+importlib.reload(S.utils)
+#dreload(S)
+os.environ["PATH"]=ENV
+
+fg= S.utils.GDFgraph("../extraData/RenatoFabbri06022014.gdf") # graph should be on fg.G
+fg2=S.utils.GDFgraph("../extraData/Massimo19062013.gdf") # graph should be on fg.G
+fg3=S.utils.GDFgraph("../extraData/DemocraciaDireta14072013.gdf") # graph should be on fg.G
+fg4=S.utils.GDFgraph("../extraData/SiliconValleyGlobalNetwork27042013.gdf") # graph should be on fg.G
+
+
+# open 4 friendship networks
+# open 4 interaction networks
+# use Social to parse gdfs
+
+# Twitter
+# make a retweet network or two
