@@ -334,10 +334,13 @@ fg2=S.utils.GDFgraph("../extraData/Massimo19062013.gdf") # graph should be on fg
 fg3=S.utils.GDFgraph("../extraData/DemocraciaDireta14072013.gdf") # graph should be on fg.G
 fg4=S.utils.GDFgraph("../extraData/SiliconValleyGlobalNetwork27042013.gdf") # graph should be on fg.G
 
-
 # open 4 friendship networks
 # open 4 interaction networks
 # use Social to parse gdfs
 
 # Twitter
 # make a retweet network or two
+
+# make a plot N x Gamma for 100 lists
+
+
