@@ -530,6 +530,7 @@ tstring3=g.makeTables(labels_,n.array(fracs[:-1]),True)
 g.writeTex(tstring3,TDIR+"tabSectorsExtra.tex")
 
 
+# Fazer análise com as redes do participa de amizade e de interação
 
 
 #    evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))

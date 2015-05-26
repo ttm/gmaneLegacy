@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="utf-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key attr.name="weight" attr.type="double" for="edge" id="d0" />
+  <graph edgedefault="directed">
+    <node id="Giuliana Redin" />
+    <node id="Jader José de Oliveira" />
+    <node id="Laila Bellix" />
+    <node id="Josué Aparecido Moreira" />
+    <node id="Cleber Possani Jr" />
+    <node id="joaquim marçal de souza" />
+    <node id="Ajuda" />
+    <node id="Thaís Bittencourt" />
+    <node id="Raúl Burgos" />
+    <node id="Marcus Vinicius de Azevedo Braga" />
+    <node id="Carlos Vieira" />
+    <node id="Sady Fauth" />
+    <node id="Marcel Barros Garcia" />
+    <node id="WALACE LUIZ DA CONCEIÇÃO HOELZLE" />
+    <node id="Fabiana Nogueira" />
+    <node id="Judson Clayton Maciel" />
+    <node id="Osmar Assis do Nascimento Filho" />
+    <node id="Cintia Takada" />
+    <node id="Rebeca s. Duarte" />
+    <node id="Francisco Gilberg Barreto" />
+    <node id="Marcelo Levy Perrucci" />
+    <node id="Luis Felipe Coimbra Costa" />
+    <node id="FRANKLIN DE PAULA JÚNIOR" />
+    <node id="André Luiz Caregnato" />
+    <node id="naianna jacqueline mesquita marrocos" />
+    <node id="Ricardo Poppi" />
+    <node id="Raimundo Nonato Sousa Silva" />
+    <node id="Thomas Tschoepke Soares" />
+    <node id="Gabriela Valle" />
+    <node id="Caroline Bampa" />
+    <node id="Emília Baroni" />
+    <node id="Roseane Palavizini" />
+    <node id="cleber jose da silva suzigan" />
+    <node id="Wagner Passos Garcia" />
+    <node id="Leonardo Valles Bento" />
+    <node id="Mariane Aparecida Ferreira de Oliveira" />
+    <node id="Ronald Emerson Scherolt da Costa" />
+    <node id="JOAO FREITAS DE CASTRO CHAVES" />
+    <node id="Milene Aparecida Dacal Coan" />
+    <node id="nanda barreto" />
+    <node id="Timothy Denis  Ireland" />
+    <node id="JOÃO BATISTA CAVALCANTI" />
+    <node id="Fábio Danilo de Pedroso Sitta Camargo" />
+    <node id="Claudia" />
+    <node id="Flávio Boleiz Júnior" />
+    <node id="Maria da Conceição Lopes Alves" />
+    <node id="Paulo André Caminha Guimarães Filho" />
+    <node id="Hylton Sarcinelli Luz" />
+    <node id="Henrique Parra Parra Filho" />
+    <node id="Desirée Bahls Tomeleri" />
+    <node id="Nemer Sanches" />
+    <node id="Juliano Geraldi" />
+    <node id="Maria Teresa Augusti" />
+    <node id="LARA REGINA NUNES VIEIRA" />
+    <node id="Jesulino Alves de Souza" />
+    <node id="Thiago Henrique Ferreira Zoroastro" />
+    <node id="Daniel Pitangueira de Avelino" />
+    <node id="Mara" />
+    <node id="Carlos André Paiva Ferreira" />
+    <node id="Leandro Nunes dos Santos" />
+    <node id="Thayara Buranello Siqueira" />
+    <node id="Lucenilde Fernandes" />
+    <node id="Ignucios" />
+    <node id="Ana Zaiczuk Raggio" />
+    <node id="Paola Cristina Gomes de Lima" />
+    <node id="Áurea Carolina de Freitas e Silva" />
+    <node id="JOAO COSTA AGUIAR FILHO" />
+    <node id="Gustavo Antonio Mendelsohn de Carvalho" />
+    <node id="Wagner Carneiro de Santana" />
+    <node id="marta batalha" />
+    <node id="Leticia Guilherme Gonçalves" />
+    <node id="Andre Carneiro Leao" />
+    <node id="João Victor Mazzarin Damas" />
+    <node id="Paulo Sanjines Barreiro" />
+    <node id="Carmen de Melo Castro e Silva" />
+    <node id="Natan Marques" />
+    <node id="Renato Fabbri" />
+    <node id="Josenildo Fernando da Silva" />
+    <node id="yzus_go@hotmail.com" />
+    <node id="edison cardoso teixeira" />
+    <node id="Sabrina Piccoli Marques" />
+    <node id="Sílvia Gomes" />
+    <node id="Lorena Salete Barbosa" />
+    <node id="Rodrigo Souto" />
+    <node id="Magda Aparecida Bueno Maciel" />
+    <node id="Cássio Batista Alves" />
+    <node id="Ricardo Luiz de Miranda Valle" />
+    <node id="andre luiz da silva" />
+    <node id="Luiz Henrique Gomes de Almeida" />
+    <node id="DIEGO DA SILVA BRITTO" />
+    <node id="Alessandra Barros" />
+    <node id="Alberto Kirilauskas" />
+    <node id="Joseph Handerson" />
+    <node id="Oigres Reis de Lima" />
+    <node id="Analucia guimarães Couto" />
+    <node id="Thiago de Menezes Rocha Cardoso" />
+    <node id="Daniel Penalva" />
+    <node id="Fádia Rebouças" />
+    <node id="Mauricio E Gleizer" />
+    <node id="Tião Garcia" />
+    <node id="Adriano Alves de Aquino Araújo" />
+    <node id="Comunicação Participa" />
+    <node id="Ricardo Peixoto Britto" />
+    <node id="Maira Gonçalves Lopes" />
+    <node id="João Damasio da Silva Neto" />
+    <node id="WAGNER AUGUSTO FISCHER" />
+    <node id="xavier uytdenbroek" />
+    <node id="Pedro Constam" />
+    <node id="Marcelo Rodrigues Saldanha da Silva" />
+    <node id="Rafaela Melo" />
+    <node id="ANA LUISA ZAGO DE MORAES" />
+    <node id="Mauro de Oliveira" />
+    <node id="Pedro Markun" />
+    <node id="Cássio N. Martin" />
+    <node id="José Henrique Scandelae" />
+    <node id="Marília Mattos Rocha" />
+    <node id="Fabiana Galera Severo" />
+    <node id="Luiz Alberto Ferreira" />
+    <node id="Thiago Capuano" />
+    <node id="Ludger Jean Louis" />
+    <node id="Roberto Candido de Oliveira " />
+    <node id="Cristiana Arruda Sarturi" />
+    <node id="MATTHEUS PIROVANI RORIZ GONÇALVES" />
+    <node id="adminuser" />
+    <node id="Salete Valesan Camba" />
+    <node id="André de Oliveira Kiepper" />
+    <node id="Maria Luiza Pinho Pereira" />
+    <node id="nailson da costa de castro" />
+    <node id="Daniel Melo Barreto" />
+    <node id="Marcela Vieira" />
+    <node id="fabricia girao cavalcante" />
+    <node id="Mariangela Mattiolli" />
+    <node id="Beto Francine" />
+    <node id="Portal" />
+    <node id="Cristiane Martins Vasquez" />
+    <node id="Teresa Donato Liporace" />
+    <node id="Newton Cesar Caetano Monteiro" />
+    <node id="Jose mendonça Furtado Neto" />
+    <node id="Oraide Luzia Peixoto Soares" />
+    <node id="ALEXSSANDRO SANTOS DA SILVA" />
+    <node id="Edson Franco" />
+    <node id="Enaile Batista da Silva Kikuta" />
+    <node id="Maria Salete Teixeira Burigo" />
+    <node id="Raphael Vieira" />
+    <node id="Luís Alexandre Merolle" />
+    <node id="Ewout ter Haar" />
+    <node id="DEMETRIO CARNEIRO DA CUNHA OLIVEIRA" />
+    <node id="José Araujo da Silva" />
+    <node id="Caroline Burle" />
+    <node id="VALDEREIS FREITAS DE SOUZA" />
+    <node id="José Ilton Soares Barbosa" />
+    <node id="Paula Guarnieri Passos" />
+    <node id="JESIEL COSTA ROSA" />
+    <node id="Gerso Pereira Junior" />
+    <node id="Sady Jacques" />
+    <node id="Marisa Souza dos Santos" />
+    <node id="ASSUNCAO SANTOS" />
+    <node id="Aleksander Velozo Pascoal" />
+    <node id="Darlan Cavalcanti" />
+    <node id="Jacques Schwarzstein" />
+    <node id="ALAN GUSTAVO SANTANA RIBEIRO" />
+    <node id="Augusto Herrmann" />
+    <node id="Edgar Platino Bacelar" />
+    <node id="Anderson Parreiras Riedel Lima" />
+    <node id="Isaac E. Batista" />
+    <node id="Luciana Guimarães Sobrinho" />
+    <node id="Laura Zacher" />
+    <node id="Nathália Kneipp Sena" />
+    <node id="Rafael Riuji Chikazawa" />
+    <node id="luis vinicius cangussu" />
+    <node id="agostinho dos santos filho" />
+    <node id="MILTON ALVES DE SOUSA" />
+    <node id="alberto viana de campos filho" />
+    <node id="Taisa Molina" />
+    <node id="Maria Aparecida Alves da Silva" />
+    <node id="Renê Patrick Richter" />
+    <node id="josinaldo santos" />
+    <node id="Frank Lane" />
+    <node id="Grazielle Machado" />
+    <node id="Jorge" />
+    <node id="Vicente Aguiar" />
+    <node id="João hellensberger Filho" />
+    <node id="Lígia Maria Alves Pereira" />
+    <node id="Alex Barroso Bernal" />
+    <node id="Rosangela Santos" />
+    <node id="Pablo Henrique do Amaral Gomes" />
+    <node id="Tatiane Regina Meneghetti" />
+    <node id="Teste da Silva" />
+    <node id="Isabel Penido de Campos Machado" />
+    <node id="Naira Beatris De Moraes Goncalves" />
+    <node id="Carla Alexsandra do Carmo Ribeiro" />
+    <node id="Ana Lima" />
+    <node id="Sérgio Cheque Bernardo" />
+    <node id="Departamento de Educação Popular e Mobilização Cidadã" />
+    <node id="Ricardo Araujo da Silva" />
+    <node id="Daniel Chiaretti" />
+    <node id="danielle alves cordeiro" />
+    <node id="Roberto Kodama" />
+    <node id="Valessio Brito" />
+    <node id="Vanderlei Francisco de Oliveira" />
+    <node id="Nayara de Oliveira S. da Silva" />
+    <node id="Fernanda Hahn" />
+    <node id="Telma Regina de Paula Souza" />
+    <node id="Maria Betânia Freitas da Silva" />
+    <node id="Maria Bertolina de Morais" />
+    <node id="Marcelo Soares Vilhanueva" />
+    <node id="maria estela da conceição" />
+    <node id="Paulo César do Amaral" />
+    <node id="Gabriela Vasconcellos Fernandes" />
+    <node id="NEUSA APARECIDA VIEIRA" />
+    <node id="Laise Sindra" />
+    <node id="raimundo jacinto da silva junior" />
+    <node id="haroldo marinho" />
+    <node id="Kátia Primon" />
+    <node id="nivea bionde dos santos de oliveira" />
+    <node id="lucas guerra pereira nonino" />
+    <node id="Carlos Eduardo Teixeira Carvalho" />
+    <node id="Francine Dorte" />
+    <node id="Fernando Alex S. Lima" />
+    <node id="Gustavo Luca Abate" />
+    <node id="Marcelo Branco" />
+    <node id="Lidia Rodrigues Padua" />
+    <edge source="Laila Bellix" target="Timothy Denis  Ireland">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cleber Possani Jr" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cleber Possani Jr" target="Jose mendonça Furtado Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ajuda" target="Oigres Reis de Lima">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ajuda" target="Grazielle Machado">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Ajuda" target="Vicente Aguiar">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Thaís Bittencourt" target="Paulo Sanjines Barreiro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Raúl Burgos" target="Gabriela Valle">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Raúl Burgos" target="Pedro Constam">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcus Vinicius de Azevedo Braga" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Carlos Vieira" target="Ignucios">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Osmar Assis do Nascimento Filho" target="Edgar Platino Bacelar">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cintia Takada" target="Daniel Melo Barreto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Rebeca s. Duarte" target="Vanderlei Francisco de Oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Francisco Gilberg Barreto" target="Marcel Barros Garcia">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Francisco Gilberg Barreto" target="Pedro Constam">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Levy Perrucci" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="naianna jacqueline mesquita marrocos" target="Joseph Handerson">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ricardo Poppi" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Raimundo Nonato Sousa Silva" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Valle" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Valle" target="NEUSA APARECIDA VIEIRA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Valle" target="Beto Francine">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Valle" target="Pedro Constam">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Valle" target="André de Oliveira Kiepper">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="cleber jose da silva suzigan" target="Cintia Takada">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Leonardo Valles Bento" target="Thiago Capuano">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Mariane Aparecida Ferreira de Oliveira" target="Gabriela Vasconcellos Fernandes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Mariane Aparecida Ferreira de Oliveira" target="Paula Guarnieri Passos">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ronald Emerson Scherolt da Costa" target="Daniel Pitangueira de Avelino">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ronald Emerson Scherolt da Costa" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ronald Emerson Scherolt da Costa" target="Ronald Emerson Scherolt da Costa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOAO FREITAS DE CASTRO CHAVES" target="Sabrina Piccoli Marques">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOAO FREITAS DE CASTRO CHAVES" target="Daniel Chiaretti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOÃO BATISTA CAVALCANTI" target="nanda barreto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOÃO BATISTA CAVALCANTI" target="Luís Alexandre Merolle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOÃO BATISTA CAVALCANTI" target="Maria Teresa Augusti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="JOÃO BATISTA CAVALCANTI" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Flávio Boleiz Júnior" target="João Damasio da Silva Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maria da Conceição Lopes Alves" target="Jesulino Alves de Souza">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="Paulo André Caminha Guimarães Filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="Fádia Rebouças">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="Renato Fabbri">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Hylton Sarcinelli Luz" target="Alberto Kirilauskas">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="André de Oliveira Kiepper">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Frank Lane">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Enaile Batista da Silva Kikuta">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Renato Fabbri">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Henrique Parra Parra Filho" target="Aleksander Velozo Pascoal">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Desirée Bahls Tomeleri" target="Tatiane Regina Meneghetti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Nemer Sanches" target="Hylton Sarcinelli Luz">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="Hylton Sarcinelli Luz">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="Henrique Parra Parra Filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="Juliano Geraldi">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Juliano Geraldi" target="edison cardoso teixeira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago Henrique Ferreira Zoroastro" target="Luis Felipe Coimbra Costa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago Henrique Ferreira Zoroastro" target="Mauricio E Gleizer">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago Henrique Ferreira Zoroastro" target="Thiago Henrique Ferreira Zoroastro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago Henrique Ferreira Zoroastro" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Pitangueira de Avelino" target="Daniel Pitangueira de Avelino">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Pitangueira de Avelino" target="andre luiz da silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Pitangueira de Avelino" target="Rodrigo Souto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Pitangueira de Avelino" target="haroldo marinho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Mara" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Leandro Nunes dos Santos" target="Leandro Nunes dos Santos">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Thayara Buranello Siqueira" target="yzus_go@hotmail.com">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ana Zaiczuk Raggio" target="Sady Fauth">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Paola Cristina Gomes de Lima" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Andre Carneiro Leao" target="Laura Zacher">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Andre Carneiro Leao" target="Fabiana Galera Severo">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Andre Carneiro Leao" target="Daniel Chiaretti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="João Victor Mazzarin Damas" target="Teresa Donato Liporace">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Paulo Sanjines Barreiro" target="Thaís Bittencourt">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Natan Marques" target="José Henrique Scandelae">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="danielle alves cordeiro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Maria Aparecida Alves da Silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Daniel Penalva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Gabriela Valle">
+      <data key="d0">9.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Frank Lane">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Fádia Rebouças">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Enaile Batista da Silva Kikuta">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Jorge">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Lidia Rodrigues Padua">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Rafael Riuji Chikazawa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="André de Oliveira Kiepper">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Paulo André Caminha Guimarães Filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="agostinho dos santos filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Alberto Kirilauskas">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Renato Fabbri" target="Fábio Danilo de Pedroso Sitta Camargo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Josenildo Fernando da Silva" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="yzus_go@hotmail.com" target="yzus_go@hotmail.com">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="edison cardoso teixeira" target="Thayara Buranello Siqueira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="edison cardoso teixeira" target="Renê Patrick Richter">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ricardo Luiz de Miranda Valle" target="Valessio Brito">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="DEMETRIO CARNEIRO DA CUNHA OLIVEIRA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Caroline Bampa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Jose mendonça Furtado Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Hylton Sarcinelli Luz">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Anderson Parreiras Riedel Lima">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Nemer Sanches">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Juliano Geraldi">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Rafael Riuji Chikazawa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="andre luiz da silva" target="Darlan Cavalcanti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Luiz Henrique Gomes de Almeida" target="Laura Zacher">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Luiz Henrique Gomes de Almeida" target="ANA LUISA ZAGO DE MORAES">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="DIEGO DA SILVA BRITTO" target="Isaac E. Batista">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Joseph Handerson" target="Lorena Salete Barbosa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago de Menezes Rocha Cardoso" target="Francine Dorte">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Penalva" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fádia Rebouças" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fádia Rebouças" target="Maria Salete Teixeira Burigo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fádia Rebouças" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fádia Rebouças" target="nivea bionde dos santos de oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Mauricio E Gleizer" target="Thiago Henrique Ferreira Zoroastro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Tião Garcia" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Tião Garcia" target="Leticia Guilherme Gonçalves">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Tião Garcia" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Adriano Alves de Aquino Araújo" target="Joseph Handerson">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Comunicação Participa" target="Ronald Emerson Scherolt da Costa">
+      <data key="d0">4.0</data>
+    </edge>
+    <edge source="Ricardo Peixoto Britto" target="Frank Lane">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maira Gonçalves Lopes" target="Frank Lane">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maira Gonçalves Lopes" target="Hylton Sarcinelli Luz">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maira Gonçalves Lopes" target="Alberto Kirilauskas">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maira Gonçalves Lopes" target="Teresa Donato Liporace">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maira Gonçalves Lopes" target="luis vinicius cangussu">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Fádia Rebouças">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Hylton Sarcinelli Luz">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Lidia Rodrigues Padua">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Pablo Henrique do Amaral Gomes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Rodrigues Saldanha da Silva" target="Alberto Kirilauskas">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Rafaela Melo" target="Valessio Brito">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Rafaela Melo" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ANA LUISA ZAGO DE MORAES" target="Luiz Henrique Gomes de Almeida">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ANA LUISA ZAGO DE MORAES" target="Fabiana Galera Severo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ANA LUISA ZAGO DE MORAES" target="Daniel Chiaretti">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ANA LUISA ZAGO DE MORAES" target="Andre Carneiro Leao">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Pedro Markun" target="Daniel Pitangueira de Avelino">
+      <data key="d0">13.0</data>
+    </edge>
+    <edge source="Pedro Markun" target="haroldo marinho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cássio N. Martin" target="Sady Fauth">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marília Mattos Rocha" target="Gustavo Antonio Mendelsohn de Carvalho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fabiana Galera Severo" target="Fabiana Galera Severo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Thiago Capuano" target="Thiago Capuano">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Thiago Capuano" target="JOÃO BATISTA CAVALCANTI">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Ludger Jean Louis" target="Fabiana Nogueira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiana Arruda Sarturi" target="Giuliana Redin">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="MATTHEUS PIROVANI RORIZ GONÇALVES" target="Marisa Souza dos Santos">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="adminuser" target="adminuser">
+      <data key="d0">4.0</data>
+    </edge>
+    <edge source="Salete Valesan Camba" target="alberto viana de campos filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="André de Oliveira Kiepper" target="Daniel Melo Barreto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="André de Oliveira Kiepper" target="Fábio Danilo de Pedroso Sitta Camargo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maria Luiza Pinho Pereira" target="Departamento de Educação Popular e Mobilização Cidadã">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcela Vieira" target="MILTON ALVES DE SOUSA">
+      <data key="d0">4.0</data>
+    </edge>
+    <edge source="Marcela Vieira" target="Alessandra Barros">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcela Vieira" target="Edgar Platino Bacelar">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="xavier uytdenbroek">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Mara">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Josué Aparecido Moreira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="joaquim marçal de souza">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Lucenilde Fernandes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Mauro de Oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Nathália Kneipp Sena">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Gerso Pereira Junior">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="JOAO COSTA AGUIAR FILHO">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Wagner Carneiro de Santana">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="José Henrique Scandelae">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="marta batalha">
+      <data key="d0">4.0</data>
+    </edge>
+    <edge source="Portal" target="Luiz Alberto Ferreira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Jader José de Oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Roberto Candido de Oliveira ">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Taisa Molina">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="adminuser">
+      <data key="d0">9.0</data>
+    </edge>
+    <edge source="Portal" target="Frank Lane">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="WALACE LUIZ DA CONCEIÇÃO HOELZLE">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Mariangela Mattiolli">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Natan Marques">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Maria Bertolina de Morais">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Oraide Luzia Peixoto Soares">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="André Luiz Caregnato">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Teste da Silva">
+      <data key="d0">13282.0</data>
+    </edge>
+    <edge source="Portal" target="Thomas Tschoepke Soares">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Sérgio Cheque Bernardo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Roseane Palavizini">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Magda Aparecida Bueno Maciel">
+      <data key="d0">3.0</data>
+    </edge>
+    <edge source="Portal" target="Cássio Batista Alves">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Wagner Passos Garcia">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Edson Franco">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="raimundo jacinto da silva junior">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="ASSUNCAO SANTOS">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Judson Clayton Maciel">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="nailson da costa de castro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Maria Betânia Freitas da Silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Maria Aparecida Alves da Silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Analucia guimarães Couto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="maria estela da conceição">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Carlos André Paiva Ferreira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="VALDEREIS FREITAS DE SOUZA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="JESIEL COSTA ROSA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Fernando Alex S. Lima">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="LARA REGINA NUNES VIEIRA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Portal" target="Marcelo Branco">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="Luciana Guimarães Sobrinho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="Rafael Riuji Chikazawa">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="agostinho dos santos filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Cristiane Martins Vasquez" target="Teresa Donato Liporace">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Newton Cesar Caetano Monteiro" target="Carmen de Melo Castro e Silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="WAGNER AUGUSTO FISCHER">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="Jose mendonça Furtado Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="Sílvia Gomes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="Hylton Sarcinelli Luz">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="Enaile Batista da Silva Kikuta">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jose mendonça Furtado Neto" target="Renato Fabbri">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ALEXSSANDRO SANTOS DA SILVA" target="danielle alves cordeiro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Enaile Batista da Silva Kikuta" target="Enaile Batista da Silva Kikuta">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maria Salete Teixeira Burigo" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maria Salete Teixeira Burigo" target="NEUSA APARECIDA VIEIRA">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Raphael Vieira" target="edison cardoso teixeira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Luís Alexandre Merolle" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ewout ter Haar" target="Ewout ter Haar">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="José Araujo da Silva" target="Daniel Pitangueira de Avelino">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Caroline Burle" target="Thiago Capuano">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Caroline Burle" target="JOÃO BATISTA CAVALCANTI">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="José Ilton Soares Barbosa" target="Wagner Carneiro de Santana">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="José Ilton Soares Barbosa" target="Cintia Takada">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Sady Jacques" target="Thiago Henrique Ferreira Zoroastro">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Aleksander Velozo Pascoal" target="Gabriela Valle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Aleksander Velozo Pascoal" target="Lidia Rodrigues Padua">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jacques Schwarzstein" target="Hylton Sarcinelli Luz">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="ALAN GUSTAVO SANTANA RIBEIRO" target="Marisa Souza dos Santos">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Augusto Herrmann" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Anderson Parreiras Riedel Lima" target="Jose mendonça Furtado Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Isaac E. Batista" target="DIEGO DA SILVA BRITTO">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Laura Zacher" target="Fabiana Galera Severo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Laura Zacher" target="Andre Carneiro Leao">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Rafael Riuji Chikazawa" target="nivea bionde dos santos de oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="agostinho dos santos filho" target="nivea bionde dos santos de oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="MILTON ALVES DE SOUSA" target="Paulo André Caminha Guimarães Filho">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Maria Aparecida Alves da Silva" target="Milene Aparecida Dacal Coan">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="josinaldo santos" target="Marisa Souza dos Santos">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Frank Lane" target="edison cardoso teixeira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Grazielle Machado" target="Ricardo Poppi">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Grazielle Machado" target="Rafaela Melo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Grazielle Machado" target="Vicente Aguiar">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Jorge" target="Caroline Burle">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Vicente Aguiar" target="Sady Jacques">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Vicente Aguiar" target="Grazielle Machado">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="João hellensberger Filho" target="Sady Fauth">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Alex Barroso Bernal" target="Rebeca s. Duarte">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Alex Barroso Bernal" target="Vanderlei Francisco de Oliveira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Rosangela Santos" target="Daniel Pitangueira de Avelino">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Pablo Henrique do Amaral Gomes" target="FRANKLIN DE PAULA JÚNIOR">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Isabel Penido de Campos Machado" target="Laura Zacher">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Isabel Penido de Campos Machado" target="fabricia girao cavalcante">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Naira Beatris De Moraes Goncalves" target="Thiago Capuano">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Carla Alexsandra do Carmo Ribeiro" target="Sady Fauth">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ana Lima" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ana Lima" target="Cintia Takada">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Ana Lima" target="Renê Patrick Richter">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Departamento de Educação Popular e Mobilização Cidadã" target="Grazielle Machado">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Ricardo Araujo da Silva" target="Thiago Capuano">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Daniel Chiaretti" target="Laura Zacher">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Daniel Chiaretti" target="ANA LUISA ZAGO DE MORAES">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="danielle alves cordeiro" target="Fábio Danilo de Pedroso Sitta Camargo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Gabriela Valle">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Cintia Takada">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Daniel Melo Barreto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Hylton Sarcinelli Luz">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Lígia Maria Alves Pereira">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Áurea Carolina de Freitas e Silva">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Roberto Kodama" target="Pablo Henrique do Amaral Gomes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Valessio Brito" target="Rafaela Melo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Nayara de Oliveira S. da Silva" target="Gabriela Vasconcellos Fernandes">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Fernanda Hahn" target="Fabiana Galera Severo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Telma Regina de Paula Souza" target="Frank Lane">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Marcelo Soares Vilhanueva" target="Hylton Sarcinelli Luz">
+      <data key="d0">2.0</data>
+    </edge>
+    <edge source="Paulo César do Amaral" target="Fábio Danilo de Pedroso Sitta Camargo">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Paulo César do Amaral" target="Paulo César do Amaral">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gabriela Vasconcellos Fernandes" target="Renê Patrick Richter">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Laise Sindra" target="Sady Fauth">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="haroldo marinho" target="Daniel Pitangueira de Avelino">
+      <data key="d0">43.0</data>
+    </edge>
+    <edge source="Kátia Primon" target="Lidia Rodrigues Padua">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="lucas guerra pereira nonino" target="Paula Guarnieri Passos">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Carlos Eduardo Teixeira Carvalho" target="Jose mendonça Furtado Neto">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Francine Dorte" target="Claudia">
+      <data key="d0">1.0</data>
+    </edge>
+    <edge source="Gustavo Luca Abate" target="Emília Baroni">
+      <data key="d0">1.0</data>
+    </edge>
+  </graph>
+</graphml>
