@@ -16,33 +16,33 @@ class NetworkPCA:
                     network_measures.weighted_directed_betweenness_
                     ))
         self.pca1=PCA(self.M1)
-        self.M2=n.array(( network_measures.weighted_clusterings_,
-                    network_measures.strengths_,
-                    network_measures.in_strengths_,
-                    network_measures.out_strengths_,
-                    network_measures.degrees_,
-                    network_measures.in_degrees_,
-                    network_measures.out_degrees_,
-                    network_measures.weighted_directed_betweenness_
-                    ))
-        self.pca2=PCA(self.M2)
-
-        self.M3=n.array(( network_measures.weighted_clusterings_,
-                    network_measures.strengths_,
-                    network_measures.in_strengths_,
-                    network_measures.out_strengths_,
-                    network_measures.degrees_,
-                    network_measures.in_degrees_,
-                    network_measures.out_degrees_,
-                    network_measures.weighted_directed_betweenness_,
-                    network_measures.asymmetries,
-                    network_measures.asymmetries_edge_mean,
-                    network_measures.asymmetries_edge_std,
-                    network_measures.disequilibrium,
-                    network_measures.disequilibrium_edge_mean,
-                    network_measures.disequilibrium_edge_std,
-                    ))
-        self.pca3=PCA(self.M3)
+        if "in_strengths_" in dir(network_measures):
+            self.M2=n.array(( network_measures.weighted_clusterings_,
+                        network_measures.strengths_,
+                        network_measures.in_strengths_,
+                        network_measures.out_strengths_,
+                        network_measures.degrees_,
+                        network_measures.in_degrees_,
+                        network_measures.out_degrees_,
+                        network_measures.weighted_directed_betweenness_
+                        ))
+            self.M3=n.array(( network_measures.weighted_clusterings_,
+                        network_measures.strengths_,
+                        network_measures.in_strengths_,
+                        network_measures.out_strengths_,
+                        network_measures.degrees_,
+                        network_measures.in_degrees_,
+                        network_measures.out_degrees_,
+                        network_measures.weighted_directed_betweenness_,
+                        network_measures.asymmetries,
+                        network_measures.asymmetries_edge_mean,
+                        network_measures.asymmetries_edge_std,
+                        network_measures.disequilibrium,
+                        network_measures.disequilibrium_edge_mean,
+                        network_measures.disequilibrium_edge_std,
+                        ))
+            self.pca2=PCA(self.M2)
+            self.pca3=PCA(self.M3)
         if plot_sym:
             fig = matplotlib.pyplot.gcf()
             fig.set_size_inches(11.,8.4)
