@@ -321,7 +321,7 @@ labels3=["$cc$","$s$","$s^{in}$","$s^{out}$",
 
 
 # Facebook
-import social as S, os
+import social as S, os, networkx as x
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
@@ -334,6 +334,7 @@ fg= S.utils.GDFgraph("../extraData/RenatoFabbri06022014.gdf") # graph should be 
 fg2=S.utils.GDFgraph("../extraData/Massimo19062013.gdf") # graph should be on fg.G
 fg3=S.utils.GDFgraph("../extraData/DemocraciaDireta14072013.gdf") # graph should be on fg.G
 fg4=S.utils.GDFgraph("../extraData/SiliconValleyGlobalNetwork27042013.gdf") # graph should be on fg.G
+fg5=x.read_graphml("../extraData/amizadesParticipa.graphml") # graph should be on fg.G
 
 # open 4 interaction networks
 # use Social to parse gdfs
@@ -341,6 +342,7 @@ fd= S.utils.GDFgraph("../extraData/SiliconValleyGlobalNetwork27042013_interactio
 fd2= S.utils.GDFgraph("../extraData/SolidarityEconomy12042013_interactions.gdf") # graph should be on fg.G
 fd3= S.utils.GDFgraph("../extraData/DemocraciaDireta14072013_interacoes.gdf") # graph should be on fg.G
 fd4= S.utils.GDFgraph("../extraData/CienciasComFronteiras29032013_interacoes.gdf") # graph should be on fg.G
+fd5=x.read_graphml("../extraData/interacoesParticipa.graphml") # graph should be on fg.G
 # Twitter
 # make a retweet network or two
 #tt= S.twitter.Twitter(app_key=            S.maccess.tw2.tak ,
@@ -366,7 +368,7 @@ fd4= S.utils.GDFgraph("../extraData/CienciasComFronteiras29032013_interacoes.gdf
 #foo=C.find({},{"id":1,"_id":0,"user.screen_name":1,"text":1}) #twitterArena
 #foo_=[i for i in foo]
 #G,G_=S.utils.makeRetweetNetwork(foo_)
-#F=[fg.G,fg2.G,fg3.G,fg4.G,fd.G,fd2.G,fd3.G,fd4.G,G,G_]
+#F=[fg.G,fg2.G,fg3.G,fg4.G,fg5,fd.G,fd2.G,fd3.G,fd4.G,fd5,G,G_]
 ##F=[fd.G,fd2.G,fd3.G,fd4.G,G,G_]
 #
 ## fazer o particionamento de erdos para todos eles, depois pca estático, fazer o q.
@@ -480,10 +482,10 @@ fd4= S.utils.GDFgraph("../extraData/CienciasComFronteiras29032013_interacoes.gdf
 #    pcas.append(pp)
 #    print("+1pca de net de F")
 #
-
+#pDump(F,"pickledir/F.pickle")
 #pDump(pcas,"pickledir/pcasFB-TW.pickle")
-#pcas=pDump(parts,"pickledir/partsFB-TW.pickle")
-#pcas=pDump(fracs,"pickledir/fracsFB-TW.pickle")
+#pDump(parts,"pickledir/partsFB-TW.pickle")
+#pDump(fracs,"pickledir/fracsFB-TW.pickle")
 pcas=pRead("pickledir/pcasFB-TW.pickle")
 parts=pRead("pickledir/partsFB-TW.pickle")
 fracs=pRead("pickledir/fracsFB-TW.pickle")
@@ -492,9 +494,9 @@ F=pRead("pickledir/F.pickle")
 #### Make tables with the fraction of participants in each erdos sector
 # one and only table
 #### Make one table for each pca of the networks each network
-labels_=["f1","f2","f3","f4",
-        "i1","12","i3","i4",
-        "tt"]
+labels_=["f1","f2","f3","f4","f5",
+        "i1","12","i3","i4","i5",
+        "tt","tt2"]
 
 for i, label in enumerate(labels_):
     pca=pcas[i]
@@ -503,7 +505,7 @@ for i, label in enumerate(labels_):
     g.writeTex(tstring,TDIR+"tabPCA1{}.tex".format(label))
 
 # montar matriz de dados unica, 3 x nlistas = 27 colunas x 4 colunas
-nn=n.zeros((4,27))
+nn=n.zeros((4,3*len(labels_)))
 for i in range(len(labels_)):
     pca=pcas[i]
     nn[:,i::len(labels_)]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
@@ -511,22 +513,22 @@ for i in range(len(labels_)):
 tstring=g.makeTables(labels1,nn)
 g.writeTex(tstring,TDIR+"tabPCA1Extra.tex")
 
-nn2=n.zeros((9,len(labels_[4:])*3))
-for i in range(4,len(labels_)):
+nn2=n.zeros((9,len(labels_[5:])*3))
+for i in range(5,len(labels_)):
     pca=pcas[i]
-    nn2[:,i-4::len(labels_[4:])]=n.abs(n.vstack((pca.pca2.eig_vectors_[:,:3],pca.pca2.eig_values_[:3])))
+    nn2[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca2.eig_vectors_[:,:3],pca.pca2.eig_values_[:3])))
 tstring2=g.makeTables(labels2,nn2,True)
 g.writeTex(tstring2,TDIR+"tabPCA2Extra.tex")
 
 
-nn3=n.zeros((15,len(labels_[4:])*3))
-for i in range(4,len(labels_)):
+nn3=n.zeros((15,len(labels_[5:])*3))
+for i in range(5,len(labels_)):
     pca=pcas[i]
-    nn3[:,i-4::len(labels_[4:])]=n.abs(n.vstack((pca.pca3.eig_vectors_[:,:3],pca.pca3.eig_values_[:3])))
+    nn3[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca3.eig_vectors_[:,:3],pca.pca3.eig_values_[:3])))
 tstring3=g.makeTables(labels3,nn3,True)
 g.writeTex(tstring3,TDIR+"tabPCA3Extra.tex")
 
-tstring3=g.makeTables(labels_,n.array(fracs[:-1]),True)
+tstring3=g.makeTables(labels_,n.array(fracs),True)
 g.writeTex(tstring3,TDIR+"tabSectorsExtra.tex")
 
 
