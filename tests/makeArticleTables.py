@@ -356,8 +356,7 @@ fd5=x.read_graphml("../extraData/interacoesParticipa.graphml") # graph should be
 #            oauth_token=         S.maccess.tw2.tat ,
 #            oauth_token_secret=  S.maccess.tw2.tats)
 
-# open arenaNETmundial from mongodb
-#print("iniciando análise das redes de fb e tt")
+print("iniciando análise das redes de fb e tt")
 #import pymongo, networkx as x
 #from maccess import mdc
 #client=pymongo.MongoClient(mdc.u2)
@@ -484,6 +483,7 @@ fd5=x.read_graphml("../extraData/interacoesParticipa.graphml") # graph should be
 #
 #pDump(F,"pickledir/F.pickle")
 #pDump(pcas,"pickledir/pcasFB-TW.pickle")
+#for pa in parts: del pa.binomial
 #pDump(parts,"pickledir/partsFB-TW.pickle")
 #pDump(fracs,"pickledir/fracsFB-TW.pickle")
 pcas=pRead("pickledir/pcasFB-TW.pickle")
@@ -494,9 +494,9 @@ F=pRead("pickledir/F.pickle")
 #### Make tables with the fraction of participants in each erdos sector
 # one and only table
 #### Make one table for each pca of the networks each network
-labels_=["f1","f2","f3","f4","f5",
-        "i1","12","i3","i4","i5",
-        "tt","tt2"]
+labels_=["F1","F2","F3","F4","F5",
+        "I1","I2","I3","I4","I5",
+        "TT1","TT2"]
 
 for i, label in enumerate(labels_):
     pca=pcas[i]
@@ -505,13 +505,25 @@ for i, label in enumerate(labels_):
     g.writeTex(tstring,TDIR+"tabPCA1{}.tex".format(label))
 
 # montar matriz de dados unica, 3 x nlistas = 27 colunas x 4 colunas
-nn=n.zeros((4,3*len(labels_)))
-for i in range(len(labels_)):
+NF = 5 # number of friendship networks
+NI = len(labels_)-NF # number of interaction networks
+nn=n.zeros((4,NF*3))
+for i in range(NF):
     pca=pcas[i]
-    nn[:,i::len(labels_)]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
+    nn[:,i::NF]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
 
-tstring=g.makeTables(labels1,nn)
-g.writeTex(tstring,TDIR+"tabPCA1Extra.tex")
+tstring=g.makeTables(labels1,nn,True)
+g.writeTex(tstring,TDIR+"tabPCA1ExtraF.tex")
+
+nn_=n.zeros((4,NI*3))
+for i in range(NI):
+    pca=pcas[i+NF]
+    nn_[:,i::NI]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
+
+tstring=g.makeTables(labels1,nn_,True)
+g.writeTex(tstring,TDIR+"tabPCA1ExtraI.tex")
+
+
 
 nn2=n.zeros((9,len(labels_[5:])*3))
 for i in range(5,len(labels_)):
@@ -532,8 +544,23 @@ tstring3=g.makeTables(labels_,n.array(fracs),True)
 g.writeTex(tstring3,TDIR+"tabSectorsExtra.tex")
 
 
-# Fazer análise com as redes do participa de amizade e de interação
-
+# Tabela geral sobre cada lista com:
+# sigla, proveniencia, critério para formação de aresta, dirigida ou nao, description, número de vertices, numero de arestas 
+data = [["F1", "Facebook","friendship","no","the friendship network of Renato Fabbri (author)",str(F[0].number_of_nodes()),str(F[0].number_of_edges())],
+        ["F2", "Facebook","friendship","no","the friendship network of Massimo Canevacci (senior anthropologist)",str(F[1].number_of_nodes()),str(F[1].number_of_edges())],
+        ["F3", "Facebook","friendship","no","the friendship network of a brazilian direct democracy group",str(F[2].number_of_nodes()),str(F[2].number_of_edges())],
+        ["F4", "Facebook","friendship","no","the friendship network of the Silicon Valley Global Network group",str(F[3].number_of_nodes()),str(F[3].number_of_edges())],
+        ["F5", "Participa.br","friendship","no","the friendship network of a brazilian federal social participation portal",str(F[4].number_of_nodes()),str(F[4].number_of_edges())],
+        ["I1", "Facebook","interaction","yes","the interaction network of the Silicon Valley Global Network group",str(F[5].number_of_nodes()),str(F[5].number_of_edges())],
+        ["I2", "Facebook","interaction","yes","the interaction network of a Solidarity Economy group",str(F[6].number_of_nodes()),str(F[6].number_of_edges())],
+        ["I3", "Facebook","interaction","yes","the interaction network of a brazilian direct democracy group",str(F[7].number_of_nodes()),str(F[7].number_of_edges())],
+        ["I4", "Facebook","interaction","yes","the interaction network of the 'Cience with Frontiers' group",str(F[8].number_of_nodes()),str(F[8].number_of_edges())],
+        ["I5", "Participa.br","interaction","yes","the interaction network of a brazilian federal social participation portal",str(F[9].number_of_nodes()),str(F[9].number_of_edges())],
+        ["TT1", "Twitter","retweet","yes","the retweet network of $\\approx 22k$ tweets with the hashtag \#arenaNETmundial",str(F[10].number_of_nodes()),str(F[10].number_of_edges())],
+        ["TT2", "Twitter","retweet","yes","same as TT1, but disconnected agents are not discarded",str(F[11].number_of_nodes()),str(F[11].number_of_edges())]]
+data_=[i[1:] for i in data]
+tstring3=g.makeTables(labels_,data_)
+g.writeTex(tstring3,TDIR+"tabExtra.tex")
 
 #    evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))
 #    eval1=n.abs(n.array([ pca.pca1.eig_values_ for pca in ne.networks_pcas]))
