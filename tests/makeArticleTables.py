@@ -583,7 +583,7 @@ dlists=pRead("pickledir/dlists.pickle")
 import mailbox
 def getNG(mint):
     PROCESSES=8
-    NLISTS=60
+    NLISTS=70
     NBUNCH=NLISTS//PROCESSES
     LOC=mint*NBUNCH
     Ns=[]
@@ -593,7 +593,7 @@ def getNG(mint):
     count=0
     print("starting", LOC, NBUNCH)
     for list_stat in dlists[LOC:LOC+NBUNCH]:
-        print(count, time.time()-T); count+=1; T=time.time()
+        print(count); count+=1
         list_id=list_stat[0]
         mfiles=os.listdir(_BASE_DIR+list_id)
         mfiles.sort()
@@ -629,12 +629,14 @@ def getNG(mint):
         Ns.append(Ns_)
         Gammas.append(Gammas_)
         n_empties=[n_empty]
-        return Ns,Gammas,n_empties
+    return Ns,Gammas,n_empties
 
 import multiprocessing as mp
 
 pool=mp.Pool(processes=8)
-results=pool.map(getNG,list(range(8))
+#results=pool.map(getNG,list(range(8)))
+results=[pool.apply_async(getNG,args=(x,)) for x in range(8)]
+output=[p.get() for p in results]
 
 #print("abrindo 60 listas com o maior número de mensagens",time.time()-T); T=time.time()
 #count=0
