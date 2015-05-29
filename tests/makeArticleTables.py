@@ -581,52 +581,60 @@ dlists=pRead("pickledir/dlists.pickle")
 # para cada endereço:
 # abre cada mensagem em mbox, guarda o autor e se é thread nova.
 import mailbox
-Ns=[]
-Gammas=[]
-n_empties=[]
-_BASE_DIR="/disco/.gmane/"
-count=0
-for list_stat in dlists[:60]:
-    print(count, time.time()-T); count+=1; T=time.time()
-    list_id=list_stat[0]
-    mfiles=os.listdir(_BASE_DIR+list_id)
-    mfiles.sort()
-    Ns_=[] # author of each message
-    Gammas_=[] # is the message a new thread?
-    count2=0
-    n_empty=0
-    for mfile in mfiles:
-        mbox = mailbox.mbox(_BASE_DIR+list_id+"/"+mfile)
-        if mbox.keys():
-            message=mbox[0]
-            author_=message['from']
-            if "replace" not in dir(author_):
-                print("spurious author")
-                continue
+def getNG(mint):
+    PROCESSES=8
+    NLISTS=60
+    NBUNCH=NLISTS//PROCESSES
+    LOC=mint*NBUNCH
+    Ns=[]
+    Gammas=[]
+    n_empties=[]
+    _BASE_DIR="/disco/.gmane/"
+    count=0
+    print("starting", LOC, NBUNCH)
+    for list_stat in dlists[LOC:LOC+NBUNCH]:
+        print(count, time.time()-T); count+=1; T=time.time()
+        list_id=list_stat[0]
+        mfiles=os.listdir(_BASE_DIR+list_id)
+        mfiles.sort()
+        Ns_=[] # author of each message
+        Gammas_=[] # is the message a new thread?
+        count2=0
+        n_empty=0
+        for mfile in mfiles:
+            mbox = mailbox.mbox(_BASE_DIR+list_id+"/"+mfile)
+            if mbox.keys():
+                message=mbox[0]
+                author_=message['from']
+                if "replace" not in dir(author_):
+                    print("spurious author")
+                    continue
+                else:
+                    author=author_.replace('"','')
+                    author=author.split("<")[-1][:-1]
+                    if " " in author: 
+                        author=author.split(" ")[0]
+                    Ns_.append(author)
+                if message['references']:
+                    Gammas_.append(False)
+                else:
+                    Gammas_.append(True)
+                if len(mbox.keys())>1:
+                    print("mbox duplo...")
             else:
-                author=author_.replace('"','')
-                author=author.split("<")[-1][:-1]
-                if " " in author: 
-                    author=author.split(" ")[0]
-                Ns_.append(author)
-            if message['references']:
-                Gammas_.append(False)
-            else:
-                Gammas_.append(True)
-            if len(mbox.keys())>1:
-                print("mbox duplo...")
-        else:
-            n_empty+=1
-        if count2%1000==0:
-            print(count2)
-        count2+=1
-    Ns.append(Ns_)
-    Gammas.append(Gammas_)
-    n_empties=[n_empty]
+                n_empty+=1
+            if count2%1000==0:
+                print(count2)
+            count2+=1
+        Ns.append(Ns_)
+        Gammas.append(Gammas_)
+        n_empties=[n_empty]
+        return Ns,Gammas,n_empties
 
 import multiprocessing as mp
 
 pool=mp.Pool(processes=8)
+results=pool.map(getNG,list(range(8))
 
 #print("abrindo 60 listas com o maior número de mensagens",time.time()-T); T=time.time()
 #count=0
