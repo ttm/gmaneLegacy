@@ -50,11 +50,13 @@ class ListDataStructures:
         self.raw_clean_authors=raw_clean_authors=[]
         self.raw_clean_dates=raw_clean_dates=[]
         self.raw_clean_references=raw_clean_references=[]
-        self.spurious_empty_ids=spurious_empty_ids=[]
+        #self.spurious_empty_ids=spurious_empty_ids=[]
         self.spurious_authors=spurious_authors=[]
+        self.n_empty=n_empty=0
         for message in messagesLoaded:
             if not message.keys(): # if message is empty
-                spurious_empty_ids.append(i)
+                #spurious_empty_ids.append(i)
+                n_empty+=1
             else:
                 author_=message['from']
                 if "replace" not in dir(author_):
@@ -69,7 +71,10 @@ class ListDataStructures:
                 if author not in author_messages:
                     author_messages[author]=[]
                 date_=message['date']
-                date = date_.split(" (")[0]
+                try:
+                    date = date_.split(" (")[0]
+                except:
+                    continue
                 if date.split(" ")[-1].islower():
                     date=date.replace(date.split(" ")[-1],date.split(" ")[-1].upper())
                 if date.split(" ")[-1].isupper() and date.split(" ")[-1].isalpha():
@@ -77,13 +82,20 @@ class ListDataStructures:
                 #date=date.replace("GMT","")
                 #date=date.replace(" CST","")
                 #date=date.replace(" CDT","")
+                date=date.replace("Thur","Thu")
+                if "-" in date and len(date.split("-")[1])==3:
+                    date=date+"0"
+                date=date.replace("--","-")
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
                     date=pytz.UTC.localize(date)
                 raw_clean_dates.append((date_,date))
                 if message['references']:
-                    id_ant=message['references'].split('\t')[-1]
-                    id_ant=id_ant.split(' ')[-1]
+                    try:
+                        id_ant=message['references'].split('\t')[-1]
+                        id_ant=id_ant.split(' ')[-1]
+                    except:
+                        continue
                 else:
                     id_ant=None
                 if id_ant:
@@ -112,5 +124,5 @@ class ListDataStructures:
                     raise TypeError("argument text accepts only 'yes' and 'no'values")
                 author_messages[author].append( (message["message-id"], id_ant, date)  )
                 message_ids.append(message['message-id'])
-                self.n_empty=len(spurious_empty_ids)
+                #self.n_empty=len(spurious_empty_ids)
                 self.n_authors=len(author_messages)
