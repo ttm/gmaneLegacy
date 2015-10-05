@@ -44,42 +44,44 @@ class NetworkPCA:
             self.pca2=PCA(self.M2)
             self.pca3=PCA(self.M3)
         if plot_sym:
-            fig = matplotlib.pyplot.gcf()
-            fig.set_size_inches(11.,8.4)
-            p.suptitle("Symmetry prevalence over clutering for data dispersion")
-            p.subplot(311)
-            # plot degree x clust
-            p.title("degree x clustering")
-            label1=r"degree $\rightarrow$"
-            label2=r"clustering $\rightarrow$"
-            p.xlabel(label1, fontsize=15)
-            p.ylabel(label2, fontsize=15)
-            n_periphery=   len(network_partitioning.sectorialized_agents__[0])
-            n_intermediary=len(network_partitioning.sectorialized_agents__[1])
-            n_hubs=        len(network_partitioning.sectorialized_agents__[2])
-            M=n.array(network_measures.degrees_)
-            network_measures.degrees__=(M-M.mean())/M.std()
-            M=n.array(network_measures.weighted_clusterings_)
-            network_measures.weighted_clusterings__=(M-M.mean())/M.std()
-            p.ylim(min(network_measures.weighted_clusterings__)-1,max(network_measures.weighted_clusterings__)+1)
-            p.xlim(min(network_measures.degrees__)-1,max(network_measures.degrees__)+1)
-            p.plot(network_measures.degrees__[:n_periphery],network_measures.weighted_clusterings__[:n_periphery],"bo", ms=3.9,label="periphery")
-
-            p.plot(network_measures.degrees__[n_periphery:n_periphery+n_intermediary],network_measures.weighted_clusterings__[n_periphery:n_periphery+n_intermediary],"go", ms=3.9,label="intermediary")
-
-            p.plot(network_measures.degrees__[-n_hubs:],network_measures.weighted_clusterings__[-n_hubs:],"ro", ms=3.9,label="hubs")
-
-            p.subplot(312)
-            self.pca2.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2=r"PC3 - clustering")
-            p.subplot(313)
-            self.pca3.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2="PC2 - symmetry")
-            p.subplots_adjust(left=0.08,bottom=0.12,right=0.97,top=0.88,wspace=0.13,hspace=0.88)
-            p.show()
-            #p.savefig("{}/{}".format(tdir,tname))
+            self.pca3.plotSym(network_partitioning)
+#            fig = matplotlib.pyplot.gcf()
+#            fig.set_size_inches(11.,8.4)
+#            p.suptitle("Symmetry prevalence over clutering for data dispersion")
+#            p.subplot(311)
+#            # plot degree x clust
+#            p.title("degree x clustering")
+#            label1=r"degree $\rightarrow$"
+#            label2=r"clustering $\rightarrow$"
+#            p.xlabel(label1, fontsize=15)
+#            p.ylabel(label2, fontsize=15)
+#            n_periphery=   len(network_partitioning.sectorialized_agents__[0])
+#            n_intermediary=len(network_partitioning.sectorialized_agents__[1])
+#            n_hubs=        len(network_partitioning.sectorialized_agents__[2])
+#            M=n.array(network_measures.degrees_)
+#            network_measures.degrees__=(M-M.mean())/M.std()
+#            M=n.array(network_measures.weighted_clusterings_)
+#            network_measures.weighted_clusterings__=(M-M.mean())/M.std()
+#            p.ylim(min(network_measures.weighted_clusterings__)-1,max(network_measures.weighted_clusterings__)+1)
+#            p.xlim(min(network_measures.degrees__)-1,max(network_measures.degrees__)+1)
+#            p.plot(network_measures.degrees__[:n_periphery],network_measures.weighted_clusterings__[:n_periphery],"ko", ms=3.9,label="periphery")
+#
+#            p.plot(network_measures.degrees__[n_periphery:n_periphery+n_intermediary],network_measures.weighted_clusterings__[n_periphery:n_periphery+n_intermediary],"k^", ms=3.9,label="intermediary")
+#
+#            p.plot(network_measures.degrees__[-n_hubs:],network_measures.weighted_clusterings__[-n_hubs:],"k*", ms=3.9,label="hubs")
+#
+#            #p.subplot(312)
+#            #self.pca2.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2=r"PC3 - clustering")
+#            p.subplot(212)
+#            self.pca3.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2="PC2 - symmetry")
+#            p.subplots_adjust(left=0.08,bottom=0.12,right=0.97,top=0.88,wspace=0.13,hspace=0.88)
+#            p.show()
+#            #p.savefig("{}/{}".format(tdir,tname))
         elif network_partitioning:
             self.pca1.plot(tname.replace(".","_1."),network_partitioning,tdir=tdir)
             self.pca2.plot(tname.replace(".","_2."),network_partitioning,tdir=tdir)
             self.pca3.plot(tname.replace(".","_3."),network_partitioning,tdir=tdir)
+
 
 class PCA:
     """Apply PCA to incoming datatable M (metrics x observations)
@@ -135,7 +137,61 @@ class PCA:
         self.final_data=n.dot(M.T,self.feature_vec)
         self.x=self.final_data[:,0]
         self.y=self.final_data[:,1]
+    #def plot(self, tname="sample.png", network_partitioning=False,labels="full", tdir=".",savefig=True,clear_fig=True,title="Vertex plot in principal components (PCA)",label1="PC1",label2="PC2"):
+    def plotSym(self,network_partitioning):
 
+        self.x_=self.M[4] # degrees
+        self.cc=self.M[0] # degrees
+        #fig = matplotlib.pyplot.gcf()
+        #fig.set_size_inches(6.,8.4)
+        #p.suptitle("Symmetry-related measures and clutering coefficient along connectivity")
+        p.suptitle("Symmetry-related measures and clutering coefficient along connectivity")
+        p.subplot(311)
+        p.xticks((),())
+            # plot degree x clust
+        #label1=r"degree $\rightarrow$"
+        label2=r"clustering $\rightarrow$"
+        #p.xlabel(label1, fontsize=15)
+        p.ylabel(label2, fontsize=15)
+        n_periphery=   len(network_partitioning.sectorialized_agents__[0])
+        n_intermediary=len(network_partitioning.sectorialized_agents__[1])
+        n_hubs=        len(network_partitioning.sectorialized_agents__[2])
+        #M=n.array(network_measures.degrees_)
+        #network_measures.degrees__=(M-M.mean())/M.std() #AQUI
+        #M=n.array(network_measures.weighted_clusterings_)
+        #network_measures.weighted_clusterings__=(M-M.mean())/M.std()
+        p.ylim(min(self.cc)-0.5,max(self.cc)+.5)
+        p.xlim(min(self.x_)-0.1,max(self.x_)+.1)
+        p.plot(self.x_[:n_periphery],                          self.cc[:n_periphery],"ko", label="periphery"                             ,ms=10,alpha=.4)
+        p.plot(self.x_[n_periphery:n_periphery+n_intermediary],self.cc[n_periphery:n_periphery+n_intermediary],"k^", label="intermediary",ms=10,alpha=.4)
+        p.plot(self.x_[-n_hubs:],                              self.cc[-n_hubs:],"k*", label="hubs"                                      ,ms=10,alpha=.4)
+
+        p.subplot(212)
+        p.ylabel(r"PC2 $\rightarrow$", fontsize=15)
+        p.xlabel(r"degree $\rightarrow$", fontsize=15)
+#        p.title("degree x symmetry-related principal component")
+        #self.pca3.plot(None,network_partitioning,labels=None,tdir=None,savefig=False,clear_fig=False,title="Vertices in principal components",label1=r"PC1 - degrees and strengths",label2="PC2 - symmetry")
+        #p.subplots_adjust(left=0.08,bottom=0.12,right=0.97,top=0.88,wspace=0.13,hspace=0.88)
+        #p.show()
+        #p.savefig("{}/{}".format(tdir,tname))
+#        elifnetwork_partitioning:
+#            self.pca1.plot(tname.replace(".","_1."),network_partitioning,tdir=tdir)
+#            self.pca2.plot(tname.replace(".","_2."),network_partitioning,tdir=tdir)
+#            self.pca3.plot(tname.replace(".","_3."),network_partitioning,tdir=tdir)
+#        p.title(title)
+
+        p.ylim(min(self.y) -0.5,max(self.y)+  0.5)
+        p.xlim(min(self.x_)-0.1,max(self.x_)+0.1)
+        #n_periphery=   len(network_partitioning.sectorialized_agents__[0])
+        #n_intermediary=len(network_partitioning.sectorialized_agents__[1])
+        #n_hubs=        len(network_partitioning.sectorialized_agents__[2])
+        p.legend()
+        p.plot(self.x_[:n_periphery],self.y[:n_periphery],"ko", label="perihpery"                                                       ,ms=10,alpha=.4)
+        p.plot(self.x_[n_periphery:n_periphery+n_intermediary],self.y[n_periphery:n_periphery+n_intermediary],"k^", label="intermediary",ms=10,alpha=.4)
+        p.plot(self.x_[-n_hubs:],self.y[-n_hubs:],"k*", label="hubs"                                                                    ,ms=10,alpha=.4)
+#        p.legend()
+        p.show()
+#        p.savefig("{}/{}".format(tdir,tname))
 
     def plot(self, tname="sample.png", network_partitioning=False,labels="full", tdir=".",savefig=True,clear_fig=True,title="Vertex plot in principal components (PCA)",label1="PC1",label2="PC2"):
         if clear_fig:
@@ -167,15 +223,15 @@ class PCA:
         p.ylim(min(self.y)-1,max(self.y)+1)
         p.xlim(min(self.x)-1,max(self.x)+1)
         if not network_partitioning:
-            p.plot(self.x,self.y,"go", ms=3.9,label="intermediary")
+            p.plot(self.x,self.y,"k^", ms=3.9,label="intermediary")
         else:
             n_periphery=   len(network_partitioning.sectorialized_agents__[0])
             n_intermediary=len(network_partitioning.sectorialized_agents__[1])
             n_hubs=        len(network_partitioning.sectorialized_agents__[2])
-            p.plot(self.x[:n_periphery],self.y[:n_periphery],"bo", ms=3.9,label="perihpery")
-            p.plot(self.x[n_periphery:n_periphery+n_intermediary],self.y[n_periphery:n_periphery+n_intermediary],"go", ms=3.9,label="intermediary")
+            p.plot(self.x[:n_periphery],self.y[:n_periphery],"k^", ms=3.9,label="perihpery")
+            p.plot(self.x[n_periphery:n_periphery+n_intermediary],self.y[n_periphery:n_periphery+n_intermediary],"k*", ms=3.9,label="hubs")
             p.plot(self.x[-n_hubs:],self.y[-n_hubs:],"ro", ms=3.9,label="hubs")
-        #p.legend()
+        p.legend()
         if savefig:
             p.savefig("{}/{}".format(tdir,tname))
             x=self.M[0]
