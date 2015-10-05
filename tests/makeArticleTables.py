@@ -304,7 +304,8 @@ NEs=[] # for evolutions of the networks
 ## 3) PCA2
 #
 evo=pRead("evoPCALAU/im000000013.pickle")
-g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
+#g.NetworkPCA(evo["nm"],g.NetworkPartitioning(evo["nm"],2,"degree"),tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
+g.NetworkPCA(evo["nm"],g.NetworkPartitioning(evo["nm"],2,"degree"),tdir="/home/r/repos/stabilityInteraction/figs",tname="im13PCAPLOT__.png",plot_sym=True)
 
 # EXTRA plots
 #import pylab as p
