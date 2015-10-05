@@ -15,10 +15,10 @@ importlib.reload(g.evolutionTimelines)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
-#labels={'gmane.comp.gcc.libstdc++.devel':"CPP", 'gmane.linux.audio.devel':"LAD", 'gmane.linux.audio.users':"LAU", 'gmane.politics.organizations.metareciclagem':"MET"}
+labels={'gmane.comp.gcc.libstdc++.devel':"CPP", 'gmane.linux.audio.devel':"LAD", 'gmane.linux.audio.users':"LAU", 'gmane.politics.organizations.metareciclagem':"MET"}
 ##print("initializing")
-#dl=g.DownloadGmaneData('~/.gmane4/')
-#TT=T.time()
+dl=g.DownloadGmaneData('~/.gmane4/')
+TT=T.time()
 ##print("{0:.2f} for initializing download dir initializing".format(T.time()-TT)); TT=T.time()
 def pDump(tobject,tfilename):
     with open(tfilename,"wb") as f:
@@ -30,7 +30,7 @@ def pRead(tfilename):
 ##
 ###### DATA STRUCTURES
 #dss=[]
-#PDIR="pickledir/"
+PDIR="pickledir/"
 ###for lid in dl.downloaded_lists:
 ###    print(lid)
 ###    label=labels[lid]
@@ -186,21 +186,21 @@ NEs=[] # for evolutions of the networks
 #    label=labels[lid]
 #    NEs.append(pRead("{}neP{}.pickle".format(PDIR,label)))
 #    print(label+"{0:.2f} for PICKLE loading evolved PCA structures".format(T.time()-TT)); TT=T.time()
-#
-## fazer vetor tridimensional de cada PCA
+##
+### fazer vetor tridimensional de cada PCA
 #VE1=[]
 #VE2=[]
 #VE3=[]
 #VA1=[]
 #VA2=[]
 #VA3=[]
-labels1=["$cc$","$k$","$bt$","$\\lambda$"]
-labels2=["$cc$","$s$","$s^{in}$","$s^{out}$",
-         "$k$","$k^{in}$","$k^{out}$","$bt$","$\\lambda$"]
-labels3=["$cc$","$s$","$s^{in}$","$s^{out}$",
-         "$k$","$k^{in}$","$k^{out}$","$bt$",
-         "$asy$", "$\\mu_{asy}$","$\\sigma_{asy}$",
-         "$dis$","$\\mu_{dis}$","$\\sigma_{dis}$","$\\lambda$"]
+#labels1=["$cc$","$k$","$bt$","$\\lambda$"]
+#labels2=["$cc$","$s$","$s^{in}$","$s^{out}$",
+#         "$k$","$k^{in}$","$k^{out}$","$bt$","$\\lambda$"]
+#labels3=["$cc$","$s$","$s^{in}$","$s^{out}$",
+#         "$k$","$k^{in}$","$k^{out}$","$bt$",
+#         "$asy$", "$\\mu^{asy}$","$\\sigma^{asy}$",
+#         "$dis$","$\\mu^{dis}$","$\\sigma^{dis}$","$\\lambda$"]
 #for lid, ne in zip(dl.downloaded_lists,NEs):
 #    evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))
 #    evec2=n.abs(n.array([pca.pca2.eig_vectors_ for pca in ne.networks_pcas]))
@@ -303,8 +303,8 @@ labels3=["$cc$","$s$","$s^{in}$","$s^{out}$",
 ## 2) PCA1
 ## 3) PCA2
 #
-#evo=pRead("evoPCALAU/im000000013.pickle")
-#g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
+evo=pRead("evoPCALAU/im000000013.pickle")
+g.NetworkPCA(evo["nm"],evo["np"],tdir="evoPCALAU",tname="im13PCAPLOT.png",plot_sym=True)
 
 # EXTRA plots
 #import pylab as p
@@ -486,249 +486,145 @@ print("iniciando análise das redes de fb e tt")
 #for pa in parts: del pa.binomial
 #pDump(parts,"pickledir/partsFB-TW.pickle")
 #pDump(fracs,"pickledir/fracsFB-TW.pickle")
-##########################################
-###############################################
-#pcas=pRead("pickledir/pcasFB-TW.pickle")
-#parts=pRead("pickledir/partsFB-TW.pickle")
-#fracs=pRead("pickledir/fracsFB-TW.pickle")
-#F=pRead("pickledir/F.pickle")
+pcas=pRead("pickledir/pcasFB-TW.pickle")
+parts=pRead("pickledir/partsFB-TW.pickle")
+fracs=pRead("pickledir/fracsFB-TW.pickle")
+F=pRead("pickledir/F.pickle")
+
+#### Make tables with the fraction of participants in each erdos sector
+# one and only table
+#### Make one table for each pca of the networks each network
+labels_=["F1","F2","F3","F4","F5",
+        "I1","I2","I3","I4","I5",
+        "TT1","TT2"]
+
+for i, label in enumerate(labels_):
+    pca=pcas[i]
+    vals=n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_))
+    tstring=g.makeTables(labels1,vals)
+    g.writeTex(tstring,TDIR+"tabPCA1{}.tex".format(label))
+
+# montar matriz de dados unica, 3 x nlistas = 27 colunas x 4 colunas
+NF = 5 # number of friendship networks
+NI = len(labels_)-NF # number of interaction networks
+nn=n.zeros((4,NF*3))
+for i in range(NF):
+    pca=pcas[i]
+    nn[:,i::NF]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
+
+tstring=g.makeTables(labels1,nn,True)
+g.writeTex(tstring,TDIR+"tabPCA1ExtraF.tex")
+
+nn_=n.zeros((4,NI*3))
+for i in range(NI):
+    pca=pcas[i+NF]
+    nn_[:,i::NI]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
+
+tstring=g.makeTables(labels1,nn_,True)
+g.writeTex(tstring,TDIR+"tabPCA1ExtraI.tex")
+
+
+
+nn2=n.zeros((9,len(labels_[5:])*3))
+for i in range(5,len(labels_)):
+    pca=pcas[i]
+    nn2[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca2.eig_vectors_[:,:3],pca.pca2.eig_values_[:3])))
+tstring2=g.makeTables(labels2,nn2,True)
+g.writeTex(tstring2,TDIR+"tabPCA2Extra.tex")
+
+
+nn3=n.zeros((15,len(labels_[5:])*3))
+for i in range(5,len(labels_)):
+    pca=pcas[i]
+    nn3[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca3.eig_vectors_[:,:3],pca.pca3.eig_values_[:3])))
+tstring3=g.makeTables(labels3,nn3,True)
+g.writeTex(tstring3,TDIR+"tabPCA3Extra.tex")
+
+tstring3=g.makeTables(labels_,n.array(fracs),True)
+g.writeTex(tstring3,TDIR+"tabSectorsExtra.tex")
+
+
+# Tabela geral sobre cada lista com:
+# sigla, proveniencia, critério para formação de aresta, dirigida ou nao, description, número de vertices, numero de arestas 
+data = [["F1", "Facebook","friendship","no","the friendship network of Renato Fabbri (author)",str(F[0].number_of_nodes()),str(F[0].number_of_edges())],
+        ["F2", "Facebook","friendship","no","the friendship network of Massimo Canevacci (senior anthropologist)",str(F[1].number_of_nodes()),str(F[1].number_of_edges())],
+        ["F3", "Facebook","friendship","no","the friendship network of a brazilian direct democracy group",str(F[2].number_of_nodes()),str(F[2].number_of_edges())],
+        ["F4", "Facebook","friendship","no","the friendship network of the Silicon Valley Global Network group",str(F[3].number_of_nodes()),str(F[3].number_of_edges())],
+        ["F5", "Participa.br","friendship","no","the friendship network of a brazilian federal social participation portal",str(F[4].number_of_nodes()),str(F[4].number_of_edges())],
+        ["I1", "Facebook","interaction","yes","the interaction network of the Silicon Valley Global Network group",str(F[5].number_of_nodes()),str(F[5].number_of_edges())],
+        ["I2", "Facebook","interaction","yes","the interaction network of a Solidarity Economy group",str(F[6].number_of_nodes()),str(F[6].number_of_edges())],
+        ["I3", "Facebook","interaction","yes","the interaction network of a brazilian direct democracy group",str(F[7].number_of_nodes()),str(F[7].number_of_edges())],
+        ["I4", "Facebook","interaction","yes","the interaction network of the 'Cience with Frontiers' group",str(F[8].number_of_nodes()),str(F[8].number_of_edges())],
+        ["I5", "Participa.br","interaction","yes","the interaction network of a brazilian federal social participation portal",str(F[9].number_of_nodes()),str(F[9].number_of_edges())],
+        ["TT1", "Twitter","retweet","yes","the retweet network of $\\approx 22k$ tweets with the hashtag \#arenaNETmundial",str(F[10].number_of_nodes()),str(F[10].number_of_edges())],
+        ["TT2", "Twitter","retweet","yes","same as TT1, but disconnected agents are not discarded",str(F[11].number_of_nodes()),str(F[11].number_of_edges())]]
+data_=[i[1:] for i in data]
+tstring3=g.makeTables(labels_,data_)
+g.writeTex(tstring3,TDIR+"tabExtra.tex")
+
+#    evec1=n.abs(n.array([pca.pca1.eig_vectors_ for pca in ne.networks_pcas]))
+#    eval1=n.abs(n.array([ pca.pca1.eig_values_ for pca in ne.networks_pcas]))
+#    if "pca2" in dir(pca):
+#    evec2=n.abs(n.array([pca.pca2.eig_vectors_ for pca in ne.networks_pcas]))
+#    evec3=n.abs(n.array([pca.pca3.eig_vectors_ for pca in ne.networks_pcas]))
+#    eval2=n.abs(n.array([ pca.pca2.eig_values_ for pca in ne.networks_pcas]))
+#    eval3=n.abs(n.array([ pca.pca3.eig_values_ for pca in ne.networks_pcas]))
 #
-##### Make tables with the fraction of participants in each erdos sector
-## one and only table
-##### Make one table for each pca of the networks each network
-#labels_=["F1","F2","F3","F4","F5",
-#        "I1","I2","I3","I4","I5",
-#        "TT1","TT2"]
+#    VE1.append(evec1)
+#    VE2.append(evec2)
+#    VE3.append(evec3)
 #
-#for i, label in enumerate(labels_):
-#    pca=pcas[i]
-#    vals=n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_))
-#    tstring=g.makeTables(labels1,vals)
+#    VA1.append(eval1)
+#    VA2.append(eval2)
+#    VA3.append(eval3)
+#
+#    m1= evec1.mean(0)
+#    s1= evec1.std(0)
+#    m1_=eval1.mean(0)
+#    s1_=eval1.std(0)
+#
+#    m2= evec2[:,:,:3].mean(0)
+#    s2= evec2[:,:,:3].std(0)
+#    m2_=eval2[:,:3].mean(0)
+#    s2_=eval2[:,:3].std(0)
+#
+#    m3= evec3[:,:,:3].mean(0)
+#    s3= evec3[:,:,:3].std(0)
+#    m3_=eval3[:,:3].mean(0)
+#    s3_=eval3[:,:3].std(0)
+#
+#    # make table with each mean and std
+#    #t1=n.zeros((m1.shape[0],6))
+#    #t1[:,::2]=m1
+#    #t1[:,1::2]=s1
+#    #t1_=n.zeros(6)
+#    #t1_[::2]=m1_
+#    #t1_[1::2]=s1_
+#    #tab_data=n.vstack((t1,t1_))
+#    label=labels[lid]
+#    tstring=g.pcaTable(labels1,m1,s1,m1_,s1_)
 #    g.writeTex(tstring,TDIR+"tabPCA1{}.tex".format(label))
+#    tstring=g.pcaTable(labels2,m2,s2,m2_,s2_)
+#    g.writeTex(tstring,TDIR+"tabPCA2{}.tex".format(label))
+#    tstring=g.pcaTable(labels3,m3,s3,m3_,s3_)
+#    g.writeTex(tstring,TDIR+"tabPCA3{}.tex".format(label))
 #
-## montar matriz de dados unica, 3 x nlistas = 27 colunas x 4 colunas
-#NF = 5 # number of friendship networks
-#NI = len(labels_)-NF # number of interaction networks
-#nn=n.zeros((4,NF*3))
-#for i in range(NF):
-#    pca=pcas[i]
-#    nn[:,i::NF]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
-#
-#tstring=g.makeTables(labels1,nn,True)
-#g.writeTex(tstring,TDIR+"tabPCA1ExtraF.tex")
-#
-#nn_=n.zeros((4,NI*3))
-#for i in range(NI):
-#    pca=pcas[i+NF]
-#    nn_[:,i::NI]=n.abs(n.vstack((pca.pca1.eig_vectors_,pca.pca1.eig_values_)))
-#
-#tstring=g.makeTables(labels1,nn_,True)
-#g.writeTex(tstring,TDIR+"tabPCA1ExtraI.tex")
-#
-#
-#
-#nn2=n.zeros((9,len(labels_[5:])*3))
-#for i in range(5,len(labels_)):
-#    pca=pcas[i]
-#    nn2[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca2.eig_vectors_[:,:3],pca.pca2.eig_values_[:3])))
-#tstring2=g.makeTables(labels2,nn2,True)
-#g.writeTex(tstring2,TDIR+"tabPCA2Extra.tex")
-#
-#
-#nn3=n.zeros((15,len(labels_[5:])*3))
-#for i in range(5,len(labels_)):
-#    pca=pcas[i]
-#    nn3[:,i-5::len(labels_[5:])]=n.abs(n.vstack((pca.pca3.eig_vectors_[:,:3],pca.pca3.eig_values_[:3])))
-#tstring3=g.makeTables(labels3,nn3,True)
-#g.writeTex(tstring3,TDIR+"tabPCA3Extra.tex")
-#
-#tstring3=g.makeTables(labels_,n.array(fracs),True)
-#g.writeTex(tstring3,TDIR+"tabSectorsExtra.tex")
-#
-#
-## Tabela geral sobre cada lista com:
-## sigla, proveniencia, critério para formação de aresta, dirigida ou nao, description, número de vertices, numero de arestas 
-#data = [["F1", "Facebook","friendship","no","the friendship network of Renato Fabbri (author)",str(F[0].number_of_nodes()),str(F[0].number_of_edges())],
-#        ["F2", "Facebook","friendship","no","the friendship network of Massimo Canevacci (senior anthropologist)",str(F[1].number_of_nodes()),str(F[1].number_of_edges())],
-#        ["F3", "Facebook","friendship","no","the friendship network of a brazilian direct democracy group",str(F[2].number_of_nodes()),str(F[2].number_of_edges())],
-#        ["F4", "Facebook","friendship","no","the friendship network of the Silicon Valley Global Network group",str(F[3].number_of_nodes()),str(F[3].number_of_edges())],
-#        ["F5", "Participa.br","friendship","no","the friendship network of a brazilian federal social participation portal",str(F[4].number_of_nodes()),str(F[4].number_of_edges())],
-#        ["I1", "Facebook","interaction","yes","the interaction network of the Silicon Valley Global Network group",str(F[5].number_of_nodes()),str(F[5].number_of_edges())],
-#        ["I2", "Facebook","interaction","yes","the interaction network of a Solidarity Economy group",str(F[6].number_of_nodes()),str(F[6].number_of_edges())],
-#        ["I3", "Facebook","interaction","yes","the interaction network of a brazilian direct democracy group",str(F[7].number_of_nodes()),str(F[7].number_of_edges())],
-#        ["I4", "Facebook","interaction","yes","the interaction network of the 'Cience with Frontiers' group",str(F[8].number_of_nodes()),str(F[8].number_of_edges())],
-#        ["I5", "Participa.br","interaction","yes","the interaction network of a brazilian federal social participation portal",str(F[9].number_of_nodes()),str(F[9].number_of_edges())],
-#        ["TT1", "Twitter","retweet","yes","the retweet network of $\\approx 22k$ tweets with the hashtag \#arenaNETmundial",str(F[10].number_of_nodes()),str(F[10].number_of_edges())],
-#        ["TT2", "Twitter","retweet","yes","same as TT1, but disconnected agents are not discarded",str(F[11].number_of_nodes()),str(F[11].number_of_edges())]]
-#data_=[i[1:] for i in data]
-#tstring3=g.makeTables(labels_,data_)
-#g.writeTex(tstring3,TDIR+"tabExtra.tex")
+#    print(label+"{0:.2f} for making evolved PCA eigen vectors and values, 3d matrices and tex tables".format(T.time()-TT)); TT=T.time()
+
+
+# use the giant follower network I opened
+#GG=x.DiGraph()
+#with open("../extraData/Twitter-dataset/data/nodes.csv","r") as f:
+#    nodes=f.read().split("\n")
+#    GG.add_nodes_from(nodes)
+#with open("../extraData/Twitter-dataset/data/edges.csv","r") as f:
+#    edges=[i.split(",") for i in f.read().split("\n")]
+#    GG.add_edges_from(edges)
+
+# use one of the 2,7k tweets, the one with most users and edges
+# (make a bundle of hashtags to find all 9 and get 24k msgs)
+
+
+# finish twitter parser
 
 # make a plot N x Gamma for 100 lists
-import time
-T=time.time()
-print("fazendo relação de listas para escolher as X com o maior número de mensagens",time.time()-T); T=time.time()
-#dl=g.DownloadGmaneData('/disco/.gmane/')
-#dl.getDownloadedLists()
-## to download first three lists with the greated number
-## of downloaded messages, do:
-#dl.downloadedStats() # might take a while
-#pDump(dl.lists,"pickledir/dlists.pickle")
-#dlists=dl.lists
-dlists=pRead("pickledir/dlists.pickle")
-
-# Roteiro minimo para obtencao de N e Gamma:
-# para cada endereço:
-# abre cada mensagem em mbox, guarda o autor e se é thread nova.
-import mailbox
-def getNG(mint):
-    PROCESSES=8
-    NLISTS=70
-    NBUNCH=NLISTS//PROCESSES
-    LOC=mint*NBUNCH
-    Ns=[]
-    Gammas=[]
-    n_empties=[]
-    _BASE_DIR="/disco/.gmane/"
-    count=0
-    print("starting", LOC, NBUNCH)
-    for list_stat in dlists[LOC:LOC+NBUNCH]:
-        print(count); count+=1
-        list_id=list_stat[0]
-        mfiles=os.listdir(_BASE_DIR+list_id)
-        mfiles.sort()
-        Ns_=[] # author of each message
-        Gammas_=[] # is the message a new thread?
-        count2=0
-        n_empty=0
-        for mfile in mfiles:
-            mbox = mailbox.mbox(_BASE_DIR+list_id+"/"+mfile)
-            if mbox.keys():
-                message=mbox[0]
-                author_=message['from']
-                if "replace" not in dir(author_):
-                    print("spurious author")
-                    continue
-                else:
-                    author=author_.replace('"','')
-                    author=author.split("<")[-1][:-1]
-                    if " " in author: 
-                        author=author.split(" ")[0]
-                    Ns_.append(author)
-                if message['references']:
-                    Gammas_.append(False)
-                else:
-                    Gammas_.append(True)
-                if len(mbox.keys())>1:
-                    print("mbox duplo...")
-            else:
-                n_empty+=1
-            if count2%1000==0:
-                print(count2)
-            count2+=1
-        Ns.append(Ns_)
-        Gammas.append(Gammas_)
-        n_empties=[n_empty]
-    return Ns,Gammas,n_empties
-
-import multiprocessing as mp
-
-pool=mp.Pool(processes=8)
-#results=pool.map(getNG,list(range(8)))
-results=[pool.apply_async(getNG,args=(x,)) for x in range(8)]
-output=[p.get() for p in results]
-
-#print("abrindo 60 listas com o maior número de mensagens",time.time()-T); T=time.time()
-#count=0
-#dss_=[]
-#lms_=[]
-##for list_stat in dl.lists[6000:620]:
-#for list_stat in dlists[:60]:
-#    print(count, time.time()-T); count+=1; T=time.time()
-#    list_id=list_stat[0]
-#    lms_.append(g.LoadMessages(list_id,basedir="/disco/.gmane/"))
-#    print("making data structs", time.time()-T); T=time.time()
-#    ds_=g.ListDataStructures(lms_[-1],text="no")
-#    dss_.append(ds_)
-#print("escrevendo dss60")    
-#pDump(dss_,"pickledir/dss60_.pickle")
-#print("lendo dss")    
-#dss60_=dss_
-#dss_=pRead("pickledir/dss_.pickle")
-##print("lendo dss60")    
-##dss60_=pRead("pickledir/dss60_.pickle")
-#
-#Ns=[]
-#Gammas=[]
-#Ns_=[]
-#Gammas_=[]
-#for ds in dss_:
-#    N=ds.n_authors
-#    M=ds.n_messages
-#    Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
-#    Ns.append(N)
-#    Gammas.append(Gamma)
-#    Ns_.append(N/M)
-#    Gammas_.append(Gamma/M)
-#from scipy import stats
-#CP=stats.pearsonr(Ns_,Gammas_)
-#CP_=stats.pearsonr(Ns,Gammas)
-#CS=stats.spearmanr(Ns_,Gammas_)
-#CS_=stats.spearmanr(Ns,Gammas)
-## p.plot(Ns_,Gammas_,"ro")
-## p.plot(Ns,Gammas,"ro")
-#Ns2=[]
-#Gammas2=[]
-#
-#
-#for ds in dss_:
-#    # Seleciona 20k msgs depois de puladas 5k
-#    Gamma=len([i for i in ds.message_ids[5000:25000] if ds.messages[i][1]==None])
-#    N=len(set([ds.messages[i][0] for i in ds.message_ids[5000:25000]]))
-#    # ve o numero de autores e o numero de threads.
-#    Ns2.append(N)
-#    Gammas2.append(Gamma)
-#    print("fazendo relação de listas para escolher as X com o maior número de mensagens",time.time()-T); T=time.time()
-#
-#from scipy import stats
-#CP2=stats.pearsonr(Ns2,Gammas2)
-#CS2=stats.spearmanr(Ns2,Gammas2)
-#
-#Ns60=[]
-#Gammas60=[]
-#Ns60_=[]
-#Gammas60_=[]
-#for ds in dss60_:
-#    N=ds.n_authors
-#    M=ds.n_messages
-#    Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
-#    Ns60.append(N)
-#    Gammas60.append(Gamma)
-#    Ns60_.append(N/M)
-#    Gammas60_.append(Gamma/M)
-#from scipy import stats
-#CP60=stats.pearsonr(Ns60_,Gammas60_)
-#CP60_=stats.pearsonr(Ns60,Gammas60)
-#CS60=stats.spearmanr(Ns60_,Gammas60_)
-#CS60_=stats.spearmanr(Ns60,Gammas60)
-## p.plot(Ns_,Gammas_,"ro")
-## p.plot(Ns,Gammas,"ro")
-#Ns602=[]
-#Gammas602=[]
-#
-#
-#for ds in dss60_:
-#    # Seleciona 20k msgs depois de puladas 5k
-#    margin=(len(ds.message_ids)-20000)//2
-#    Gamma=len([i for i in ds.message_ids[margin:2000+margin] if ds.messages[i][1]==None])
-#    N=len(set([ds.messages[i][0] for i in ds.message_ids[margin:20000+margin]]))
-#    # ve o numero de autores e o numero de threads.
-#    Ns602.append(N)
-#    Gammas602.append(Gamma)
-#    print("fazendo relação de listas para escolher as X com o maior número de mensagens",time.time()-T); T=time.time()
-#
-#from scipy import stats
-#CP602=stats.pearsonr(Ns602,Gammas602)
-#CS602=stats.spearmanr(Ns602,Gammas602)
-
-

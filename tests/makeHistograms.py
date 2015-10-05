@@ -44,10 +44,16 @@ nm=ne.networks_measures[-1]
 # fazendo o partitionings
 
 np=g.NetworkPartitioning(nm)
+p.figure(figsize=(10.,3.))
+p.subplots_adjust(left=0.08,bottom=0.18,right=0.99,top=0.87)
+
 
 p.bar([i[0]-0.5 for i in np.bins],
         np.empirical_distribution,
         alpha=.7, label="empirical distribution")
+#p.bar(n.log([i[0]-0.5 for i in np.bins]),
+#      n.log(  np.empirical_distribution),
+#        alpha=.7, label="empirical distribution")
 centers=[i[0] for i in np.bins]
 binomial_probs=[]
 for i, bin_ in enumerate(np.bins):
@@ -59,14 +65,20 @@ for i, bin_ in enumerate(np.bins):
     binomial_probs.append(binomial_prob)
 #p.plot(centers,np.binomial.cdf(centers))
 p.plot(centers,binomial_probs,"ro",label="binomial distribution")
+#p.plot(n.log(centers),n.log(binomial_probs),"ro",label="binomial distribution")
 p.title("CPP list, {} messages, {} participants, {} edges".format(
          ne.window_size, nm.N, nm.E))
-p.xlabel(r"degree $\rightarrow$")
+p.xlabel(r"k $\rightarrow$")
 p.xticks(centers)
-p.ylabel(r"probability $\rightarrow$")
+p.ylabel(r"P(k) $\rightarrow$")
 p.legend()
 #p.bar([i[0]-0.5 for i in np.bins],binomial_probs,color="red",alpha=.4 )
 
 # legendas: ks de corte, n de msgs, N e E, lista
+#p.savefig("../../stabilityInteraction/figs/empiricalBinomial.png")
+
+#fig=p.gcf()
+#fig.set_size_inches(1.5, 10.5,forward=True)
+
 p.show()
 
