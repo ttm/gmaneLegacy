@@ -74,11 +74,11 @@ class EvolutionTimelines:
             ttype_="exc"
             not_classified=list([1-sum(self.fractionLengths(i,total)) 
                 for i,total in zip(self.agents[ttype_],self.agents["totals"])])
-            p.plot(list(range(0,ate,step_size)),not_classified,"k")
+            p.plot(list(range(0,ate,step_size))[:-1],not_classified,"k-.x")
         if ttype == "inclusivist":
             ttype_="inc"
             super_classified=list([sum(self.fractionLengths(i,total))-1 for i,total in zip(self.agents[ttype_],self.agents["totals"])])
-            p.plot(list(range(0,ate,step_size)),super_classified,"k")
+            p.plot(list(range(0,ate,step_size))[:-1],super_classified,"k-.x")
         if ttype == "exclusivist cascade": 
             ttype_="excc"
             p.ylabel(r"fraction of nodes in each section $\rightarrow$")
@@ -95,11 +95,17 @@ class EvolutionTimelines:
         hubs_fractions=[i[2] for i in fractions]
         intermediary_fractions=[i[1] for i in fractions]
         periphery_fractions=[i[0] for i in fractions]
-        p.plot(list(range(0,ate,step_size)),periphery_fractions,"b")
-        p.plot(list(range(0,ate,step_size)),intermediary_fractions,"g")
-        p.plot(list(range(0,ate,step_size)),hubs_fractions,"r")
+        print(list(range(0,ate,step_size)),periphery_fractions)
+        print(len(list(range(0,ate,step_size))),
+              len(periphery_fractions))
+        #p.plot(list(range(0,ate,step_size))[:-1],periphery_fractions,   "b")
+        #p.plot(list(range(0,ate,step_size))[:-1],intermediary_fractions,"g")
+        #p.plot(list(range(0,ate,step_size))[:-1],hubs_fractions,        "r")
+        p.plot(list(range(0,ate,step_size))[:-1],periphery_fractions,   "ko-",ms=8,alpha=.7,label="periphery")
+        p.plot(list(range(0,ate,step_size))[:-1],intermediary_fractions,"k^-",ms=8,alpha=.7,label="intermediary")
+        p.plot(list(range(0,ate,step_size))[:-1],hubs_fractions,        "k*-",ms=10,alpha=.7,label="hubs")
         p.ylim(0,1.)
-        p.xlim(-5,ate+5)
+        p.xlim(-5,ate-1700+5)
     def plotMeasure(self,title,subplot,ate,step_size):
         if subplot=="5,2,10":
             p.subplot(5,2,10)
@@ -133,24 +139,38 @@ class EvolutionTimelines:
         p.xlim(-5,ate+5)
 
     def plotSingles(self):
-        p.clf()
-        fig = matplotlib.pyplot.gcf()
-        fig.set_size_inches(10.5,3.4) ###
+        #p.clf()
+        #fig = matplotlib.pyplot.gcf()
+        #fig.set_size_inches(10.5,3.4) ###
+        p.figure(figsize=(10.,4.))
         #ate=self.overall[1][0].n_messages-self.overall[0]["window_size"]
         ate=self.overall[1][0].n_messages
         step_size=self.overall[0]["step_size"]
-        p.suptitle((r"Fraction of participants in each Erdös Sector. Window: %i messages."+"\nPlacement resolution: %i messages. %s") % (self.overall[0]["window_size"],step_size,self.label))
+        p.suptitle(r"Empirical fractions of participants in each of the Erdös sectors")
+        #p.suptitle((r"Fraction of participants in each Erdös Sector. Window: %i messages."+"\nPlacement resolution: %i messages. %s") % (self.overall[0]["window_size"],step_size,self.label))
 
         self.plotFracs("degree",     "221",ate,step_size)
+        p.ylabel(r"$\overline{|e_{1,x}|} \;\rightarrow$",fontsize=20)
         self.plotFracs("strength",   "223",ate,step_size)
+        p.ylabel(r"$\overline{|e_{4,x}|} \;\rightarrow$",fontsize=20)
+        p.xlabel(r"messages $\;\rightarrow$",fontsize=15)
         self.plotFracs("exclusivist","222",ate,step_size)
+        p.ylabel(r"$\overline{|c_{1,x}|} \;\rightarrow$",fontsize=20)
         self.plotFracs("inclusivist","224",ate,step_size)
+        p.ylabel(r"$\overline{|c_{2,x}|} \;\rightarrow$",fontsize=20)
+        p.xlabel(r"messages $\;\rightarrow$",fontsize=15)
         #fig.set_size_inches(5.5,16.4) ###
 
-        p.subplots_adjust(left=0.05,bottom=0.08,right=0.98,top=0.82,wspace=0.13,hspace=0.43)
+        p.subplots_adjust(left=0.08,bottom=0.13,right=0.99,top=0.79,wspace=0.23,hspace=0.47)
+
+        p.plot([],[],        "k-.x",label="without sector or ambiguous")
+        p.legend(bbox_to_anchor=(-0.98, 2.7, 1.75, .1), loc=4,
+                           ncol=4, mode="expand", borderaxespad=0.,fontsize=10,frameon=False)
         filename="InText-W{}-S{}.png".format(self.label,self.overall[0]["window_size"],step_size)
         # legenda no superior direito
-        p.savefig("{}/{}".format(self.tdir,filename))
+        tname="{}{}".format(self.tdir,filename)
+        p.savefig(tname)
+        print("written image file:", tname)
         #p.show()
     def plotFirstPage(self):
         p.clf()
