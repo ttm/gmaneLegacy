@@ -29,7 +29,7 @@ def pRead(tfilename):
     return tobject
 ##
 ###### DATA STRUCTURES
-#dss=[]
+dss=[]
 PDIR="pickledir/"
 ###for lid in dl.downloaded_lists:
 ###    print(lid)
@@ -41,28 +41,28 @@ PDIR="pickledir/"
 ###    pDump(ds,"{}ds{}.pickle".format(PDIR,label))
 ###    dss.append(ds)
 ##
-#for lid in dl.downloaded_lists:
-#    label=labels[lid]
-#    dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
-#    print(label+"{0:.2f} for PICKLE loading data structures".format(T.time()-TT)); TT=T.time()
+for lid in dl.downloaded_lists:
+    label=labels[lid]
+    dss.append(pRead("{}ds{}.pickle".format(PDIR,label)))
+    print(label+"{0:.2f} for PICKLE loading data structures".format(T.time()-TT)); TT=T.time()
 ##
 ######## TIME STATISTICS
-#tss=[]; count=0
+tss=[]; count=0
+for lid in dl.downloaded_lists:
+    label=labels[lid]
+    ds=dss[count]; count+=1
+    ts=g.TimeStatistics(ds)
+    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
+    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
+    tss.append(ts)
 #for lid in dl.downloaded_lists:
 #    label=labels[lid]
-#    ds=dss[count]; count+=1
-#    ts=g.TimeStatistics(ds)
-#    print(label+"{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
-#    pDump(ts,"{}ts{}.pickle".format(PDIR,label))
-#    tss.append(ts)
-##for lid in dl.downloaded_lists:
-##    label=labels[lid]
-##    tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
-##    print(label+"{0:.2f} for PICKLE loading time statistics".format(T.time()-TT)); TT=T.time()
+#    tss.append(pRead("{}ts{}.pickle".format(PDIR,label)))
+#    print(label+"{0:.2f} for PICKLE loading time statistics".format(T.time()-TT)); TT=T.time()
 ##
 ####pDump([dl,dss,tss],"4listas_.pickle")
-###f=open("4listas_.pickle","rb")
-###dl,dss,tss=pickle.load(f)
+###f=open("4listas_.pickle","rb") # DEPRECATED
+###dl,dss,tss=pickle.load(f) # DEPRECATED
 ###f.close()
 ##
 order=[2,1,3,0] # LAU LAD MET CPP
@@ -89,39 +89,40 @@ TDIR="/home/r/repos/stabilityInteraction/tables/"
 #
 #data_=[]
 ### medidas: circular mean, circular std, circular variance, circular dispersion, max/min
-#def circMeasures(tdict,mean=True):
-#    if mean:
-#       return [tdict["circular_measures"]["circular_mean"],
-#            tdict["circular_measures"]["std_unity_radius"],
-#            tdict["circular_measures"]["variance_unity_radius"],
-#            tdict["circular_measures"]["circular_dispersion"],
-#            tdict["max_discrepancy"],
-#            tdict["max_discrepancy_"][0],
-#            tdict["max_discrepancy_"][1],
-#        ]
-#    else:
-#       return ["--//--",
-#            tdict["circular_measures"]["std_unity_radius"],
-#            tdict["circular_measures"]["variance_unity_radius"],
-#            tdict["circular_measures"]["circular_dispersion"],
-#            tdict["max_discrepancy"],
-#            tdict["max_discrepancy_"][0],
-#            tdict["max_discrepancy_"][1],
-#        ]
-#labels_=["seconds","minutes","hours","weekdays","month days","months"]
-#for i in order:
-#    ts=tss[i]
-#    data_=[]
-#    data_.append(circMeasures(ts.seconds,False))
-#    data_.append(circMeasures(ts.minutes,False))
-#    data_.append(circMeasures(ts.hours))
-#    data_.append(circMeasures(ts.weekdays))
-#    data_.append(circMeasures(ts.monthdays))
-#    data_.append(circMeasures(ts.months))
-#    tstring=g.makeTables(labels_,data_,True)
-#    label=labels[dl.downloaded_lists[i]]
-#    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
-#print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
+def circMeasures(tdict,mean=True):
+    if mean:
+       return [tdict["circular_measures"]["circular_mean"],
+            tdict["circular_measures"]["std_unity_radius"],
+            tdict["circular_measures"]["variance_unity_radius"],
+            tdict["circular_measures"]["circular_dispersion"],
+            tdict["max_discrepancy"],
+            tdict["max_discrepancy_"][0],
+            tdict["max_discrepancy_"][1],
+        ]
+    else:
+       return ["--//--",
+            tdict["circular_measures"]["std_unity_radius"],
+            tdict["circular_measures"]["variance_unity_radius"],
+            tdict["circular_measures"]["circular_dispersion"],
+            tdict["max_discrepancy"],
+            tdict["max_discrepancy_"][0],
+            tdict["max_discrepancy_"][1],
+        ]
+labels_=["seconds","minutes","hours","weekdays","month days","months"]
+for i in order:
+    ts=tss[i]
+    data_=[]
+    data_.append(circMeasures(ts.seconds,False))
+    data_.append(circMeasures(ts.minutes,False))
+    data_.append(circMeasures(ts.hours))
+    data_.append(circMeasures(ts.weekdays))
+    data_.append(circMeasures(ts.monthdays))
+    data_.append(circMeasures(ts.months))
+    tstring=g.makeTables(labels_,data_,True)
+    label=labels[dl.downloaded_lists[i]]
+    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
+print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
+sys.exit()
 ##
 ### Make at least time table inline for
 ### hours of the day,

@@ -51,25 +51,25 @@ class TimeStatistics:
     def uniformComparisson(self):
         ar=n.random.randint(0,60,(1000,self.n_observations))
         cc=n.array([n.histogram(i,60)[0] for i in ar])
-        cc_=cc.max(1)/cc.min(1)
+        cc_=cc.min(1)/cc.max(1)
         self.obs60=(cc_.mean(),cc_.std())
         self.obs60_=cc_
 
         ar=n.random.randint(0,24,(1000,self.n_observations))
         cc=n.array([n.histogram(i,24)[0] for i in ar])
-        cc_=cc.max(1)/cc.min(1)
+        cc_=cc.min(1)/cc.max(1)
         self.obs24=(cc_.mean(),cc_.std())
         self.obs24_=cc_
 
         ar=n.random.randint(0,30,(1000,self.n_observations))
         cc=n.array([n.histogram(i,30)[0] for i in ar])
-        cc_=cc.max(1)/cc.min(1)
+        cc_=cc.min(1)/cc.max(1)
         self.obs30=(cc_.mean(),cc_.std())
         self.obs30_=cc_
 
         ar=n.random.randint(0,7,(1000,self.n_observations))
         cc=n.array([n.histogram(i,7)[0] for i in ar])
-        cc_=cc.max(1)/cc.min(1)
+        cc_=cc.min(1)/cc.max(1)
         self.obs7=(cc_.mean(),cc_.std())
         self.obs7_=cc_
         
@@ -88,7 +88,7 @@ class TimeStatistics:
         # contagem para histograma
         seconds=[i.second for i in self.datetimes]
         histogram=n.histogram(seconds,bins=list(range(61)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(seconds,60)
         seconds=dict(
@@ -102,7 +102,7 @@ class TimeStatistics:
     def minutesStats(self):
         samples=[i.minute for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(61)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(samples,60)
         minutes=dict(
@@ -118,7 +118,7 @@ class TimeStatistics:
     def hoursStats(self):
         samples=[i.hour for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(25)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(samples,24)
         hours=dict(
@@ -132,7 +132,7 @@ class TimeStatistics:
     def weekdaysStats(self):
         samples=[i.weekday() for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(8)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(samples,7)
         self.weekdays=dict(
@@ -153,7 +153,7 @@ class TimeStatistics:
             for xx in self.datetimes])
         mean_month_size=n.round(mean_month_size)
         histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size+1))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics([i*mean_month_size for i in samples],mean_month_size)
         self.monthdays=dict(
@@ -173,7 +173,7 @@ class TimeStatistics:
             for xx in self.datetimes])
         mean_month_size=n.round(mean_month_size)
         histogram=n.histogram(samples,bins=n.linspace(0,1,mean_month_size+1))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(samples,1)
         self.monthdays=dict(
@@ -197,13 +197,13 @@ class TimeStatistics:
         else:
             samples=[i.month-1 for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(13)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         # medidas circulares
         circular_measures=circularStatistics(samples,12)
 
         ar=n.random.randint(0,12,(1000,len(samples)))
         cc=n.array([n.histogram(i,12)[0] for i in ar])
-        cc_=cc.max(1)/cc.min(1)
+        cc_=cc.min(1)/cc.max(1)
         self.obs12=(cc_.mean(),cc_.std())
         self.obs12_=cc_
 
@@ -220,7 +220,7 @@ class TimeStatistics:
         smin=min(samples)
         smax=max(samples)
         histogram=n.histogram(samples,bins=list(range(smin,smax+2)))[0]
-        max_discrepancy=histogram.max()/histogram.min()
+        max_discrepancy=histogram.min()/histogram.max()
         self.years=dict(
             samples=samples,
             histogram=histogram,
