@@ -46,13 +46,14 @@ PDIR="pickledir/"
 dl=pRead("{}dl.pickle".format(PDIR))
 
 ###### DATA STRUCTURES
+TOTAL_M=500
 dss=[]; iNs=[]; nms=[]; tss=[]; nps=[]
 PDIR="pickledir/"
 for lid in dl.lists[:4]:
     lid=lid[0]
     print("\n",lid)
 #    label=labels[lid]
-    lm=g.LoadMessages(lid,500,basedir="~/.gmane3/")
+    lm=g.LoadMessages(lid,TOTAL_M,basedir="~/.gmane3/")
     print(lid+"{0:.2f} for loading messages".format(T.time()-TT)); TT=T.time()
     ds=g.ListDataStructures(lm,text="yes")
     print(lid+"{0:.2f} for data structures".format(T.time()-TT)); TT=T.time()
@@ -88,13 +89,29 @@ for lid in dl.lists[:4]:
 data_=[]; count=0
 for lid in dl.lists[:4]:
     lid=lid[0]
-    ds=dss[count]; count+=1
+    ds=dss[count]; np=nps[count];  count+=1
     date1=ds.messages[ds.message_ids[0]][2].isoformat().split("T")[0]
     date2=ds.messages[ds.message_ids[-1]][2].isoformat().split("T")[0]
     N=ds.n_authors
+    Ns=[len(i) for i in np.sectorialized_agents__]
+    Ns_=[100*len(i)/N for i in np.sectorialized_agents__]
+    M_=TOTAL_M-ds.n_messages
+    Mh=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[2]])
+    Mi=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[1]])
+    Mp=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[0]])
+    M=[Mh,Mi,Mp][::-1]
+    M2=[100*i/ds.n_messages for i in M]
+    idsh=[i[0] for j in np.sectorialized_agents__[2] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    idsi=[i[0] for j in np.sectorialized_agents__[1] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    idsp=[i[0] for j in np.sectorialized_agents__[0] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    idsh_=len(idsh)
+    idsi_=len(idsi)
+    idsp_=len(idsp)
+    ids=[idsh_,idsi_,idsp_][::-1]
     Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
-    M_=20000-ds.n_messages
-    data_.append([date1,date2,N,Gamma,M_])
+    ids_=[100*ii/Gamma for ii in ids]
+    print(sum(ids),Gamma)
+    data_.append([date1,date2,N,Ns,Ns_,M,M2,Gamma,ids,ids_,M_])
 #tstring=g.makeTables(labels_,data_)
 #print(tstring)
 #TDIR="tables/"
