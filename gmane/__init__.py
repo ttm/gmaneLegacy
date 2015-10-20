@@ -12,7 +12,9 @@ __all__=["DownloadGmaneData",
 "AgentStatistics",
 "EvolutionTimelines",
 "makeTables", "partialSums", "pcaTable", "writeTex",
-"EvolutionMusic"]
+"EvolutionMusic",]
+#"utils",
+#"EmailStructures"]
 
 
 
@@ -30,5 +32,6 @@ from .agentStatistics import AgentStatistics
 from .evolutionTimelines import EvolutionTimelines
 from .tableHelpers import makeTables, partialSums, pcaTable, writeTex, markEntries
 from .evolutionMusic import EvolutionMusic
+from .utils import EmailStructures, generalMeasures
 
 

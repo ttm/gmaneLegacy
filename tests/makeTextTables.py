@@ -46,48 +46,43 @@ PDIR="pickledir/"
 dl=pRead("{}dl.pickle".format(PDIR))
 
 ###### DATA STRUCTURES
-TOTAL_M=500
+TOTAL_M=200
 dss=[]; iNs=[]; nms=[]; tss=[]; nps=[]
 PDIR="pickledir/"
-for lid in dl.lists[:4]:
+for lid in dl.lists[4:6]:
     lid=lid[0]
     print("\n",lid)
 #    label=labels[lid]
     lm=g.LoadMessages(lid,TOTAL_M,basedir="~/.gmane3/")
     print(lid+"{0:.2f} for loading messages".format(T.time()-TT)); TT=T.time()
     ds=g.ListDataStructures(lm,text="yes")
+
     print(lid+"{0:.2f} for data structures".format(T.time()-TT)); TT=T.time()
-    pDump(ds,"{}ds{}.pickle".format(PDIR,lid))
     dss.append(ds)
+    pDump(ds,"{}ds{}.pickle".format(PDIR,lid))
 
     ts=g.TimeStatistics(ds)
     print("{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
-    pDump(ts,"{}ts{}.pickle".format(PDIR,lid))
     tss.append(ts)
+    pDump(ts,"{}ts{}.pickle".format(PDIR,lid))
 
     iN=g.InteractionNetwork(ds)
     print("made interaction network")
     iNs.append(iN)
+    pDump(iN,"{}iN{}.pickle".format(PDIR,lid))
+
     nm=g.NetworkMeasures(iN,exclude=["rich_club"])
     print("network mesaures")
     nms.append(nm)
+    pDump(nm,"{}nm{}.pickle".format(PDIR,lid))
+
     np2_=g.NetworkPartitioning(nm,2,"g")
     print("partitioned network")
     nps.append(np2_)
+    pDump(nm,"{}np{}.pickle".format(PDIR,lid))
 
-
-#for lid in dl.lists[:10]:
-#    lid=lid[0]
-#    tss.append(pRead("{}ts{}.pickle".format(PDIR,lid)))
-#    print(lid+"{0:.2f} for PICKLE loading time statistics".format(T.time()-TT)); TT=T.time()
-
-
-# Faz rede
-# particiona rede
-#for i in [0]:
-#    labels_.append(labels[dl.downloaded_lists[i]])
 data_=[]; count=0
-for lid in dl.lists[:4]:
+for lid in dl.lists[4:6]:
     lid=lid[0]
     ds=dss[count]; np=nps[count];  count+=1
     date1=ds.messages[ds.message_ids[0]][2].isoformat().split("T")[0]
@@ -101,6 +96,8 @@ for lid in dl.lists[:4]:
     Mp=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[0]])
     M=[Mh,Mi,Mp][::-1]
     M2=[100*i/ds.n_messages for i in M]
+    MN=M_/N
+    MN_=[i/j if j!=0 else n.inf for i,j in zip(M,Ns)]
     idsh=[i[0] for j in np.sectorialized_agents__[2] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
     idsi=[i[0] for j in np.sectorialized_agents__[1] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
     idsp=[i[0] for j in np.sectorialized_agents__[0] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
@@ -111,7 +108,8 @@ for lid in dl.lists[:4]:
     Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
     ids_=[100*ii/Gamma for ii in ids]
     print(sum(ids),Gamma)
-    data_.append([date1,date2,N,Ns,Ns_,M,M2,Gamma,ids,ids_,M_])
+    data_.append([date1,date2,N,Ns,Ns_,M,M2,Gamma,ids,ids_,M_,MN,MN_])
+
 #tstring=g.makeTables(labels_,data_)
 #print(tstring)
 #TDIR="tables/"

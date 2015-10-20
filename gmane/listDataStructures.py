@@ -52,11 +52,11 @@ class ListDataStructures:
         self.raw_clean_references=raw_clean_references=[]
         #self.spurious_empty_ids=spurious_empty_ids=[]
         self.spurious_authors=spurious_authors=[]
-        self.n_empty=n_empty=0
+        self.n_empty=n_empty=0#messagesLoaded.n_empty
         for message in messagesLoaded:
             if not message.keys(): # if message is empty
                 #spurious_empty_ids.append(i)
-                n_empty+=1
+                self.n_empty+=1
             else:
                 author_=message['from']
                 if "replace" not in dir(author_):
@@ -95,6 +95,7 @@ class ListDataStructures:
                         id_ant=message['references'].split('\t')[-1]
                         id_ant=id_ant.split(' ')[-1]
                     except:
+                        print("AQUI AQUI")
                         continue
                 else:
                     id_ant=None
