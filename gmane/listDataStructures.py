@@ -38,6 +38,43 @@ class ListDataStructures:
     ids_r to responses
     vz to spurious_empty_ids
     """
+    def cleanText(self, text):
+        t=text.splitlines()
+        t=[line for line in t if line]
+        t_=[]
+        for line in t:
+            if line.startswith(">"):
+                pass
+            elif line.startswith("On Mon"):
+                pass
+            elif line.startswith("On Tue"):
+                pass
+            elif line.startswith("On Wed"):
+                pass
+            elif line.startswith("On Thu"):
+                pass
+            elif line.startswith("On Fri"):
+                pass
+            elif line.startswith("On Sat"):
+                pass
+            elif line.startswith("On Sun"):
+                pass
+            elif line.endswith("wrote:"):
+                pass
+            # uma palavra soh sem ponto final
+            elif len(line.split()) == 1 and line[-1]!=".":
+                pass
+            # duas palavras separadas, com a primeira letra caixa alta em cada
+            elif line.istitle():
+                pass
+            elif line.startswith("--"):
+                break
+            elif "----" in line:
+                pass
+            else:
+                t_.append(line)
+        return t_
+
     def __init__(self, messagesLoaded=None,text="yes"):
         if "messages" in dir(messagesLoaded):
             messagesLoaded=messagesLoaded.messages
@@ -108,6 +145,10 @@ class ListDataStructures:
                     messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
                     t=message.get_payload()
+
+                    while type(t)!=type("astring"):
+                        t=t[0].get_payload()
+                    t=self.cleanText(t)
                     #if type(t)==type("astring"):
                     #    pass
                     #else:

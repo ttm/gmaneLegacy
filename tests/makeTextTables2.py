@@ -51,14 +51,14 @@ TOTAL_M=400
 dss=[]; iNs=[]; nms=[]; tss=[]; nps=[]
 PDIR="pickledir/"
 ES=[]
-for lid in dl.lists[4:8]:
+for lid in dl.lists[14:18]:
     lid=lid[0]
     es=g.EmailStructures(lid,TOTAL_M)
     ES.append(es)
-pDump(ES,"{}ES{}.pickle".format(PDIR,lid))
+#pDump(ES,"{}ES{}.pickle".format(PDIR,lid))
 
 measures=[]; count=0
-for lid in dl.lists[4:8]:
+for lid in dl.lists[14:18]:
     lid=lid[0]
     es=ES[count].structs; count+=1
     ds=es[1]; np=es[-1]
@@ -66,6 +66,9 @@ for lid in dl.lists[4:8]:
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI
 
+# rotina para a tabela seguinte:
+# conta 
+foo=g.makeText(ds)
 
 
 
