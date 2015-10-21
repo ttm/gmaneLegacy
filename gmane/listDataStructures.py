@@ -3,6 +3,76 @@ import parsedatetime as pdt
 parser=pdt.Calendar()
 import pytz
 
+def getcharsets(msg):
+    charsets = set({})
+    for c in msg.get_charsets():
+        if c is not None:
+            charsets.update([c])
+    return charsets
+def handleerror2(errmsg, t,charset):
+    print(errmsg, charset)
+    print("This is the body:",t)
+def getBody(msg):
+    while msg.is_multipart():
+        msg=msg.get_payload()[0]
+    t=msg.get_payload(decode=True)
+    for charset in getcharsets(msg):
+        try:
+            t=t.decode(charset)
+        except LookupError:
+            handleerror2("LookupError for unknown charset:",t,charset)
+            t=t.decode()
+    if not getcharsets(msg):
+        t=t.decode()
+    return t
+def cleanText(text):
+#    return text
+    t=text.splitlines()
+    t=[line for line in t if line]
+    t_=[]
+    for line in t:
+        if line.startswith(">"):
+            pass
+        elif line.startswith("On Mon"):
+            pass
+        elif line.startswith("On Jan"):
+            pass
+        elif line.startswith("On Tue"):
+            pass
+        elif line.startswith("On Wed"):
+            pass
+        elif line.startswith("On Thu"):
+            pass
+        elif line.startswith("On Fri"):
+            pass
+        elif line.startswith("On Sat"):
+            pass
+        elif line.startswith("On Sun"):
+            pass
+        elif line.endswith("wrote:"):
+            pass
+        # uma palavra soh sem ponto final
+        elif len(line.split()) == 1 and line[-1]!=".":
+            pass
+        # duas palavras separadas, com a primeira letra caixa alta em cada
+        elif line.istitle():
+            pass
+        elif line.startswith("-----BEGIN"):
+            pass
+        elif line.startswith("Hash: "):
+            pass
+        elif line.startswith("--"):
+            break
+        elif line[:4].count("-")>=3:
+            break
+        elif "----" in line:
+            pass
+        else:
+            t_.append(line)
+    t_="\n".join(t_)
+    return t_
+
+
 class ListDataStructures:
     """Basic datastructures driven from Gmane email messages.
 
@@ -38,42 +108,7 @@ class ListDataStructures:
     ids_r to responses
     vz to spurious_empty_ids
     """
-    def cleanText(self, text):
-        t=text.splitlines()
-        t=[line for line in t if line]
-        t_=[]
-        for line in t:
-            if line.startswith(">"):
-                pass
-            elif line.startswith("On Mon"):
-                pass
-            elif line.startswith("On Tue"):
-                pass
-            elif line.startswith("On Wed"):
-                pass
-            elif line.startswith("On Thu"):
-                pass
-            elif line.startswith("On Fri"):
-                pass
-            elif line.startswith("On Sat"):
-                pass
-            elif line.startswith("On Sun"):
-                pass
-            elif line.endswith("wrote:"):
-                pass
-            # uma palavra soh sem ponto final
-            elif len(line.split()) == 1 and line[-1]!=".":
-                pass
-            # duas palavras separadas, com a primeira letra caixa alta em cada
-            elif line.istitle():
-                pass
-            elif line.startswith("--"):
-                break
-            elif "----" in line:
-                pass
-            else:
-                t_.append(line)
-        return t_
+
 
     def __init__(self, messagesLoaded=None,text="yes"):
         if "messages" in dir(messagesLoaded):
@@ -144,23 +179,9 @@ class ListDataStructures:
                 if text=="no":
                     messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
-                    t=message.get_payload()
+                    t=getBody(message)
 
-                    while type(t)!=type("astring"):
-                        t=t[0].get_payload()
-                    t=self.cleanText(t)
-                    #if type(t)==type("astring"):
-                    #    pass
-                    #else:
-                    #    t=t[0].get_payload()
-                    #if type(t)==type("astring"):
-                    #    pass
-                    #else:
-                    #    t=t[0].get_payload()
-#                    while type(t)!=type("astring"):
-#                        t=t[0].get_payload()
-                    #print t
-#                    t=self.cleanText(t)
+                    t=cleanText(t)
                     messages[message["message-id"]]=(author,id_ant,date,t)
                 else:
                     raise TypeError("argument text accepts only 'yes' and 'no'values")
