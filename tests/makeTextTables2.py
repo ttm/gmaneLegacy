@@ -47,18 +47,18 @@ PDIR="pickledir/"
 dl=pRead("{}dl.pickle".format(PDIR))
 
 ###### DATA STRUCTURES
-TOTAL_M=400
+TOTAL_M=100
 dss=[]; iNs=[]; nms=[]; tss=[]; nps=[]
 PDIR="pickledir/"
 ES=[]
-for lid in dl.lists[14:18]:
+for lid in dl.lists[14:16]:
     lid=lid[0]
     es=g.EmailStructures(lid,TOTAL_M)
     ES.append(es)
 #pDump(ES,"{}ES{}.pickle".format(PDIR,lid))
 
 measures=[]; count=0
-for lid in dl.lists[14:18]:
+for lid in dl.lists[14:16]:
     lid=lid[0]
     es=ES[count].structs; count+=1
     ds=es[1]; np=es[-1]
@@ -70,6 +70,94 @@ for lid in dl.lists[14:18]:
 # conta 
 foo=g.makeText(ds)
 
+def getcharsets(msg):
+    charsets = set({})
+    for c in msg.get_charsets():
+        if c is not None:
+            charsets.update([c])
+    return charsets
+
+def handleerror(errmsg, emailmsg,cs,body):
+    print()
+    print(errmsg)
+    print("This error occurred while decoding with ",cs," charset.")
+    print("These charsets were found in the one email.",getcharsets(emailmsg))
+    print("This is the subject:",emailmsg['subject'])
+    print("This is the sender:",emailmsg['From'])
+    print("This is the body:",body)
+
+def getbodyfromemail(msg):
+    body = None
+    #Walk through the parts of the email to find the text body.    
+    if msg.is_multipart():
+        for part in msg.walk():
+            # If part is multipart, walk through the subparts.            
+            if part.is_multipart():
+                for subpart in part.walk():
+                    if subpart.get_content_type() == 'text/plain':
+                        body = subpart.get_payload(decode=True)
+                        continue
+            elif part.get_content_type() == 'text/plain':
+                body = part.get_payload(decode=True)
+    elif msg.get_content_type() == 'text/plain':
+        body = msg.get_payload(decode=True) 
+    for charset in getcharsets(msg):
+        try:
+            body = body.decode(charset)
+        except UnicodeDecodeError:
+            handleerror("UnicodeDecodeError: encountered.",msg,charset,body)
+        except AttributeError:
+            handleerror("AttributeError: encountered" ,    msg,charset,body)
+    return body 
+
+
+def handleerror2(errmsg, t):
+    print()
+    print(errmsg)
+#    print("This error occurred while decoding with ",cs," charset.")
+#    print("These charsets were found in the one email.",getcharsets(emailmsg))
+#    print("This is the subject:",emailmsg['subject'])
+#    print("This is the sender:",emailmsg['From'])
+    print("This is the body:",t)
+
+
+def getBody(msg):
+    while msg.is_multipart():
+        msg=msg.get_payload()[0]
+    t=msg.get_payload(decode=True)
+    for charset in getcharsets(msg):
+        try:
+            t=t.decode(charset)
+        except LookupError:
+            handleerror2("UnicodeDecodeError: encountered.",t)
+            t=t.decode()
+    return t
+
+    #    print("multipart:", msg.is_multipart())
+    #print("content type:", msg.get_content_type())
+    #while type(t) not in (type("astring"),type(b"abytes")):
+    #    print("multipart:", msg.is_multipart())
+    #    print("content type:", msg.get_content_type())
+    #    t=t[0].get_payload(decode=True)
+
+#def getBodyBACK(msg):
+#    print("multipart:", msg.is_multipart())
+#    print("content type:", msg.get_content_type())
+#    t=msg.get_payload(decode=True)
+#
+#    while type(t) not in (type("astring"),type(b"abytes")):
+#        print("multipart:", msg.is_multipart())
+#        print("content type:", msg.get_content_type())
+#        t=t[0].get_payload(decode=True)
+#    for charset in getcharsets(msg):
+#        try:
+#            t=t.decode(charset)
+#        except LookupError:
+#            handleerror("UnicodeDecodeError: encountered.",msg,charset,body)
+#    return t
+
+# m.get_payload()[0].get_payload()
+# m.get_payload()[2].get_payload()[0].get_payload()[0].get_payload()
 
 
 #    date1=ds.messages[ds.message_ids[0]][2].isoformat().split("T")[0]
