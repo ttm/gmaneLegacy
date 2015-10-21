@@ -230,10 +230,11 @@ def medidasTamanhosSentencas(T,medidas_tokens):
         vdict[mvar] = locals()[mvar]
     return vdict
 
-
-
-def medidasTamanhosMensagens():
-    self.mT=mT=[string.join(self.m.mm[i][3]) for i in self.ids]
+def medidasTamanhosMensagens(ds, tids=None):
+    if not tids:
+        self.mT=mT=[string.join(self.m.mm[i][3]) for i in ds.message_ids]
+    else:
+        self.mT=mT=[string.join(self.m.mm[i][3]) for i in tids]
 
     self.tmT=tmT=[len(t) for t in mT] # chars
     self.ttmT=ttmT=[len(k.tokenize.wordpunct_tokenize(t)) for t in mT] # tok
@@ -245,5 +246,3 @@ def medidasTamanhosMensagens():
     self.dttmT=n.std(ttmT)
     self.mtsmT=n.mean(tsmT)
     self.dtsmT=n.std(tsmT)
-
-
