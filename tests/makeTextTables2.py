@@ -58,18 +58,22 @@ for lid in dl.lists[34:36]:
 #pDump(ES,"{}ES{}.pickle".format(PDIR,lid))
 
 measures=[]; count=0
+char_measures=[]
+tok_measures=[]
 for lid in dl.lists[34:36]:
     lid=lid[0]
     es=ES[count].structs; count+=1
     ds=es[1]; np=es[-1]
     measures.append(g.generalMeasures(ds,np))
+    t=g.makeText(ds)[0]
+    char_measures.append(g.medidasLetras(t))
+    tok_measures.append(g.medidasTokens(t))
+
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI
 
 # rotina para a tabela seguinte:
 # conta 
-foo=g.makeText(ds)
-foo2=g.makeText(ES[0].structs[1])
 
 #tstring=g.makeTables(labels_,data_)
 #print(tstring)
