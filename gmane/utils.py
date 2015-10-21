@@ -1,34 +1,35 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k
+import gmane as g, time, numpy as n, re, nltk as k, string
+from nltk.corpus import wordnet as wn
 puncts=set(string.punctuation)
-w=open("wordsEn.txt","rb")
+w=open("./wordsEn.txt","r")
 w=w.read()
 WL=w.split()
 WL.append("email")
 WL.append("e-mail")
 WL_=set(WL)
-stopworkds=set(k.corpus.stopwords.words("english"))
+stopwords=set(k.corpus.stopwords.words("english"))
 
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
     def __init__(self,list_id,n_messages,text="yes"):
-        TT=T.time()
+        TT=time.time()
         lid=list_id; TOTAL_M=n_messages
         lm=g.LoadMessages(lid,TOTAL_M,basedir="~/.gmane3/")
         ds=g.ListDataStructures(lm,text="yes")
-        print(lid+"{0:.2f} for loading messages and making datastructures".format(T.time()-TT)); TT=T.time()
+        print(lid+"{0:.2f} for loading messages and making datastructures".format(time.time()-TT)); TT=time.time()
 
-        print(lid+"{0:.2f} for data structures".format(T.time()-TT)); TT=T.time()
+        print(lid+"{0:.2f} for data structures".format(time.time()-TT)); TT=time.time()
         ts=g.TimeStatistics(ds)
-        print("{0:.2f} for statistics along time".format(T.time()-TT)); TT=T.time()
+        print("{0:.2f} for statistics along time".format(time.time()-TT)); TT=time.time()
         iN=g.InteractionNetwork(ds)
         nm=g.NetworkMeasures(iN,exclude=["rich_club"])
-        print("{0:.2f} for network measures".format(T.time()-TT)); TT=T.time()
+        print("{0:.2f} for network measures".format(time.time()-TT)); TT=time.time()
         np2_=g.NetworkPartitioning(nm,2,"g")
         del np2_.binomial
-        print("{0:.2f} for network partition".format(T.time()-TT)); TT=T.time()
+        print("{0:.2f} for network partition".format(time.time()-TT)); TT=time.time()
         self.structs=lm, ds, ts, iN, nm, np2_
 def generalMeasures(ds,np):
     """Return overall measures from list datastructures and network partitioning"""
@@ -91,45 +92,63 @@ def medidasTokens(T):
     atime=time.time()
     wtok=wtok=k.tokenize.wordpunct_tokenize(T)
     wtok_=wtok_=[t.lower() for t in wtok]
-    nt=len(wtok)
-    ntd=len(set(wtok))
+    nt=len(wtok) #
+    ntd=len(set(wtok)) # 
     # tokens que sao pontuacoes
-    ntp=sum([sum([tt in puncts for tt in t])==len(t) for t in wtok])
+    ntp=sum([sum([tt in puncts for tt in t])==len(t) for t in wtok]) #
     # known and unkown words
-    kw=[]
-    ukw=[]
+    kw=[] #
+    ukw=[] #
+    tp=[]
+    sw=[]
     for t in wtok_:
         if t in WL_:
             kw.append(t)
+        elif sum([tt in puncts for tt in t])==len(t):
+            tp.append(t)
         else:
             ukw.append(t)
-    wss=[i for i in kw if wn.synsets(i)]
-    wss_=set(wss)
+        if t in stopwords:
+            sw.append(t)
+    sw_=set(sw)
+    kw_=set(kw)
+    ukw_=set(ukw)
+    kwss=[i for i in kw if wn.synsets(i)] #
+    kwss_=set(kwss) #
     # known words that does not have synsets
-    kwnss=[i for i in kw if i not in wss_]
+    kwnss=[i for i in kw if i not in kwss_] #
     print("MT2:", atime-time.time()); atime=time.time()
-    kwnss_=set(kwnss)
+    kwnss_=set(kwnss) #
     # words that are stopwords
-    kwsw=[i for i in kw if i in stopwords]
+    kwsw=[i for i in kw if i in stopwords] #
+    kwsw_=set(kwsw)
     print("MT3:", atime-time.time()); atime=time.time()
     # known words that are not stopwords
-    kwnsw=[i for i in kw if i not in stopwords]
+    kwnsw=[i for i in kw if i not in stopwords] #
+    kwnsw_=set(kwnsw) #
     # unknown words that are stopwords
-    ukwsw=[i for i in ukw if i in stopwords]
+    ukwsw=[i for i in ukw if i in stopwords] #
     print( "MT4:", atime-time.time()); atime=time.time()
-    # words that return synsets and are stopwords
-    self.wsssw=[i for i in wss if i in stopwords]
+    # known words that return synsets and are stopwords
+    kwsssw=[i for i in kwss if i in stopwords] #
     print("MT5:", atime-time.time()); atime=time.time()
-    # words that dont return synsets and are stopwords
-    self.wnsssw=[i for i in wnss if i in stopwords]
+    # known words that dont return synsets and are stopwords
+    kwnsssw=[i for i in kwnss if i in stopwords] #
     print("MT6:", atime-time.time()); atime=time.time()
     # words that are known, are not stopwords and do not return synset
     foo_=kwnss_.difference(stopwords)
-    kwnssnsw=[i for i in kw if i in foo_]
+    kwnssnsw=[i for i in kw if i in foo_] #
     print("MT7:", atime-time.time()); atime=time.time()
-    foo_=kwss_.difference(self.stopwords)
-    kwssnsw=[i for i in kw if i in foo_]
-    return nt, ntd/nt
+    foo_=kwss_.difference(stopwords) 
+    kwssnsw=[i for i in kw if i in foo_] #
+    kwssnsw_=set(kwssnsw)
+    print("MT8:", atime-time.time()); atime=time.time()
+    mvars=("nt", "ntd", "ntp","sw","sw_","kw", "kw_", "tp", "ukw", "ukw_", "kwss", "kwss_", "kwnss", "kwnss_","kwsw", "kwsw_", "kwnsw", "kwnsw_", "ukwsw", "kwsssw", "kwnsssw", "kwnssnsw", "kwssnsw","kwssnsw_")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+
 def medidasLetras(T):
     # quantos caracteres
     nc=len(T)
@@ -144,7 +163,87 @@ def medidasLetras(T):
     np=sum([t in puncts for t in T])
     # numerais
     nd=sum([t.isdigit() for t in T])
-
     return nc,ne/nc,nl/(nc-ne),nm/nl,nv/nl,np/(nc-ne),nd/(nc-ne)
+
+def mediaDesvio(tid="astring",adict={"stringkey":"tokens"}):
+    tid_=tid+"_"
+    toks=[len(i) for i in adict[tid]]
+    toks_=[len(i) for i in adict[tid_]]
+
+    mtid=n.mean(toks)
+    dtid=n.std(toks)
+    mtid_=n.mean(toks_)
+    dtid_= n.std(toks_)
+
+    fdict={}
+    fdict["m"+tid]=mtid
+    fdict["d"+tid]=dtid
+    fdict["m"+tid_]=mtid_
+    fdict["d"+tid_]=dtid_
+
+    return fdict
+
+def medidasTamanhosTokens(medidas_tokens):
+    mdict={}
+    MT=medidas_tokens
+    mdict.update(mediaDesvio("kw",MT))
+    mdict.update(mediaDesvio("kwnsw",MT))
+    mdict.update(mediaDesvio("kwssnsw",MT))
+    mdict.update(mediaDesvio("kwssnsw",MT))
+    mdict.update(mediaDesvio("kwsw",MT))
+    mdict.update(mediaDesvio("sw",MT))
+    return mdict
+
+def medidasTamanhosSentencas(T,medidas_tokens):
+    mdict={}
+    MT=medidas_tokens
+    ############
+    # medidas de sentencas
+    TS=k.sent_tokenize(T)
+    # media e desvio de numero de caracteres por sentenca
+    tTS=[len(i) for i in TS]
+    mtTS=n.mean(tTS) #
+    dtTS=n.std(tTS) #
+    
+    # media e desvio do tamanho das sentencas em tokens
+    sTS=[k.tokenize.wordpunct_tokenize(i) for i in TS]
+    tsTS=[len(i) for i in sTS]
+    mtsTS=n.mean(tsTS) #
+    dtsTS=n.std(tsTS) #
+
+    # media e desvio do tamanho das sentencas em palavras conhecidas
+    kw_=MT["kw_"]
+    tsTSkw=[len([ii for ii in i if ii in kw_]) for i in sTS]
+    mtsTSkw=n.mean(tsTSkw) #
+    dtsTSkw=n.std(tsTSkw) #
+
+    # media e desvio do tamanho das sentencas em palavras que retornam synsets e nao sao stopwords
+    pv_=MT["kwssnsw_"]
+    tsTSpv=[len([ii for ii in i if ii in pv_]) for i in sTS]
+    mtsTSpv=n.mean(tsTSpv) #
+    dtsTSpv=n.std(tsTSpv) #
+
+    mvars=("mtTS","dtTS","mtsTS","dtsTS","mtsTSkw","dtsTSkw",
+           "mtsTSpv","dtsTSpv")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+
+
+
+def medidasTamanhosMensagens():
+    self.mT=mT=[string.join(self.m.mm[i][3]) for i in self.ids]
+
+    self.tmT=tmT=[len(t) for t in mT] # chars
+    self.ttmT=ttmT=[len(k.tokenize.wordpunct_tokenize(t)) for t in mT] # tok
+    self.tsmT=tsmT=[len(k.sent_tokenize(t)) for t in mT] # sents
+
+    self.mtmT=n.mean(tmT)
+    self.dtmT=n.std(tmT)
+    self.mttmT=n.mean(ttmT)
+    self.dttmT=n.std(ttmT)
+    self.mtsmT=n.mean(tsmT)
+    self.dtsmT=n.std(tsmT)
 
 

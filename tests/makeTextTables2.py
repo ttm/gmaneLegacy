@@ -60,6 +60,8 @@ for lid in dl.lists[34:36]:
 measures=[]; count=0
 char_measures=[]
 tok_measures=[]
+size_measures=[]
+sent_size_measures=[]
 for lid in dl.lists[34:36]:
     lid=lid[0]
     es=ES[count].structs; count+=1
@@ -68,6 +70,8 @@ for lid in dl.lists[34:36]:
     t=g.makeText(ds)[0]
     char_measures.append(g.medidasLetras(t))
     tok_measures.append(g.medidasTokens(t))
+    size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
+    sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
 
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI
