@@ -229,20 +229,25 @@ def medidasTamanhosSentencas(T,medidas_tokens):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
-
 def medidasTamanhosMensagens(ds, tids=None):
     if not tids:
-        self.mT=mT=[string.join(self.m.mm[i][3]) for i in ds.message_ids]
+        mT=[ds.messages[i][3] for i in ds.message_ids]
     else:
-        self.mT=mT=[string.join(self.m.mm[i][3]) for i in tids]
+        mT=[ds.messages[i][3] for i in tids]
 
-    self.tmT=tmT=[len(t) for t in mT] # chars
-    self.ttmT=ttmT=[len(k.tokenize.wordpunct_tokenize(t)) for t in mT] # tok
-    self.tsmT=tsmT=[len(k.sent_tokenize(t)) for t in mT] # sents
+    tmT=[len(t) for t in mT] # chars
+    ttmT=[len(k.tokenize.wordpunct_tokenize(t)) for t in mT] # tokens
+    tsmT=[len(k.sent_tokenize(t)) for t in mT] # sentences
 
-    self.mtmT=n.mean(tmT)
-    self.dtmT=n.std(tmT)
-    self.mttmT=n.mean(ttmT)
-    self.dttmT=n.std(ttmT)
-    self.mtsmT=n.mean(tsmT)
-    self.dtsmT=n.std(tsmT)
+    mtmT=n.mean(tmT)
+    dtmT=n.std(tmT)
+    mttmT=n.mean(ttmT)
+    dttmT=n.std(ttmT)
+    mtsmT=n.mean(tsmT)
+    dtsmT=n.std(tsmT)
+    mvars=("mtmT","dtmT","mttmT","dttmT","mtsmT","dtsmT")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+

@@ -73,7 +73,7 @@ for lid in dl.lists[34:36]:
     tok_measures.append(g.medidasTokens(t))
     size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
     sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
-    msg_size_measures.append(g.medidasTamanhosMensagens(t,tok_measures[-1]))
+    msg_size_measures.append(g.medidasTamanhosMensagens(ds))
 
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI
