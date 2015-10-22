@@ -94,3 +94,4 @@ brill_tagger = trainer.train(training_data, max_rules, min_score)
 f=open("./pickledir/brill_tagger", 'wb')
 pickle.dump(brill_tagger,f,-1)
 f.close()
+# acerto de: 0.9180

@@ -101,3 +101,4 @@ f=open("./pickledir/brill_tagger2", 'wb')
 pickle.dump(brill_tagger,f,-1)
 f.close()
 print("Done writting.",time.time()-atime); atime=time.time()#)
+# acerto de: 0.9184661557159511
