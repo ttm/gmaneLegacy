@@ -84,8 +84,8 @@ bigram_tagger = k.tag.BigramTagger(training_data,
 ##  k.tag.brill.ProximateTokensTemplate(k.tag.brill.ProximateWordsRule, (-1, -1), (1,1)),
 ##  ]
 trace=5 
-#trainer = k.tag.BrillTaggerTrainer(bigram_tagger, templates, trace)
-trainer = k.tag.BrillTaggerTrainer(bigram_tagger, templates, 2)
+trainer = k.tag.BrillTaggerTrainer(bigram_tagger, templates, 0)
+#trainer = k.tag.BrillTaggerTrainer(bigram_tagger, templates, 2)
 #trainer = k.tag.brill.BrillTaggerTrainer(bigram_tagger, trace)
 ##trainer = brill.BrillTaggerTrainer(u, templates, trace)
 max_rules=40000
@@ -93,7 +93,7 @@ min_score=2
 #brill_tagger = trainer.train(training_data, max_rules, min_score)
 brill_tagger = trainer.train(training_data, max_rules, 1)
  
-f=open("./pickledir/brill_tagger3", 'wb')
+f=open("./pickledir/brill_tagger5", 'wb')
 pickle.dump(brill_tagger,f,-1)
 f.close()
 # acerto de: 0.9180
