@@ -19,7 +19,7 @@
 # renderizar 4 listas
 # avaliar fazer para mais listas para tirar médias e desvios
 
-import gmane as g, os, pickle, time as T, numpy as n
+import gmane as g, os, pickle, time as T, numpy as n, nltk as k
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
@@ -74,6 +74,8 @@ for lid in dl.lists[34:36]:
     size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
     sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
     msg_size_measures.append(g.medidasTamanhosMensagens(ds))
+
+# POS TAGS
 
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI
