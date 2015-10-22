@@ -1,7 +1,7 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, string
+import gmane as g, time, numpy as n, re, nltk as k, string, pickle
 from nltk.corpus import wordnet as wn
 puncts=set(string.punctuation)
 w=open("./wordsEn.txt","r")
@@ -11,6 +11,9 @@ WL.append("email")
 WL.append("e-mail")
 WL_=set(WL)
 stopwords=set(k.corpus.stopwords.words("english"))
+f=open("pickledir/brill_tagger3","rb")
+brill_tagger=pickle.load(f)
+f.close()
 
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""

@@ -19,6 +19,9 @@ f.close()
 f=open("pickledir/brill_tagger2","rb")
 brill_tagger2=pickle.load(f)
 f.close()
+f=open("pickledir/brill_tagger3","rb")
+brill_tagger3=pickle.load(f)
+f.close()
 
 tagged_data = k.corpus.treebank.tagged_sents(tagset="universal")
 tagged_data2 = k.corpus.brown.tagged_sents(tagset="universal")
@@ -31,6 +34,21 @@ training_data = tagged_data[:cutoff]+tagged_data2[:cutoff2]
 gold_data = tagged_data[cutoff:]+tagged_data2[cutoff2:]
 testing_data = [[t[0] for t in sent] for sent in gold_data]
 
+#import timeit
+#print("before")
+#print(timeit.timeit("brill_tagger.tag_sents(testing_data[400:600])",number=1000))
+#print("after",time.time()-atime)
+
+#In [85]: %timeit brill_tagger.tag_sents(testing_data[400:430])
+#100 loops, best of 3: 8.67 ms per loop
+#In [88]: brill_tagger.evaluate(gold_data)
+#Out[88]: 0.9188828533869088
+#
+#In [86]: %timeit brill_tagger2.tag_sents(testing_data[400:430])
+#100 loops, best of 3: 12.4 ms per loop
+#
+#In [87]: %timeit brill_tagger3.tag_sents(testing_data[400:430])
+#10 loops, best of 3: 42 ms per loop
 
 
 
