@@ -276,3 +276,39 @@ def medidasPOS(sentences_tokenized):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+
+def medidasWordnet(words_with_synsets):
+    # dentre as palavras conhecidas e que retornam synsets:
+    wss=words_with_synsets
+    syn=[wn.synsets(i) for i in wss] # swss
+    # numero de synsets por palavra conhecida
+    nsyn=[len(i) for i in syn]
+    mnsyn=n.mean(nsyn) #
+    dnsyn=n.std(nsyn) #
+    #Synsets mais incidentes:
+    first_syns=[i[0] for i in syn] # VERIFICAR TTM swss_
+    # verbetes cujo synset principal possui mais de um caminho até o hiperonimo raiz
+    pluri_asc=[i for i in first_syns if len(i.hypernym_paths())==2]
+    # dentre estes mais incidentes, medir:
+    # incidencias de synsets dentre os hiperonimos
+    hyper=[i.hypernym_paths()[0] for i in first_syns] # sshe 
+    # histograma das incidencias
+    hyper_=[item for sublist in hyper for item in sublist] # sshe_
+    hhyper=c.Counter(hyper_) # hsshe #
+    # histograma das hypernimias mais genericas
+    first_hyper=[i[0] for i in hyper] # ssheg
+    hfirst_hyper=c.Counter(first_hyper) # hssheg #
+    # profundidade das especificações dos significados
+    profundidade=[i.max_depth() for i in first_syns] #
+
+    # incidência de meronimias e holonimias
+    mero=[i.member_meronyms() for i in first_syns] #
+    holo=[i.member_holonyms() for i in first_syns] #
+
+    mvars=("mnsyn","dnsyn","hhyper","hfirst_hyper","profundidade","mero","holo")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+
+
