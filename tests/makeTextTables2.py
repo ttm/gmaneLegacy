@@ -76,6 +76,7 @@ for lid in dl.lists[34:36]:
     msg_size_measures.append(g.medidasTamanhosMensagens(ds))
 
 # POS TAGS
+# brill_tagger.tag(
 
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI

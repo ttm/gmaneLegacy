@@ -19,7 +19,7 @@ f.close()
 f=open("pickledir/brill_tagger2","rb")
 brill_tagger2=pickle.load(f)
 f.close()
-f=open("pickledir/brill_tagger3","rb")
+f=open("pickledir/brill_tagger3","rb") # escolhido, acho q trace 2 e min_score 1
 brill_tagger3=pickle.load(f)
 f.close()
 f=open("pickledir/brill_tagger4","rb")
