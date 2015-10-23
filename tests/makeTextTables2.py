@@ -63,6 +63,7 @@ tok_measures=[]
 size_measures=[]
 sent_size_measures=[]
 msg_size_measures=[]
+pos_measures=[]
 for lid in dl.lists[34:36]:
     lid=lid[0]
     es=ES[count].structs; count+=1
@@ -74,9 +75,14 @@ for lid in dl.lists[34:36]:
     size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
     sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
     msg_size_measures.append(g.medidasTamanhosMensagens(ds))
+    pos_measures.append(g.medidasPOS(sent_size_measures[-1]["sTS"]))
 
-# POS TAGS
-# brill_tagger.tag(
+#f=open("pickledir/brill_tagger3","rb")
+#brill_tagger=pickle.load(f)
+#f.close()
+#
+## POS TAGS
+#aa=brill_tagger.tag(sent_size_measures[-1]["sTS"][0])
 
 # faz uma tabela para o corpo do artigo
 # tabela com 4 na sequência para o SI

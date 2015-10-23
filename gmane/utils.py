@@ -1,7 +1,7 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, string, pickle
+import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle
 from nltk.corpus import wordnet as wn
 puncts=set(string.punctuation)
 w=open("./wordsEn.txt","r")
@@ -209,7 +209,7 @@ def medidasTamanhosSentencas(T,medidas_tokens):
     dtTS=n.std(tTS) #
     
     # media e desvio do tamanho das sentencas em tokens
-    sTS=[k.tokenize.wordpunct_tokenize(i) for i in TS]
+    sTS=[k.tokenize.wordpunct_tokenize(i) for i in TS] ### Para os POS tags
     tsTS=[len(i) for i in sTS]
     mtsTS=n.mean(tsTS) #
     dtsTS=n.std(tsTS) #
@@ -227,7 +227,7 @@ def medidasTamanhosSentencas(T,medidas_tokens):
     dtsTSpv=n.std(tsTSpv) #
 
     mvars=("mtTS","dtTS","mtsTS","dtsTS","mtsTSkw","dtsTSkw",
-           "mtsTSpv","dtsTSpv")
+           "mtsTSpv","dtsTSpv","sTS")
     vdict={}
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
@@ -253,4 +253,26 @@ def medidasTamanhosMensagens(ds, tids=None):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+def medidasPOS(sentences_tokenized):
+    """Measures of POS tags
 
+    Receives a sequence of sentences,
+    each as a sequence of tokens.
+    Returns a set measures of POS tags,
+    and the tagged sentences"""
+
+    tags=brill_tagger.tag_sents(sentences_tokenized)
+    tags_=[item for sublist in tags for item in sublist]
+    tags__=[i[1] for i in tags_ if i[0].lower() in WL_]
+    htags=c.Counter(tags__)
+
+    if htags:
+       	factor=100.0/sum(htags.values())
+        htags_={}
+        for i in htags.keys(): htags_[i]=htags[i]*factor    
+        htags__=c.OrderedDict(sorted(htags_.items(), key=lambda x: x[1]))
+    mvars=("htags__","tags")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
