@@ -91,6 +91,39 @@ for lid in dl.lists[34:36]:
     wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
     check("wn measures")
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+vect = TfidfVectorizer(min_df=1)
+tfidf = vect.fit_transform(["I'd like an apple",
+                            "An apple a day keeps the doctor away",
+                            "Never compare an apple to an orange",
+                            "I prefer scikit-learn to Orange"])
+aa=(tfidf * tfidf.T).A
+texts=[ds.messages[i][-1] for i in ds.message_ids]
+
+tfidf = vect.fit_transform(texts)
+bb=(tfidf * tfidf.T).A
+check("made sims")
+
+# ver se os autores que possuem mensagens com alta similaridade
+# se eles se comunicam sempre ou não ou se tem de tudo.
+# hipótese: tendem a se aliar ou competir, de forma
+# que ou se comunicam com frequência ou não se comunicam
+
+# verificar se as mensagens e respostas possuem
+# maior similaridade entre si que outros pares de mensagens
+
+# verificar se os indivíduos que mais se comunicam
+# mantém similaridade mais alta
+# mesmo em mensagens que não são trocadas entre os participantes
+
+
+
+
+#array([[ 1.        ,  0.25082859,  0.39482963,  0.        ],
+#       [ 0.25082859,  1.        ,  0.22057609,  0.        ],
+#       [ 0.39482963,  0.22057609,  1.        ,  0.26264139],
+#       [ 0.        ,  0.        ,  0.26264139,  1.        ]])
+
 #f=open("pickledir/brill_tagger3","rb")
 #brill_tagger=pickle.load(f)
 #f.close()
