@@ -116,6 +116,24 @@ check("made sims")
 # mantém similaridade mais alta
 # mesmo em mensagens que não são trocadas entre os participantes
 
+# ver incidencia das raizes "abstraction" e "entity" para as arvores taxonomicas
+# ver incidencia dos synsets logo apos estas duas raizes
+
+# ver reincidencia da arvore taxonomica
+# e/ou de palavras relacionadas por meronimia e holonimia
+
+# ver tamanho das cadeias ateh a raiz
+# ver numero de caminhos ateh a raiz
+# número medio e desvio de hiponimos de cada termo
+# número médio e desvio dos primeiros hiperonimos de cada termo
+
+# cruzando todos os termos com relação ao common_hyperyms
+# a média de número de iperônimos comuns dá uma medida
+# do quão focada e redundante é a mensagem ou o corpus todo.
+
+# algum tipo de sentiment analysis
+
+
 
 
 
