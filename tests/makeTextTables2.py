@@ -19,7 +19,7 @@
 # renderizar 4 listas
 # avaliar fazer para mais listas para tirar médias e desvios
 
-import gmane as g, os, pickle, time, numpy as n, nltk as k
+import gmane as g, os, pickle, time, numpy as n, nltk as k, sys
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
@@ -88,9 +88,11 @@ for lid in dl.lists[34:36]:
     check("msg size")
     pos_measures.append(g.medidasPOS(sent_size_measures[-1]["sTS"]))
     check("pos measures")
-    wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
+    #wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
+    wordnet_measures.append(g.medidasWordnet(pos_measures[-1]["tags"]))
     check("wn measures")
 
+sys.exit()
 from sklearn.feature_extraction.text import TfidfVectorizer
 vect = TfidfVectorizer(min_df=1)
 tfidf = vect.fit_transform(["I'd like an apple",
@@ -104,6 +106,7 @@ tfidf = vect.fit_transform(texts)
 bb=(tfidf * tfidf.T).A
 check("made sims")
 
+### tfidf:
 # ver se os autores que possuem mensagens com alta similaridade
 # se eles se comunicam sempre ou não ou se tem de tudo.
 # hipótese: tendem a se aliar ou competir, de forma
@@ -116,6 +119,7 @@ check("made sims")
 # mantém similaridade mais alta
 # mesmo em mensagens que não são trocadas entre os participantes
 
+##### wordnet
 # ver incidencia das raizes "abstraction" e "entity" para as arvores taxonomicas
 # ver incidencia dos synsets logo apos estas duas raizes
 
