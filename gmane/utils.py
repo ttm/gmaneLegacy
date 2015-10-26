@@ -12,7 +12,7 @@ WL.append("email")
 WL.append("e-mail")
 WL_=set(WL)
 stopwords=set(k.corpus.stopwords.words("english"))
-f=open("pickledir/brill_tagger3","rb")
+f=open("pickledir/brill_taggerT2M1","rb")
 brill_tagger=pickle.load(f)
 f.close()
 
@@ -337,7 +337,64 @@ def medidasWordnet(words_with_pos_tags):
             posok.append((ww[0],ss[tindex]))
         else:
             posnok.append(ww)
-    return WT_,wlists,posok,posnok
+    # estatísticas sobre posok
+    # quais as tags?
+    posok_=[i[1].pos() for i in posok]
+    ftags=[posok_.count(i)/len(posok) for i in ('s', 'a', 'n', 'r', 'v')]
+    mvars=("WT_","wlists","posok","posnok","ftags")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+def medidasWordnet2(wndict):
+    sss=wndict["posok"]
+    sss_=[i[1] for i in sss]
+    hyperpaths=[i.hypernym_paths() for i in sss_]
+    top_hypernyms=[i[-4:] for i in hyperpaths[0]]
+    lexnames=[i.lexname().split(".")[-1] for i in sss_]
+
+    mhol=[len(i.member_holonyms()) for i in sss_]
+    phol=[len(i.part_holonyms()) for i in sss_]
+    shol=[len(i.substance_holonyms()) for i in sss_]
+    hol=[mhol[i]+phol[i]+shol[i] for i in range(len(sss_))]
+
+    mmer=[len(i.member_meronyms()) for i in sss_]
+    pmer=[len(i.part_meronyms()) for i in sss_]
+    smer=[len(i.substance_meronyms()) for i in sss_]
+    mer=[mmer[i]+pmer[i]+smer[i] for i in range(len(sss_))]
+
+    nlemmas=[len(i.lemmas()) for i in sss_]
+    nhyperpaths=[len(i) for i in hyperpaths]
+    shyperpaths=[len(i) for j in hyperpaths for i in j]
+    nihypernyms=[len(i.instance_hypernyms()) for i in sss_]
+    nentailments=[len(i.entailments()) for i in sss_]
+    nhypo=[len(i.hyponyms()) for i in sss_]
+    nhiypo=[len(i.instance_hyponyms()) for i in sss_]
+    maxd=[i.max_depth() for i in sss_]
+    mind=[i.min_depth() for i in sss_]
+    nregion_domains=[len(i.region_domains()) for i in sss_]
+    ntopic_domains= [len(i.topic_domains())  for i in sss_]
+    nusage_domains= [len(i.usage_domains())  for i in sss_]
+    nsimilar=[    len(i.similar_tos()) for i in sss_]
+    nverb_groups=[len(i.verb_groups()) for i in sss_]
+    mvars=list(locals().keys()); mvars.remove("wndict")
+    mvars_=mvars[:]
+    mvars_.remove("sss_");       mvars_.remove("sss");
+    mvars_.remove("top_hypernyms")
+    mvars_.remove("hyperpaths"); mvars_.remove("lexnames")
+    vdict={}
+    #mvars=("nmero_part",)
+    locals_=locals()
+    for mvar in mvars:
+        if mvar not in mvars_:
+            vdict[mvar] = locals_[mvar]
+        else:
+            vdict["m"+mvar]=n.mean(locals_[mvar])
+            vdict["d"+mvar]=n.std(locals_[mvar])
+    return vdict
+
+
+#    return WT_,wlists,posok,posnok
     # receber lista de sentencas de taggeadas e refaze-la
     # separando as que são stopwords
     # depois separando as que tem synset

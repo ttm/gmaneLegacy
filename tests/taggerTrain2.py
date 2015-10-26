@@ -1,4 +1,4 @@
-import nltk as k, pickle, time
+import nltk as k, pickle, time, sys
 tagger=k.data.load('taggers/maxent_treebank_pos_tagger/english.pickle')
 # levou muito tempo, retornou:
 # tagger.evaluate(k.corpus.brown.tagged_sents())
@@ -18,15 +18,15 @@ gold_data = treebank.tagged_sents()[200:300]
 testing_data = [[ss[0] for ss in s] for s in gold_data]
 
 backoff = RegexpTagger([
-(r'^-?[0-9]+(.[0-9]+)?$', 'CD'),   # cardinal numbers
-(r'(The|the|A|a|An|an)$', 'AT'),   # articles
-(r'.*able$', 'JJ'),                # adjectives
-(r'.*ness$', 'NN'),                # nouns formed from adjectives
-(r'.*ly$', 'RB'),                  # adverbs
-(r'.*s$', 'NNS'),                  # plural nouns
-(r'.*ing$', 'VBG'),                # gerunds
-(r'.*ed$', 'VBD'),                 # past tense verbs
-(r'.*', 'NN')                      # nouns (default)
+(r'^-?[0-9]+(.[0-9]+)?$', 'NUM'),   # cardinal numbers
+(r'(The|the|A|a|An|an)$', 'DET'),   # articles
+(r'.*able$', 'ADJ'),                # adjectives
+(r'.*ness$', 'NOUN'),                # nouns formed from adjectives
+(r'.*ly$', 'ADV'),                  # adverbs
+(r'.*s$', 'NOUN'),                  # plural nouns
+(r'.*ing$', 'VERB'),                # gerunds
+(r'.*ed$', 'VERB'),                 # past tense verbs
+(r'.*', 'NOUN')                      # nouns (default)
 ])
 
 baseline = backoff
@@ -87,18 +87,18 @@ print("Done ngrams.",time.time()-atime); atime=time.time()#
 ##  k.tag.brill.ProximateTokensTemplate(k.tag.brill.ProximateTagsRule, (-1, -1), (1,1)),
 ##  k.tag.brill.ProximateTokensTemplate(k.tag.brill.ProximateWordsRule, (-1, -1), (1,1)),
 ##  ]
-trace=5 
+trace=2
 trainer = k.tag.BrillTaggerTrainer(trigram_tagger, templates, trace)
 print("Done bootstrapping trainer.",time.time()-atime); atime=time.time()#)
 #trainer = k.tag.brill.BrillTaggerTrainer(bigram_tagger, trace)
 ##trainer = brill.BrillTaggerTrainer(u, templates, trace)
 max_rules=40000
-min_score=2
+min_score=1
 brill_tagger = trainer.train(training_data, max_rules, min_score)
 print("Done training.",time.time()-atime); atime=time.time()#)
  
 f=open("./pickledir/brill_tagger2", 'wb')
-pickle.dump(brill_tagger,f,-1)
+pickle.dump(brill_tagger_,f,-1)
 f.close()
 print("Done writting.",time.time()-atime); atime=time.time()#)
 # acerto de: 0.9184661557159511

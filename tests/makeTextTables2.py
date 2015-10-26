@@ -65,6 +65,7 @@ sent_size_measures=[]
 msg_size_measures=[]
 pos_measures=[]
 wordnet_measures=[]
+wordnet_measures2=[]
 def check(amsg="string message"):
     global TT
     print(amsg, time.time()-TT); TT=time.time()
@@ -91,6 +92,8 @@ for lid in dl.lists[34:36]:
     #wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
     wordnet_measures.append(g.medidasWordnet(pos_measures[-1]["tags"]))
     check("wn measures")
+    wordnet_measures2.append(g.medidasWordnet2(wordnet_measures[-1]))
+    check("wn2 measures")
 
 sys.exit()
 from sklearn.feature_extraction.text import TfidfVectorizer
