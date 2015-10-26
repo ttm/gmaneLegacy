@@ -95,6 +95,16 @@ for lid in dl.lists[34:36]:
     wordnet_measures2.append(g.medidasWordnet2(wordnet_measures[-1]))
     check("wn2 measures")
 
+# fazer kolmogorov-smirnov
+
+# fazer pca, guardando:
+# matriz de correlação
+# autovetores e autovalores
+# valores finais nos 2 últimas componentes
+
+
+
+
 sys.exit()
 from sklearn.feature_extraction.text import TfidfVectorizer
 vect = TfidfVectorizer(min_df=1)

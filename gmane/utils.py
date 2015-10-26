@@ -350,7 +350,7 @@ def medidasWordnet2(wndict):
     sss=wndict["posok"]
     sss_=[i[1] for i in sss]
     hyperpaths=[i.hypernym_paths() for i in sss_]
-    top_hypernyms=[i[-4:] for i in hyperpaths[0]]
+    top_hypernyms=[i[0][:4] for i in hyperpaths]
     lexnames=[i.lexname().split(".")[-1] for i in sss_]
 
     mhol=[len(i.member_holonyms()) for i in sss_]
@@ -392,47 +392,32 @@ def medidasWordnet2(wndict):
             vdict["m"+mvar]=n.mean(locals_[mvar])
             vdict["d"+mvar]=n.std(locals_[mvar])
     return vdict
+from sklearn.feature_extraction.text import TfidfVectorizer
+def tfIdf(texts):
+    """Returns distance matrix for the texts"""
+    vect = TfidfVectorizer(min_df=1)
+    tfidf = vect.fit_transform([tt.lower() for tt in texts])
+    aa=(tfidf * tfidf.T).A
+    return aa
+def kolmogorovSmirnovDistance(seq1,seq2,bins=30):
+    """Calculate distance between histograms
+    
+    Adapted from the Kolmogorov-Smirnov test"""
+    amin=min(min(seq1),min(seq2))
+    amax=max(max(seq1),max(seq2))
+    bins=n.linspace(amin,amax,bins+1,endpoint=True)
+    h1=n.hist(seq1,bins,density=True)[0]
+    h2=n.hist(seq2,bins,density=True)[0]
+    space=bin[1]-bin[0]
+    cs1=n.cumsum(h1*espacamento)
+    cs2=n.cumsum(h2*espacamento)
 
-
-#    return WT_,wlists,posok,posnok
-    # receber lista de sentencas de taggeadas e refaze-la
-    # separando as que são stopwords
-    # depois separando as que tem synset
-    # depois analizando os 4 conjuntos finais
-
-
-    # dentre as palavras conhecidas e que retornam synsets:
-
-    #wss=words_with_synsets
-    #syn=[wn.synsets(i) for i in wss] # swss
-    ## numero de synsets por palavra conhecida
-    #nsyn=[len(i) for i in syn]
-    #mnsyn=n.mean(nsyn) #
-    #dnsyn=n.std(nsyn) #
-    ##Synsets mais incidentes:
-    #first_syns=[i[0] for i in syn] # VERIFICAR TTM swss_
-    ## verbetes cujo synset principal possui mais de um caminho até o hiperonimo raiz
-    #pluri_asc=[i for i in first_syns if len(i.hypernym_paths())==2]
-    ## dentre estes mais incidentes, medir:
-    ## incidencias de synsets dentre os hiperonimos
-    #hyper=[i.hypernym_paths()[0] for i in first_syns] # sshe 
-    ## histograma das incidencias
-    #hyper_=[item for sublist in hyper for item in sublist] # sshe_
-    #hhyper=c.Counter(hyper_) # hsshe #
-    ## histograma das hypernimias mais genericas
-    #first_hyper=[i[0] for i in hyper] # ssheg
-    #hfirst_hyper=c.Counter(first_hyper) # hssheg #
-    ## profundidade das especificações dos significados
-    #profundidade=[i.max_depth() for i in first_syns] #
-
-    ## incidência de meronimias e holonimias
-    #mero=[i.member_meronyms() for i in first_syns] #
-    #holo=[i.member_holonyms() for i in first_syns] #
-
-    #mvars=("mnsyn","dnsyn","hhyper","hfirst_hyper","profundidade","mero","holo")
-    #vdict={}
-    #for mvar in mvars:
-    #    vdict[mvar] = locals()[mvar]
-    #return vdict
+    dc=n.abs(cs1-cs2)
+    Dnn=max(dc)
+    n1=len(seq1)
+    n2=len(seq2)
+    fact=((n1+n2)/(n1*n2))**0.5
+    calpha_HP=Dnn/fact
+    return calpha
 
 
