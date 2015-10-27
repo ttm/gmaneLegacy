@@ -406,18 +406,18 @@ def kolmogorovSmirnovDistance(seq1,seq2,bins=30):
     amin=min(min(seq1),min(seq2))
     amax=max(max(seq1),max(seq2))
     bins=n.linspace(amin,amax,bins+1,endpoint=True)
-    h1=n.hist(seq1,bins,density=True)[0]
-    h2=n.hist(seq2,bins,density=True)[0]
-    space=bin[1]-bin[0]
-    cs1=n.cumsum(h1*espacamento)
-    cs2=n.cumsum(h2*espacamento)
+    h1=n.histogram(seq1,bins,density=True)[0]
+    h2=n.histogram(seq2,bins,density=True)[0]
+    space=bins[1]-bins[0]
+    cs1=n.cumsum(h1*space)
+    cs2=n.cumsum(h2*space)
 
     dc=n.abs(cs1-cs2)
     Dnn=max(dc)
     n1=len(seq1)
     n2=len(seq2)
     fact=((n1+n2)/(n1*n2))**0.5
-    calpha_HP=Dnn/fact
+    calpha=Dnn/fact
     return calpha
 
 
