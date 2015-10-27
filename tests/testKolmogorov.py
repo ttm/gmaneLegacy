@@ -6,6 +6,7 @@ importlib.reload(g.pca)
 importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
 importlib.reload(g.utils)
+importlib.reload(g.tableHelpers)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 from pylatex import Document, Section, Subsection, Subsubsection, Table, Math, TikZ, Axis, \

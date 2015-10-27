@@ -36,11 +36,34 @@ def markEntries(table,marker):
     # find maximum and minimum in each row
     # boldface them all
     return lines
-def makeTables(labels,data,two_decimal=False):
+def encapsulateTable(string_table,column_labels, caption):
+    """Uses the output of makeTables to render a complete latex table"""
+    header="\\begin{table}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+    header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
+    caption_="\\caption{{{}}}\n".format(caption)
+    footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table}}".format(caption_)
+    table=header+string_table+footer
+    return table
+def lTable(labels,labelsh,data,caption,filename):
+    t1=makeTables(labels,data,True,ttype="kolmNull")
+    t1_=t1.split("\\hline")[:-1]
+    tvals=[int(float(tt.split("&")[-1].split(" \\\\")[0])) for tt in t1_]
+    #print("AQUIIII!!!B",tvals)
+    #print(t1)
+    #for tval in tvals:
+    #    print(str(tval)+".00",str(tval))
+    #    t1=t1.replace(" {}.00 ".format(tval)," {} ".format(tval))
+    t2=encapsulateTable(t1,labelsh,caption)
+    writeTex(t2,filename)
+#def makeTables2(data,two_decimal=False):
+#    """Variation of makeTables for tables withour row labels"""
+def makeTables(labels,data,two_decimal=False,ttype=None):
     """Returns a latex table of data with Label in first column.
     
     Returns latex printable or writable to files to
     be imported by latex files.
+    ttype gives a known table type:
+    kolmNull for the Kolmogorov-Smirnov Null hypothesis checking.
     """
     if len(labels)!=len(data):
         print("input one label per data row")
@@ -62,12 +85,13 @@ def makeTables(labels,data,two_decimal=False):
                        (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
                       else 
                           ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
-
+        elif ttype=="kolmNull":
+            data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*3+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif type(data[0][0])==type("astring"):
             #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data) ])
         else:
-            data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            data="".join([((str(labels[i])+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
     return data
 
 def partialSums(labels, data, partials,partial_labels="",datarow_labels=""):
