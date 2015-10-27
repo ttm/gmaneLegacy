@@ -32,6 +32,6 @@ from .agentStatistics import AgentStatistics
 from .evolutionTimelines import EvolutionTimelines
 from .tableHelpers import makeTables, partialSums, pcaTable, writeTex, markEntries
 from .evolutionMusic import EvolutionMusic
-from .utils import EmailStructures, generalMeasures, makeText, medidasLetras, medidasTokens, medidasTamanhosTokens, medidasTamanhosSentencas, medidasTamanhosMensagens, medidasPOS, medidasWordnet, medidasWordnet2, tfIdf, kolmogorovSmirnovDistance, WL_
+from .textUtils import EmailStructures, generalMeasures, makeText, medidasLetras, medidasTokens, medidasTamanhosTokens, medidasTamanhosSentencas, medidasTamanhosMensagens, medidasPOS, medidasWordnet, medidasWordnet2, tfIdf, kolmogorovSmirnovDistance, WL_
 
 
