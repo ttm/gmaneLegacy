@@ -58,64 +58,64 @@ print(ll_)
 
 # medidas para um dos casos
 NE=1000 # número de eventos na amostra
-#texto=l1_[0]
-#NC=len(texto)//NE # número de caracteres no evento
-#textos=[texto[j*NC:(j+1)*NC] for j in range(NE)]
-#med=[g.medidasTokens(i) for i in textos]
-#med_=[g.medidasTamanhosTokens(i) for i in med]
-#sinal1=[i["mkw"] for i in med_]
-#sinal1b=[i["dkw"] for i in med_]
-#sinal2=[i["msw"] for i in med_]
-#sinal2b=[i["dsw"] for i in med_]
-#
-#texto2=l2_[0]
-#NC=len(texto2)//NE # número de caracteres no evento
-#textos2=[texto2[j*NC:(j+1)*NC] for j in range(NE)]
-#med2=[g.medidasTokens(i) for i in textos2]
-#med2_=[g.medidasTamanhosTokens(i) for i in med2]
-#sinal21 =[i["mkw"] for i in  med2_]
-#sinal21b=[i["dkw"] for i in med2_]
-#sinal22 =[i["msw"] for i in  med2_]
-#sinal22b=[i["dsw"] for i in med2_]
-#
-#texto3=l1_[1]
-#NC=len(texto3)//NE # número de caracteres no evento
-#textos3=[texto3[j*NC:(j+1)*NC] for j in range(NE)]
-#med3=[g.medidasTokens(i) for i in textos3]
-#med3_=[g.medidasTamanhosTokens(i) for i in med3]
-#sinal31 =[i["mkw"] for i in  med3_]
-#sinal31b=[i["dkw"] for i in  med3_]
-#sinal32 =[i["msw"] for i in  med3_]
-#sinal32b=[i["dsw"] for i in  med3_]
-#
-#print(g.kolmogorovSmirnovDistance(sinal1,sinal2),
-#g.kolmogorovSmirnovDistance(sinal1,sinal21),
-#g.kolmogorovSmirnovDistance(sinal1,sinal31),
-#)
-#
-## renderiza tabelinha com caracteristicas gerais de cada
-## texto total.
-#labels=("Hamlet","Bible","Moby",r"Mem\'orias")
-#labelsh=("label","description","chars","tokens","sents",
-#        r"$\mu(kw)$",r"$\sigma(kw)$",
-#        r"$\mu(sw)$",r"$\sigma(sw)$")
-#textos3=l_
-#med3=[g.medidasTokens(i) for i in textos3]
-#med3_=[g.medidasTamanhosTokens(i) for i in med3]
-#sinal31 =[i["mkw"] for i in  med3_]
-#sinal31b=[i["dkw"] for i in  med3_]
-#sinal32 =[i["msw"] for i in  med3_]
-#sinal32b=[i["dsw"] for i in  med3_]
-#data=[["Hamlet by Shakespeare","King James Version of the Holly Bible", "Moby Dick by Herman Melville",r"Esa\'u e Jac\'o from Machado de Assis"]]
-#data+=[ll]
-#data+=[llF]
-#data+=[llS]
-#data+=[sinal31,sinal31b,sinal32,sinal32b]
-##data_=list(zip(data))
-#data_=[[i[j] for i in data] for j in range(4)]
-#caption="General description of the texts used to exemplify the use of the $c'$ values. Individual values of number of characters, tokens, sentences give context. Mean and standard deviation of the size of known words $kw$ and of the stopwords $st$ used are used in next table for comparison through $c'$. This table holds has the only purpose of contextualizing next table."
-#fname="textsGeneral.tex"
-#g.lTable(labels,labelsh,data_,caption,TDIR+fname,"textsGeneral")
+texto=l1_[0]
+NC=len(texto)//NE # número de caracteres no evento
+textos=[texto[j*NC:(j+1)*NC] for j in range(NE)]
+med=[g.medidasTokens(i) for i in textos]
+med_=[g.medidasTamanhosTokens(i) for i in med]
+sinal1=[i["mkw"] for i in med_]
+sinal1b=[i["dkw"] for i in med_]
+sinal2=[i["msw"] for i in med_]
+sinal2b=[i["dsw"] for i in med_]
+
+texto2=l2_[0]
+NC=len(texto2)//NE # número de caracteres no evento
+textos2=[texto2[j*NC:(j+1)*NC] for j in range(NE)]
+med2=[g.medidasTokens(i) for i in textos2]
+med2_=[g.medidasTamanhosTokens(i) for i in med2]
+sinal21 =[i["mkw"] for i in  med2_]
+sinal21b=[i["dkw"] for i in med2_]
+sinal22 =[i["msw"] for i in  med2_]
+sinal22b=[i["dsw"] for i in med2_]
+
+texto3=l1_[1]
+NC=len(texto3)//NE # número de caracteres no evento
+textos3=[texto3[j*NC:(j+1)*NC] for j in range(NE)]
+med3=[g.medidasTokens(i) for i in textos3]
+med3_=[g.medidasTamanhosTokens(i) for i in med3]
+sinal31 =[i["mkw"] for i in  med3_]
+sinal31b=[i["dkw"] for i in  med3_]
+sinal32 =[i["msw"] for i in  med3_]
+sinal32b=[i["dsw"] for i in  med3_]
+
+print(g.kolmogorovSmirnovDistance(sinal1,sinal2),
+g.kolmogorovSmirnovDistance(sinal1,sinal21),
+g.kolmogorovSmirnovDistance(sinal1,sinal31),
+)
+
+# renderiza tabelinha com caracteristicas gerais de cada
+# texto total.
+labels=("H,H1,H2","B,B1,B2","M,M1,M2",r"E,E1,E2")
+labelsh=("label","description","chars","tokens","sents",
+        r"$\mu(kw)$",r"$\sigma(kw)$",
+        r"$\mu(sw)$",r"$\sigma(sw)$")
+textos3=l_
+med3=[g.medidasTokens(i) for i in textos3]
+med3_=[g.medidasTamanhosTokens(i) for i in med3]
+sinal31 =[i["mkw"] for i in  med3_]
+sinal31b=[i["dkw"] for i in  med3_]
+sinal32 =[i["msw"] for i in  med3_]
+sinal32b=[i["dsw"] for i in  med3_]
+data=[["Hamlet by Shakespeare","King James Version of the Holly Bible", "Moby Dick by Herman Melville",r"Esa\'u e Jac\'o from Machado de Assis"]]
+data+=[ll]
+data+=[llF]
+data+=[llS]
+data+=[sinal31,sinal31b,sinal32,sinal32b]
+#data_=list(zip(data))
+data_=[[i[j] for i in data] for j in range(4)]
+caption="General description of the texts used to exemplify the use of the $c'$ values. Individual values of number of characters, tokens, sentences give context. Mean and standard deviation of the size of known words $kw$ and of the stopwords $st$ used are used in next table for comparison through $c'$. This table holds has the only purpose of contextualizing next table. Numbers in the labels indicate first and second half of the corresponding text in the next tables."
+fname="textsGeneral.tex"
+g.lTable(labels,labelsh,data_,caption,TDIR+fname,"textsGeneral")
 
 # renderiza tabelinha com todos os 12 textos as distâncias
 

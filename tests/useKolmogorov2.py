@@ -35,7 +35,7 @@ for w1 in wfiles_:
     check(("w2",w2))
 S=[]
 for i in range(len(wt)):
-    S+=[wt[i][0],wt[i][11],wfiles_[0]]
+    S+=[wfiles_[0],wt[i][0],wt[i][11]]
 dists2=[]
 check("antes")
 for i in S:
@@ -52,9 +52,28 @@ fname="audioDistances.tex"
 caption=r"Values of $c'$ for histograms drawn from sound PCM samples and wavelet leaf coefficient."
 g.lTable(labels,labelsh,dists2,caption,TDIR+fname,"audioDistances")
 
-
-labelsh=("label","description","events","events rate")
-
+labelsh=("label","description","events")
+data=[["recorded 'front center'",
+      "first wavelet approximation",
+      "higher wavelet leaf",
+      "recorded 'front left'",
+      "first wavelet approximation",
+      "higher wavelet leaf",
+      "recorded 'rear center'",
+      "first wavelet approximation",
+      "higher wavelet leaf",
+      "first wavelet approximation",
+      "higher wavelet leaf",
+      "recorded 'rear left'",
+      "noise",
+      "first wavelet approximation",
+      "higher wavelet leaf"]]
+events=[len(i) for i in S]
+data+=[events]
+data_=[[i[j] for i in data] for j in range(len(S))]
+caption="General description of the audio data used for the $c'$ values of the next table. The recorded data events are the PCM samples normalized to fit [-1,1]. The wavelet first approximation consists of the low frequencies. The higher leaf consists of a first approximation of a detail"
+fname="audioGeneral.tex"
+g.lTable(labels,labelsh,data_,caption,TDIR+fname,"audioGeneral")
 
 # fazer com wavelets mais especificas
 # : a aproximacao do detalhe da aproximacao da aproximaca, por exemplo
