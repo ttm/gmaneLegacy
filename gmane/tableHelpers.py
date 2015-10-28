@@ -104,7 +104,10 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
             try:
                 data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*3+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             except:
-                data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*4+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+                try:
+                    data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*4+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+                except:
+                    data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*5+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif type(data[0][0])==type("astring"):
             #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data) ])
