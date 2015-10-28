@@ -36,24 +36,32 @@ def markEntries(table,marker):
     # find maximum and minimum in each row
     # boldface them all
     return lines
-def encapsulateTable(string_table,column_labels, caption):
+def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
-    header="\\begin{table}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
-    header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
+    if ttype=="kolmDiff3":
+        header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+    else:
+        header="\\begin{table}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+#    header+="\\footnotesize"
+    if column_labels:
+        header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
-    footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table}}".format(caption_)
+    if ttype=="kolmDiff3":
+        footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
+    else:
+        footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table}}".format(caption_)
     table=header+string_table+footer
     return table
-def lTable(labels,labelsh,data,caption,filename):
-    t1=makeTables(labels,data,True,ttype="kolmNull")
+def lTable(labels,labelsh,data,caption,filename,ttype="kolmNull"):
+    t1=makeTables(labels,data,True,ttype)
     t1_=t1.split("\\hline")[:-1]
-    tvals=[int(float(tt.split("&")[-1].split(" \\\\")[0])) for tt in t1_]
+    #tvals=[int(float(tt.split("&")[-1].split(" \\\\")[0])) for tt in t1_]
     #print("AQUIIII!!!B",tvals)
     #print(t1)
     #for tval in tvals:
     #    print(str(tval)+".00",str(tval))
     #    t1=t1.replace(" {}.00 ".format(tval)," {} ".format(tval))
-    t2=encapsulateTable(t1,labelsh,caption)
+    t2=encapsulateTable(t1,labelsh,caption,ttype)
     writeTex(t2,filename)
 #def makeTables2(data,two_decimal=False):
 #    """Variation of makeTables for tables withour row labels"""
@@ -85,8 +93,18 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
                        (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
                       else 
                           ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="kolmDiff3":
+            data="".join([((str(labels[i])+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="kolmDiff2":
+            data="".join([((str(labels[i])+" & %.3f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="kolmDiff":
+            #data="".join([((str(labels[i])+" & %.3f "*16+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            data="".join([((str(labels[i])+" & %.3f & %.3f & %.3f & %s & %s "+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmNull":
-            data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*3+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            try:
+                data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*3+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            except:
+                data="".join([((str(labels[i])+" & %.3f & %.2f "+"& %d "*4+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif type(data[0][0])==type("astring"):
             #data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
             data="".join([((labels[i]+" & %s "+" & %.2f "*(len(datarow)-1)+"\\\\\\hline\n")%tuple(datarow)) if type(datarow[0])==type("astring") else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data) ])

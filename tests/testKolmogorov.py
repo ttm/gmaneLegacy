@@ -164,7 +164,6 @@ for xxx in xxN:
     i+=1
 check("diferencas normais\n")
 
-###
 xxN2=n.linspace(0,1,11,endpoint=True)
 distsAllN2=[[g.kolmogorovSmirnovDistance(
         n.random.normal(xxx,1,NA),n.random.normal(0,1,NA)) for i in range(ND)]
@@ -177,6 +176,7 @@ for xxx in xxN2:
     i+=1
 check("diferencas normais -> 2\n")
 
+############ TTM  maduro abaixo
 check("diferencas weibull\n")
 xxW=n.linspace(.1,2,20,endpoint=True)
 distsAllW=[[g.kolmogorovSmirnovDistance(
