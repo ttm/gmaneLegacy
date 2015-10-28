@@ -40,6 +40,8 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
     if ttype=="kolmDiff3":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+    elif ttype=="audioDistances":
+        header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     elif ttype=="textsDistances":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     elif ttype=="textsGeneral":
@@ -51,6 +53,8 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
     if ttype=="kolmDiff3":
+        footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
+    elif ttype=="audioDistances":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
     elif ttype=="textsGeneral":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
@@ -101,6 +105,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
                        (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
                       else 
                           ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="audioDistances":
+            data="".join([((str(labels[i])+" & %.3f "*15 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsDistances":
             data="".join([((str(labels[i])+" & %.3f "*12 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsGeneral":
