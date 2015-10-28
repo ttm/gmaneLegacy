@@ -11,7 +11,10 @@ WL=k.corpus.words.words()
 WL.append("email")
 WL.append("e-mail")
 WL_=set(WL)
+WLP=k.corpus.floresta.words()
+WLP_=set(WLP)
 stopwords=set(k.corpus.stopwords.words("english"))
+stopwordsP=set(k.corpus.stopwords.words("portuguese"))
 f=open("pickledir/brill_taggerT2M1","rb")
 brill_tagger=pickle.load(f)
 f.close()
@@ -92,10 +95,30 @@ def makeText(ds,mid=None):
     T,ncontractions=REPLACER.replace(T_) # todo o texto, sem contracoes
     return T, ncontractions
 
+def medidasTokensQ(T,lang="en"):
+    atime=time.time()
+    wtok=k.tokenize.wordpunct_tokenize(T)
+    wtok_=[t.lower() for t in wtok]
+    if lang=="en":
+        kw=[len(i) for i in wtok_ if i in WL_]
+        sw=[len(i) for i in wtok_ if i in stopwords]
+    else:
+        kw=[len(i) for i in wtok_ if i in WLP_]
+        sw=[len(i) for i in wtok_ if i in stopwordsP]
+    mkw=n.mean(kw)
+    dkw=n.std(kw)
+    msw=n.mean(sw)
+    dsw=n.std(sw)
+    mvars=("mkw","dkw","msw","dsw")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+
 def medidasTokens(T):
     atime=time.time()
-    wtok=wtok=k.tokenize.wordpunct_tokenize(T)
-    wtok_=wtok_=[t.lower() for t in wtok]
+    wtok=k.tokenize.wordpunct_tokenize(T)
+    wtok_=[t.lower() for t in wtok]
     nt=len(wtok) #
     ntd=len(set(wtok)) # 
     # tokens que sao pontuacoes

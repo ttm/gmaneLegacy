@@ -40,6 +40,10 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
     if ttype=="kolmDiff3":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+    elif ttype=="textsDistances":
+        header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
+    elif ttype=="textsGeneral":
+        header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     else:
         header="\\begin{table}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
 #    header+="\\footnotesize"
@@ -47,6 +51,10 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
     if ttype=="kolmDiff3":
+        footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
+    elif ttype=="textsGeneral":
+        footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
+    elif ttype=="textsDistances":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
     else:
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table}}".format(caption_)
@@ -93,6 +101,10 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
                        (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
                       else 
                           ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="textsDistances":
+            data="".join([((str(labels[i])+" & %.3f "*12 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="textsGeneral":
+            data="".join([((str(labels[i])+" & %s & %d & %d & %d & %.3f & %.3f & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":
             data="".join([((str(labels[i])+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff2":
