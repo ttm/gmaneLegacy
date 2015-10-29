@@ -1,5 +1,5 @@
 from music21 import *
-import gmane as g, time
+import gmane as g, numpy as n, time
 TDIR="/home/r/repos/kolmogorov-smirnov/tables/"
 TT=time.time()
 def check(amsg="string message"):
@@ -49,10 +49,15 @@ pp=[pitchesp,
         pitchesb0,pitchesb,
         pitchess,
         ]
+def Z(a):
+    """The z-score"""
+    a_=n.array(a)
+    return (a_-a_.mean())/a_.std()
+pp_=[Z(ppp) for ppp in pp]
 dists=[]
-for i in pp:
+for i in pp_:
     dists+=[[]]
-    for j in pp:
+    for j in pp_:
         dists[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
         check(("j",j))
     check(("i",i))
@@ -62,7 +67,7 @@ labels=["Pale",
             "Bach1","Bach2",
             "Moza1","Moza2",
             "Beet1","Beet2",
-            "Shoe"]
+            r"Sch\"on"]
 labelsh=[""]+labels
 g.lTable(labels,labelsh,dists,caption,TDIR+fname,"musicDistances")
 
@@ -75,11 +80,11 @@ data=[["Sanctus 69 from G. P. da Palestrina",
         "K458 from W. A. Mozart",
         "Opus 18, n1, mov. 3 from L. van Beethoven",
         "Opus 132 from L. van Beethoven",
-        r"Opus 19, mov. 2 from A. Sh\"nberg"]]
+        r"Opus 19, mov. 2 from A. Sch\"onberg"]]
 events=[len(i) for i in pp]
 data+=[events]
 data_=[[i[j] for i in data] for j in range(len(pp))]
-caption="General description of the music data used for the $c'$ values of the next table. Each event is a midi value of a note pitch."
+caption="General description of the music data used for the $c'$ values of the next table. Each event is a midi value of a note pitch. Samples where chosen to reflect music history timeline. Works by the same composer were chosen among the first and last 10\%."
 fname="musicGeneral.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"audioGeneral")
 
