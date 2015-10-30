@@ -95,6 +95,21 @@ def makeText(ds,mid=None):
     T,ncontractions=REPLACER.replace(T_) # todo o texto, sem contracoes
     return T, ncontractions
 
+def medidasTokensQ_(T,lang="en"):
+    atime=time.time()
+    wtok=k.tokenize.wordpunct_tokenize(T)
+    wtok_=[t.lower() for t in wtok]
+    if lang=="en":
+        kw=[len(i) for i in wtok_ if i in WL_]
+        sw=[len(i) for i in wtok_ if i in stopwords]
+    else:
+        kw=[len(i) for i in wtok_ if i in WLP_]
+        sw=[len(i) for i in wtok_ if i in stopwordsP]
+    mvars=("kw","sw")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
 def medidasTokensQ(T,lang="en"):
     atime=time.time()
     wtok=k.tokenize.wordpunct_tokenize(T)

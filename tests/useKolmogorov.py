@@ -125,6 +125,9 @@ g.lTable(labels,labelsh,data_,caption,TDIR+fname,"textsGeneral")
 # depois do estado do SO
 check("antes")
 def medidas(texto):
+    sinal=g.medidasTokensQ_(texto)
+    sinal1_,sinal2_=sinal["kw"],sinal["sw"]
+
     check("MED antes")
     NE=1000 # número de eventos na amostra
     NC=len(texto)//NE # número de caracteres no evento
@@ -136,7 +139,7 @@ def medidas(texto):
     sinal2=[i["msw"] for i in  med]
     sinal2b=[i["dsw"] for i in med]
     check("MED fim")
-    return sinal1,sinal1b,sinal2,sinal2b
+    return sinal1,sinal1b,sinal2,sinal2b,sinal1_,sinal2_
 
 #LL=[i[j] for i in (l_,l1_,l2_) for j in range(4)]
 #LL=[i for j in (l_,l1_,l2_) for i in j]
@@ -198,6 +201,30 @@ for i in range(12):
         )
 fname="textsDistances4.tex"
 caption=r"Values of $c'$ for histograms drawn from the standard deviation of the sizes of the stopwords."
+g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+
+data=[]
+for i in range(12):
+    data.append([])
+    for j in range(12):
+        data[-1].append( g.kolmogorovSmirnovDistance(
+                   todas_medidas[i][4],todas_medidas[j][4]
+                         )
+        )
+fname="textsDistances2b.tex"
+caption=r"Values of $c'$ for histograms drawn from the sizes of the known words."
+g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+
+data=[]
+for i in range(12):
+    data.append([])
+    for j in range(12):
+        data[-1].append( g.kolmogorovSmirnovDistance(
+                   todas_medidas[i][5],todas_medidas[j][5]
+                         )
+        )
+fname="textsDistances4b.tex"
+caption=r"Values of $c'$ for histograms drawn from sizes of the stopwords."
 g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
 
 

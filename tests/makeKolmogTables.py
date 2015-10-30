@@ -500,10 +500,43 @@ check("diferencas Power")
 ## aplicações
 
 
-
+######
+# 
+# events in a sample para items of the sample (together known as set of data)
+# 
+# 
 
 #############
 ## região crítica?
 # hipótese nula?
 # distribuições chi-square? lei de potência?
 # Kolmogorov-Smirnov distances? https://pypi.python.org/pypi/powerlaw
+# discrete cases? http://www.itl.nist.gov/div898/handbook/eda/section3/eda35g.htm
+# KS statistics == KS distance?
+# bootstrap resampling ... e ... ad hoc
+# D statistic, p-value
+# the Kolmogorov-Smirnov goodness-of-fit is the D statistic and the KS distance?
+# medir Fisher information?
+
+# Another advantage is that it is an exact test (the chi-square goodness-of-fit test depends on an adequate sample size for the approximations to be valid) http://www.itl.nist.gov/div898/handbook/eda/section3/eda35g.htm
+# Note that although the K-S test is typically developed in the context of continuous distributions for uncensored and ungrouped data, the test has in fact been extended to discrete distributions and to censored and grouped data.
+# We do not discuss those cases here.
+
+# The logarithm transformation may help to overcome cases where the Kolmogorov test data does not seem to fit the assumption that it came from the normal distribution. https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test
+# If one chooses a critical value of the test statistic Dα such that P(Dn > Dα) = α, then a band of width ±Dα around Fn(x) will entirely contain F(x) with probability 1 − α.
+
+
+# boas referências: http://stats.stackexchange.com/questions/411/motivation-for-kolmogorov-distance-between-distributions
+# Most Monte Carlo studies show that the Anderson-Darling test is more powerful than the Kolmogorov-Smirnov test. It is available in scipy.stats with critical values, and in statsmodels with approximate p-values:
+
+# often not very sensitive in establishing distances between two distributions, and a similar EDF-based test gives a better performance. https://asaip.psu.edu/Articles/beware-the-kolmogorov-smirnov-test
+# The Anderson-Darling (AD) test was developed in the 1950s as a weighted CvM test to overcome both of these problems. 
+# from scipy.stats import anderson_ksamp
+# Bootstrap resampling is conceptually and computationally simple, and the theory underlying the bootstrap guarantee that the resulting significance levels are unbiased for a wide range of situations.
+
+# In R you can also do a bootstrapped KS test sekhon.berkeley.edu/matching/ks.boot.html which gets rid of the continuity requirement – Dr G http://stats.stackexchange.com/questions/13326/can-i-use-kolmogorov-smirnov-to-compare-two-empirical-distributions
+
+# >>> sm.stats.normal_ad(x)
+# (0.23016468240712129, 0.80657628536145665)
+
+# https://en.wikipedia.org/wiki/Anderson%E2%80%93Darling_test
