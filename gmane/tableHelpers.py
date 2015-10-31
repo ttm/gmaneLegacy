@@ -1,4 +1,55 @@
-import numpy as n, string
+import numpy as n, string, re
+def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"]):
+    """make some double lines in a latex table"""
+    with open(tablefname,"r") as f:
+        lines=f.read()
+    # colocando barras nas linhas verticais
+    header=re.findall(r"\\begin{tabular}{(.*)}\\hline\n",lines)[0]
+    indexes=[i.start() for i in re.finditer("\|",header)]
+    js=vlines
+    header_=header[:]
+    foo=0
+    for j in js:
+        j_=indexes[j]+foo
+        header_=header_[:j_]+"||"+header_[j_+1:]
+        foo+=1
+    lines__=lines.replace(header,header_)
+    # colocando barras nas linhas horizontais
+    linhas=lines__.split("\\hline")
+    ii=hlines
+    linesF=lines__[:]
+    for i in ii:
+        linha=linhas[i]
+        linha_=linha+"\\hline"
+        if lines__.count(linha)==1:
+            linesF=linesF.replace(linha,linha_)
+        elif lines__.count(linha)>1:
+            print("mais de uma linha igual ERRO!!!")
+        else:
+            print("linha não existe!!! ERRO!!")
+    return linesF
+def markEntries_(tablefname,marker,locs=[("i","j")]):
+    with open(tablefname,"r") as f:
+        lines=f.read()
+    for loc in locs:
+        linha=re.findall(r"\\hline\n.*"*loc[0]+r"\\hline\n(.*)\\hline\n",lines)[0]
+
+        elementos=[i.strip() for i in linha.split("&")]
+        elementos_=elementos[:]
+        elementos_[-1],resto=elementos[-1].split(" ")
+        elemento=elementos_[loc[1]]
+        elemento_="{{{} {}}}".format(marker,elemento)
+        elementos_[loc[1]]=elemento_
+        linha_=" & ".join(elementos_)+" "+resto
+        if lines.count(linha)==1:
+            print(linha,linha_)
+            lines=lines.replace(linha,linha_)
+        elif lines.count(linha)>1:
+            print("mais de uma linha igual ERRO!!!")
+        else:
+            print("linha não existe!!! ERRO!!")
+    print("\n\n\nLINES",lines)
+    return lines
 def markEntries(table,marker):
     """Make entries in a table boldface or use other markings"""
     # open rendered table as text
