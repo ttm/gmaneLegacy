@@ -62,7 +62,7 @@ for i in pp_:
         check(("j",j))
     check(("i",i))
 fname="musicDistances.tex"
-caption=r"Values of $c'$ for histograms drawn from the pitches of classical compositions."
+caption=r"Values of $c$ for histograms drawn from the pitches of classical compositions."
 labels=["Pale",
             "Bach1","Bach2",
             "Moza1","Moza2",
@@ -84,7 +84,7 @@ data=[["Sanctus 69 from G. P. da Palestrina",
 events=[len(i) for i in pp]
 data+=[events]
 data_=[[i[j] for i in data] for j in range(len(pp))]
-caption="General description of the music data used for the $c'$ values of the next table. Each event is a midi value of a note pitch. Samples where chosen to reflect music history timeline. Works by the same composer were chosen among the first and last 10\%."
+caption="General description of the music data used for the $c$ values of the next table. Each event is a midi value of a note pitch. Samples where chosen to reflect music history timeline. Works by the same composer were chosen among the first and last 10\% of all he produced."
 fname="musicGeneral.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"audioGeneral")
 

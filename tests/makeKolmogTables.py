@@ -9,6 +9,8 @@ importlib.reload(g.textUtils)
 importlib.reload(g.tableHelpers)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
+TDIR="/home/r/repos/kolmogorov-smirnov/tables/"
+TDIR2="/home/r/repos/kolmogorov-smirnov/aux/"
 TT=time.time()
 def check(amsg="string message"):
     global TT
@@ -19,6 +21,14 @@ ND=10**2 # numero de comparações de distribuições
 
 alfas=[0.1,0.05,0.025,0.01,0.005,0.001]
 calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
+
+
+preambule1=r"""The number of comparisons is $N_c={}$,
+each with the sample size of $n=n'={}$.
+Each histogram have $N_b={}$ equally spaced bins.""".format(ND,NA,30)
+f=open(TDIR2+"preambule1.tex","w")
+f.write(preambule1)
+f.close()
 
 check("antes")
 dists=[g.kolmogorovSmirnovDistance(
@@ -34,30 +44,24 @@ dists3=[g.kolmogorovSmirnovDistance(
         n.random.normal(6,3,NA),n.random.normal(6,3,NA))
         for i in range(ND)]
 check("normal3")
-labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1'(\alpha)|$",r"$|C_2'(\alpha)|$",r"$|C_3'(\alpha)|$")
+labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1(\alpha)|$",r"$|C_2(\alpha)|$",r"$|C_3(\alpha)|$")
 caption=r"""The theoretical maximum number $\alpha N_c$ of rejections
-of the null hypothesis for critical values of $\alpha$.
-The number of comparisons is $N_c={}$,
-each with the sample size of $N_o={}$ observations.
-Each histogram have $N_b={}$ equally spaced bins.
-The $N_o$ values of $c_1'$ were calculated using simulations of
- normal distributions with $\mu={}$ and $\sigma={}$.
-The $N_o$ values of $c_2'$ were calculated using simulations of
- normal distributions with $\mu={}$ and $\sigma={}$.
-The $N_o$ values of $c_3'$ were calculated using simulations of
- normal distributions with $\mu={}$ and $\sigma={}$.
+of the null hypothesis for significance levels $\alpha$.
+The $c_1$ values were calculated using simulations of normal distributions with $\mu={}$ and $\sigma={}$.
+The $c_2$ values were calculated using simulations of normal distributions with $\mu={}$ and $\sigma={}$.
+The $c_3$ values were calculated using simulations of normal distributions with $\mu={}$ and $\sigma={}$.
 Over all $N_c$ comparisons,
- $\mu(c_1')={:.4f}$ and $\sigma(c_1')={:.4f}$,
- $\mu(c_2')={:.4f}$ and $\sigma(c_2')={:.4f}$,
- $\mu(c_3')={:.4f}$ and $\sigma(c_3')={:.4f}$ .
-""".format(ND,NA,30,
-        0,1,
+ $\mu(c_1)={:.4f}$ and $\sigma(c_1)={:.4f}$,
+ $\mu(c_2)={:.4f}$ and $\sigma(c_2)={:.4f}$,
+ $\mu(c_3)={:.4f}$ and $\sigma(c_3)={:.4f}$ .
+""".format(        0,1,
         3,2,
         6,3,
            n.mean(dists ),n.std(dists ),
            n.mean(dists2),n.std(dists2),
            n.mean(dists3),n.std(dists3),
            )
+
 
 
 data=[]
@@ -71,7 +75,6 @@ for alfa, calfa in zip(alfas,calfas):
     print(n1, alfa*ND )
     print(sum([dist>calfa for dist in dists2]), alfa*ND )
     print(sum([dist>calfa for dist in dists3]), alfa*ND )
-TDIR="/home/r/repos/kolmogorov-smirnov/tables/"
 fname="tabNormNull.tex"
 g.lTable(labels,labelsh,data,caption,TDIR+fname)
 
@@ -92,23 +95,17 @@ dists3=[g.kolmogorovSmirnovDistance(
         3*n.random.random(NA)+4,3*n.random.random(NA)+4)
         for i in range(ND)]
 check("uniforme3")
-labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1'(\alpha)|$",r"$|C_2'(\alpha)|$",r"$|C_3'(\alpha)|$")
+labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1(\alpha)|$",r"$|C_2(\alpha)|$",r"$|C_3(\alpha)|$")
 caption=r"""The theoretical maximum number $\alpha N_c$ of rejections
 of the null hypothesis for critical values of $\alpha$.
-The number of comparisons is $N_c={}$,
-each with the sample size of $N_o={}$ observations.
-Each histogram have $N_b={}$ equally spaced bins.
-The $N_o$ values of $c_1'$ were calculated using simulations of
- uniform distributions within $[{},{})$.
-The $N_o$ values of $c_2'$ were calculated using simulations of
- uniform distributions within $[{},{})$.
-The $N_o$ values of $c_3'$ were calculated using simulations of
- normal distributions with $\mu={}$ and $\sigma={}$.
+The $c_1$ values were calculated using simulations of uniform distributions within $[{},{})$.
+The $c_2$ values were calculated using simulations of uniform distributions within $[{},{})$.
+The $c_3$ values were calculated using simulations of uniform distributions with $\mu={}$ and $\sigma={}$.
 Over all $N_c$ comparisons,
- $\mu(c_1')={:.4f}$ and $\sigma(c_1')={:.4f}$,
- $\mu(c_2')={:.4f}$ and $\sigma(c_2')={:.4f}$,
- $\mu(c_3')={:.4f}$ and $\sigma(c_3')={:.4f}$ .
-""".format(ND,NA,30,
+ $\mu(c_1)={:.4f}$ and $\sigma(c_1)={:.4f}$,
+ $\mu(c_2)={:.4f}$ and $\sigma(c_2)={:.4f}$,
+ $\mu(c_3)={:.4f}$ and $\sigma(c_3)={:.4f}$ .
+""".format(
         0,1,
         2,6,
         4,10,
@@ -153,27 +150,21 @@ dists4=[g.kolmogorovSmirnovDistance(
         n.random.weibull(6,NA),n.random.weibull(6,NA))
         for i in range(ND)]
 check("weibull4")
-labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1'(\alpha)|$",r"$|C_2'(\alpha)|$",r"$|C_3'(\alpha)|$",r"$|C_4'(\alpha)|$")
+labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1(\alpha)|$",r"$|C_2(\alpha)|$",r"$|C_3(\alpha)|$",r"$|C_4(\alpha)|$")
 caption=r"""The theoretical maximum number $\alpha N_c$ of rejections
 of the null hypothesis for critical values of $\alpha$.
-The number of comparisons is $N_c={}$,
-each with the sample size of $N_o={}$ observations.
-Each histogram have $N_b={}$ equally spaced bins.
-The $N_o$ values of $c_1'$ were calculated using simulations of
- 1-parameter Weibull distributions with $a={}$.
-The $N_o$ values of $c_2'$ were calculated using simulations of
- 1-parameter Weibull distributions with $a={}$.
-The $N_o$ values of $c_3'$ were calculated using simulations of
+The $c_1$ values were calculated using simulations of 1-parameter Weibull distributions with $a={}$.
+The $c_2$ values were calculated using simulations of 1-parameter Weibull distributions with $a={}$.
+The $c_3$ values were calculated using simulations of 1-parameter Weibull distributions with $a={}$.
+Over all $N_c$ comparisons,
+The $N_o$ values of $c_4$ were calculated using simulations of
  1-parameter Weibull distributions with $a={}$.
 Over all $N_c$ comparisons,
-The $N_o$ values of $c_4'$ were calculated using simulations of
- 1-parameter Weibull distributions with $a={}$.
-Over all $N_c$ comparisons,
- $\mu(c_1')={:.4f}$ and $\sigma(c_1')={:.4f}$,
- $\mu(c_2')={:.4f}$ and $\sigma(c_2')={:.4f}$,
- $\mu(c_3')={:.4f}$ and $\sigma(c_3')={:.4f}$ .
- $\mu(c_4')={:.4f}$ and $\sigma(c_4')={:.4f}$ .
-""".format(ND,NA,30,
+ $\mu(c_1)={:.4f}$ and $\sigma(c_1)={:.4f}$,
+ $\mu(c_2)={:.4f}$ and $\sigma(c_2)={:.4f}$,
+ $\mu(c_3)={:.4f}$ and $\sigma(c_3)={:.4f}$ .
+ $\mu(c_4)={:.4f}$ and $\sigma(c_4)={:.4f}$ .
+""".format(
         0.1,
         2,
         4,
@@ -225,29 +216,21 @@ dists4_=[g.kolmogorovSmirnovDistance(
         for i in range(ND)]
 check("weibull4")
 
-labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1'(\alpha)|$",r"$|C_2'(\alpha)|$",r"$|C_3'(\alpha)|$",r"$|C_4'(\alpha)|$",r"$|C_5'(\alpha)|$")
+labelsh=(r"$\alpha N_c$",r"$\alpha$",r"$c(\alpha)$",r"$|C_1(\alpha)|$",r"$|C_2(\alpha)|$",r"$|C_3(\alpha)|$",r"$|C_4(\alpha)|$",r"$|C_5(\alpha)|$")
 caption=r"""The theoretical maximum number $\alpha N_c$ of rejections
 of the null hypothesis for critical values of $\alpha$.
-The number of comparisons is $N_c={}$,
-each with the sample size of $N_o={}$ observations.
-Each histogram have $N_b={}$ equally spaced bins.
-The $N_o$ values of $c_1'$ were calculated using simulations of
- power functions distributions with $a={}$.
-The $N_o$ values of $c_2'$ were calculated using simulations of
- power functions distributions with $a={}$.
-The $N_o$ values of $c_3'$ were calculated using simulations of
- power functions distributions with $a={}$.
-The $N_o$ values of $c_4'$ were calculated using simulations of
- power functions distributions with $a={}$.
-The $N_o$ values of $c_5'$ were calculated using simulations of
- power functions distributions with $a={}$.
+The $c_1$ values were calculated using simulations of power functions distributions with $a={}$.
+The $c_2$ values were calculated using simulations of power functions distributions with $a={}$.
+The $c_3$ values were calculated using simulations of power functions distributions with $a={}$.
+The $c_4$ values were calculated using simulations of power functions distributions with $a={}$.
+The $c_5$ values were calculated using simulations of power functions distributions with $a={}$.
 Over all $N_c$ comparisons,
- $\mu(c_1')={:.4f}$ and $\sigma(c_1')={:.4f}$,
- $\mu(c_2')={:.4f}$ and $\sigma(c_2')={:.4f}$,
- $\mu(c_3')={:.4f}$ and $\sigma(c_3')={:.4f}$ .
- $\mu(c_4')={:.4f}$ and $\sigma(c_4')={:.4f}$ .
- $\mu(c_5')={:.4f}$ and $\sigma(c_5')={:.4f}$ .
-""".format(ND,NA,30,
+ $\mu(c_1)={:.4f}$ and $\sigma(c_1)={:.4f}$,
+ $\mu(c_2)={:.4f}$ and $\sigma(c_2)={:.4f}$,
+ $\mu(c_3)={:.4f}$ and $\sigma(c_3)={:.4f}$ .
+ $\mu(c_4)={:.4f}$ and $\sigma(c_4)={:.4f}$ .
+ $\mu(c_5)={:.4f}$ and $\sigma(c_5)={:.4f}$ .
+""".format(
         0.3,
         1,
         2,
@@ -295,16 +278,14 @@ distsAllN_=[(n.mean(dd),n.std(dd),n.median(dd),
     ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllN]
 i=0
 labels=xxN
-labelsh=[r"$\sigma$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
+labelsh=[r"$\sigma$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
 #data=n.vstack((xxN,n.array(distsAllN_).T))
 data=distsAllN_
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with normal distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with normal distributions.
 One normal distribution is fixed, with $\mu=0$ and $\sigma=1$,
 and compared agaist normal distributions with $\mu=0$
-and different values of $\sigma$.""".format(ND,NA, 30)
+and different values of $\sigma$."""
 data_=[]
 i=0
 for dists in distsAllN:
@@ -314,7 +295,7 @@ for dists in distsAllN:
     data_.append(list(data[i])+line); i+=1
 
 #labelsh=[r"$\sigma$"]+[r"$|C'({})|$".format(alfa) for alfa in alfas]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 #caption+=r"""Number of rejections of the null hypothesis for different values of $\alpha$."""
 fname="tabNormDiff3.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
@@ -337,15 +318,13 @@ for dists in distsAllN2:
     for calfa in calfas:
         line.append(sum([dist>calfa for dist in dists])/ND)
     data2_.append(list(data2[i])+line); i+=1
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with normal distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with normal distributions.
 One normal distribution is fixed, with $\mu=0$ and $\sigma=1$,
-and compared agaist normal distributions with different values of $\mu$ and fixed $\sigma=1$.""".format(ND,NA, 30)
+and compared agaist normal distributions with different values of $\mu$ and fixed $\sigma=1$."""
 
-labelsh=[r"$\mu$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 fname="tabNormDiffMean.tex"
 g.lTable(labels,labelsh,data2_,caption,TDIR+fname,"kolmDiff3")
 
@@ -369,17 +348,15 @@ for dists in distsAll:
     for calfa in calfas:
         line.append(sum([dist>calfa for dist in dists])/ND)
     data_.append(list(data[i])+line); i+=1
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with uniform distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with uniform distributions.
 One uniform distribution has the fixed domain $[0,1)$.
 The other uniform distribution in each comparison
 is also centered around 0.5,
-but spread over $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries.""".format(ND,NA, 30)
+but spread over $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries."""
 
-labelsh=[r"$b$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh=[r"$b$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 fname="tabUniformDiffSpread.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
 i=0
@@ -402,17 +379,15 @@ for dists in distsAll:
     for calfa in calfas:
         line.append(sum([dist>calfa for dist in dists])/ND)
     data_.append(list(data[i])+line); i+=1
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with uniform distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with uniform distributions.
 One uniform distribution has the fixed domain $[0,1)$.
 The other uniform distribution in each comparison
 have varied mean values but always
-spread over $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries.""".format(ND,NA, 30)
+spread over a fixed $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries."""
 
-labelsh=[r"$\mu$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 fname="tabUniformDiffMean.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
 i=0
@@ -441,16 +416,14 @@ for dists in distsAllW:
     for calfa in calfas:
         line.append(sum([dist>calfa for dist in dists])/ND)
     data_.append(list(data[i])+line); i+=1
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with 1-parameter Weibull distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with 1-parameter Weibull distributions.
 One Weibull distribution has the fixed shape parameter $a=1.5$.
 The other Weibull distribution in each comparison
-has varied values of $a$.""".format(ND,NA, 30)
+has varied values of $a$."""
 
-labelsh=[r"$a$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 fname="tabWeibullDiffShape.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
 i=0
@@ -477,16 +450,14 @@ for dists in distsAllW:
     for calfa in calfas:
         line.append(sum([dist>calfa for dist in dists])/ND)
     data_.append(list(data[i])+line); i+=1
-caption=r"""Location and dispersion of $N_c={}$
-measurements of $c'$ through simulations
-with power function distributions and $N_o={}$ events each.
-$N_b={}$ equal bins were used to make the histograms.
+caption=r"""Measurements of $c$ through simulations
+with power function distributions.
 One power distribution has the fixed exponent parameter $1-a=2.5$.
 The other power function distribution in each comparison
-has varied values of $a$.""".format(ND,NA, 30)
+has varied values of $a$."""
 
-labelsh=[r"$a$",r"$\mu(c')$",r"$\sigma(c')$","m(c')","min(c')","max(c')"]
-labelsh+=[r"$\overline{{C'({})}}$".format(alfa) for alfa in alfas]
+labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 fname="tabPowerDiffShape.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
 i=0

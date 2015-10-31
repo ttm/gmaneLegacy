@@ -96,7 +96,7 @@ g.kolmogorovSmirnovDistance(sinal1,sinal31),
 # renderiza tabelinha com caracteristicas gerais de cada
 # texto total.
 labels=("H,H1,H2","B,B1,B2","M,M1,M2",r"E,E1,E2")
-labelsh=("label","description","chars","tokens","sents",
+labelsh=("label","description","chars","tokens","sentences",
         r"$\mu(kw)$",r"$\sigma(kw)$",
         r"$\mu(sw)$",r"$\sigma(sw)$")
 textos3=l_
@@ -113,7 +113,11 @@ data+=[llS]
 data+=[sinal31,sinal31b,sinal32,sinal32b]
 #data_=list(zip(data))
 data_=[[i[j] for i in data] for j in range(4)]
-caption="General description of the texts used to exemplify the use of the $c'$ values. Individual values of number of characters, tokens, sentences give context. Mean and standard deviation of the size of known words $kw$ and of the stopwords $st$ used are used in next table for comparison through $c'$. This table holds has the only purpose of contextualizing next table. Numbers in the labels indicate first and second half of the corresponding text in the next tables."
+caption="""General description of the texts used to exemplify the use of the $c$ statistic.
+Individual values of number of characters, tokens, sentences give context.
+Mean and standard deviation of the size of known words $kw$ and of the stopwords
+$st$ are used in next tables.
+Numbers in the labels indicate first and second half of the corresponding text in the next tables."""
 fname="textsGeneral.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"textsGeneral")
 
@@ -162,7 +166,7 @@ for i in range(12):
 labels=( "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
 labelsh=("", "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
 fname="textsDistances.tex"
-caption=r"Values of $c'$ for histograms drawn from mean of the sizes of the known words."
+caption=r"Values of $c$ for histograms drawn from mean of the sizes of the known words."
 g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
 
 
