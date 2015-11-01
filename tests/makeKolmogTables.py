@@ -25,7 +25,7 @@ calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
 
 preambule1=r"""The number of comparisons is $N_c={}$,
 each with the sample size of $n=n'={}$.
-Each histogram have $N_b={}$ equally spaced bins.""".format(ND,NA,30)
+Each histogram have $N_b={}$ equally spaced bins.""".format(ND,NA,300)
 f=open(TDIR2+"preambule1.tex","w")
 f.write(preambule1)
 f.close()

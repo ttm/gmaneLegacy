@@ -46,6 +46,57 @@ me("tabWeibullDiffShape_","\\bf",[(9,i) for i in  range(0,12)])
 dl("tabPowerDiffShape",[1],[],)
 me("tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
 
+
+dl("textsGeneral",[1],[1],)
+me("textsGeneral_","\\bf",[(i,0) for i in range(1,5)])
+dl("textsDistances",[1,4,7,10],[1,4,7,10],)
+me("textsDistances_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances_","\\bf",[(0,i) for i in range(1,13)])
+dl("textsDistances2",[1,4,7,10],[1,4,7,10],)
+me("textsDistances2_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances2_","\\bf",[(0,i) for i in range(1,13)])
+dl("textsDistances2b",[1,4,7,10],[1,4,7,10],)
+me("textsDistances2b_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances2b_","\\bf",[(0,i) for i in range(1,13)])
+dl("textsDistances3",[1,4,7,10],[1,4,7,10],)
+me("textsDistances3_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances3_","\\bf",[(0,i) for i in range(1,13)])
+dl("textsDistances4",[1,4,7,10],[1,4,7,10],)
+me("textsDistances4_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances4_","\\bf",[(0,i) for i in range(1,13)])
+dl("textsDistances4b",[1,4,7,10],[1,4,7,10],)
+me("textsDistances4b_","\\bf",[(i,0) for i in range(1,13)])
+me("textsDistances4b_","\\bf",[(0,i) for i in range(1,13)])
+
+
+dl("audioGeneral",[1],[1],)
+me("audioGeneral_","\\bf",[(i,0) for i in range(1,16)])
+
+dl("audioDistances",[1,4,7,10,13],[1,4,7,10,13],)
+me("audioDistances_","\\bf",[(i,0) for i in range(1,16)])
+me("audioDistances_","\\bf",[(0,i) for i in range(1,16)])
+
+
+dl("musicGeneral",[1],[1],)
+me("musicGeneral_","\\bf",[(i,0) for i in range(1,9)])
+
+dl("musicDistances",[2,4,6,8],[2,4,6,8],)
+me("musicDistances_","\\bf",[(i,0) for i in range(1,9)])
+me("musicDistances_","\\bf",[(0,i) for i in range(1,9)])
+g.writeTex(g.fSize(TDIR+"musicDistances_.tex","\\scriptsize"),TDIR+"musicDistances_.tex")
+
+
+dl("osGeneral",[1],[1],)
+me("osGeneral_","\\bf",[(i,0) for i in range(1,11)])
+
+dl("osDistances",[4,5,7,9,11],[4,5,7,9,11],)
+me("osDistances_","\\bf",[(i,0) for i in range(1,11)])
+me("osDistances_","\\bf",[(0,i) for i in range(1,11)])
+g.writeTex(g.fSize(TDIR+"osDistances_.tex","\\scriptsize"),TDIR+"osDistances_.tex")
+
+
+
+
 #tablefname="tabNormDiff3.tex"
 #with open(TDIR+tablefname,"r") as f:
 #    lines=f.read()

@@ -44,7 +44,9 @@ for i in S:
         dists2[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
         check(("j",j))
     check(("i",i))
-labels=[[i.format(j) for i in("$S{}$",r"$W_1 {}$","$W_2 {}$")]
+#labels=[[i.format(j) for i in("$S{}$",r"$W_1 {}$","$W_2 {}$")]
+#         for j in range(1,6)]
+labels=[[i.format(j) for i in("S{}",r"W1-{}","W2-{}")]
          for j in range(1,6)]
 labels=[i for j in labels for i in j]
 labelsh=[""]+labels

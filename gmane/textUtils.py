@@ -437,7 +437,7 @@ def tfIdf(texts):
     tfidf = vect.fit_transform([tt.lower() for tt in texts])
     aa=(tfidf * tfidf.T).A
     return aa
-def kolmogorovSmirnovDistance(seq1,seq2,bins=30):
+def kolmogorovSmirnovDistance(seq1,seq2,bins=300):
     """Calculate distance between histograms
     
     Adapted from the Kolmogorov-Smirnov test"""

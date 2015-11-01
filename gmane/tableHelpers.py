@@ -1,4 +1,14 @@
 import numpy as n, string, re
+def fSize(tablefname,ftag="scriptsize"):
+    """Change size of table font"""
+    with open(tablefname,"r") as f:
+        lines=f.read()
+    l=lines.split("\n")
+    l.insert(1,ftag)
+    l="\n".join(l)
+    return l
+
+
 def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"]):
     """make some double lines in a latex table"""
     with open(tablefname,"r") as f:
@@ -160,6 +170,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
             data="".join([((str(labels[i])+" & %.3f "*15 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsDistances":
             data="".join([((str(labels[i])+" & %.3f "*12 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype in ("audioGeneral","musicGeneral","osGeneral"):
+            data="".join([((str(labels[i])+" & %s & %d " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsGeneral":
             data="".join([((str(labels[i])+" & %s & %d & %d & %d & %.3f & %.3f & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":
