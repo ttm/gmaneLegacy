@@ -33,6 +33,6 @@ from .evolutionTimelines import EvolutionTimelines
 from .tableHelpers import makeTables, partialSums, pcaTable, writeTex, markEntries, lTable, encapsulateTable, markEntries_, doubleLines, fSize
 from .evolutionMusic import EvolutionMusic
 from .textUtils import EmailStructures, generalMeasures, makeText, medidasLetras, medidasTokens, medidasTamanhosTokens, medidasTamanhosSentencas, medidasTamanhosMensagens, medidasPOS, medidasWordnet, medidasWordnet2, tfIdf, WL_,medidasTokensQ,medidasTokensQ_
-from .ksStatistic import KSStatistic, kolmogorovSmirnovDistance
+from .ksStatistics import KSReferences, kolmogorovSmirnovDistance
 
 
