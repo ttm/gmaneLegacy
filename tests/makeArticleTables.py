@@ -89,40 +89,40 @@ TDIR="/home/r/repos/stabilityInteraction/tables/"
 #
 #data_=[]
 ### medidas: circular mean, circular std, circular variance, circular dispersion, max/min
-def circMeasures(tdict,mean=True):
-    if mean:
-       return [tdict["circular_measures"]["circular_mean"],
-            tdict["circular_measures"]["std_unity_radius"],
-            tdict["circular_measures"]["variance_unity_radius"],
-            tdict["circular_measures"]["circular_dispersion"],
-            tdict["max_discrepancy"],
-            tdict["max_discrepancy_"][0],
-            tdict["max_discrepancy_"][1],
-        ]
-    else:
-       return ["--//--",
-            tdict["circular_measures"]["std_unity_radius"],
-            tdict["circular_measures"]["variance_unity_radius"],
-            tdict["circular_measures"]["circular_dispersion"],
-            tdict["max_discrepancy"],
-            tdict["max_discrepancy_"][0],
-            tdict["max_discrepancy_"][1],
-        ]
-labels_=["seconds","minutes","hours","weekdays","month days","months"]
-for i in order:
-    ts=tss[i]
-    data_=[]
-    data_.append(circMeasures(ts.seconds,False))
-    data_.append(circMeasures(ts.minutes,False))
-    data_.append(circMeasures(ts.hours))
-    data_.append(circMeasures(ts.weekdays))
-    data_.append(circMeasures(ts.monthdays))
-    data_.append(circMeasures(ts.months))
-    tstring=g.makeTables(labels_,data_,True)
-    label=labels[dl.downloaded_lists[i]]
-    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
-print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
-sys.exit()
+#def circMeasures(tdict,mean=True):
+#    if mean:
+#       return [tdict["circular_measures"]["circular_mean"],
+#            tdict["circular_measures"]["std_unity_radius"],
+#            tdict["circular_measures"]["variance_unity_radius"],
+#            tdict["circular_measures"]["circular_dispersion"],
+#            tdict["max_discrepancy"],
+#            tdict["max_discrepancy_"][0],
+#            tdict["max_discrepancy_"][1],
+#        ]
+#    else:
+#       return ["--//--",
+#            tdict["circular_measures"]["std_unity_radius"],
+#            tdict["circular_measures"]["variance_unity_radius"],
+#            tdict["circular_measures"]["circular_dispersion"],
+#            tdict["max_discrepancy"],
+#            tdict["max_discrepancy_"][0],
+#            tdict["max_discrepancy_"][1],
+#        ]
+#labels_=["seconds","minutes","hours","weekdays","month days","months"]
+#for i in order:
+#    ts=tss[i]
+#    data_=[]
+#    data_.append(circMeasures(ts.seconds,False))
+#    data_.append(circMeasures(ts.minutes,False))
+#    data_.append(circMeasures(ts.hours))
+#    data_.append(circMeasures(ts.weekdays))
+#    data_.append(circMeasures(ts.monthdays))
+#    data_.append(circMeasures(ts.months))
+#    tstring=g.makeTables(labels_,data_,True)
+#    label=labels[dl.downloaded_lists[i]]
+#    g.writeTex(tstring,TDIR+"tab2Time{}.tex".format(label))
+#print(label+"{0:.2f} for making time statistics table".format(T.time()-TT)); TT=T.time()
+#sys.exit()
 ##
 ### Make at least time table inline for
 ### hours of the day,

@@ -150,14 +150,14 @@ class EvolutionTimelines:
         #p.suptitle((r"Fraction of participants in each Erdös Sector. Window: %i messages."+"\nPlacement resolution: %i messages. %s") % (self.overall[0]["window_size"],step_size,self.label))
 
         self.plotFracs("degree",     "221",ate,step_size)
-        p.ylabel(r"$\overline{|e_{1,x}|} \;\rightarrow$",fontsize=20)
+        p.ylabel(r"$\overline{e_{1,x}} \;\rightarrow$",fontsize=20)
         self.plotFracs("strength",   "223",ate,step_size)
-        p.ylabel(r"$\overline{|e_{4,x}|} \;\rightarrow$",fontsize=20)
+        p.ylabel(r"$\overline{e_{4,x}} \;\rightarrow$",fontsize=20)
         p.xlabel(r"messages $\;\rightarrow$",fontsize=15)
         self.plotFracs("exclusivist","222",ate,step_size)
-        p.ylabel(r"$\overline{|c_{1,x}|} \;\rightarrow$",fontsize=20)
+        p.ylabel(r"$\overline{c_{1,x}} \;\rightarrow$",fontsize=20)
         self.plotFracs("inclusivist","224",ate,step_size)
-        p.ylabel(r"$\overline{|c_{2,x}|} \;\rightarrow$",fontsize=20)
+        p.ylabel(r"$\overline{c_{2,x}} \;\rightarrow$",fontsize=20)
         p.xlabel(r"messages $\;\rightarrow$",fontsize=15)
         #fig.set_size_inches(5.5,16.4) ###
 

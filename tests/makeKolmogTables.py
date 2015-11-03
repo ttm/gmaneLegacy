@@ -15,9 +15,59 @@ TT=time.time()
 def check(amsg="string message"):
     global TT
     print(amsg, time.time()-TT); TT=time.time()
+def min3(narray):
+    narray_=n.array(narray)
+    args=narray_.argsort()
+    return narray_[args[:3]]
+def max3(narray):
+    narray_=n.array(narray)
+    args=narray_.argsort()
+    return narray_[args[-3:]]
+alfas=[0.1,0.05,0.025,0.01,0.005,0.001]
+calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
+
+
+ND=10**2 # numero de comparações de distribuições
+############3
+## c change along n and n'
+#nn=n.arange(100,100000,10000)
+#nn=n.arange(100000,10000000,1000000)
+nn=n.logspace(1,10,10)
+#distsAll=[[g.kolmogorovSmirnovDistance(
+#        xxx*n.random.random(NA),n.random.random(NA)) for i in range(ND)]
+distsAllW=[[g.kolmogorovSmirnovDistance(
+        n.random.normal(0,1,nnn),n.random.normal(0.1,1,nnn)) for i in range(ND)]
+        for nnn in nn]
+data=[(n.mean(dd),n.std(dd),n.median(dd),
+    ("{:.3f},"*3)[:-1].format(*min3(dd)),
+    ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+data_=[]
+i=0
+for dists in distsAllW:
+    line=[]
+    for calfa in calfas:
+        line.append(sum([dist>calfa for dist in dists])/ND)
+    data_.append(list(data[i])+line); i+=1
+caption=r"""Measurements of $c$ through simulations
+with normal function distributions
+fixed with $\mu_1=0$, $\mu_2=0.1$ and $\sigma_1=\sigma_2=1$.
+The number of elements in each sample is gradually increased."""
+
+labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
+fname="tabNormalElementsDiff.tex"
+labels=nn
+g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
+i=0
+check("diferencas Power")
+
+
+
+
+sys.exit()
 #n.random.normal(0,1,1000000)
 NA=10**3 # numero de amostras
-ND=10**2 # numero de comparações de distribuições
+ND=NC=10**2 # numero de comparações de distribuições
 
 alfas=[0.1,0.05,0.025,0.01,0.005,0.001]
 calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
@@ -26,9 +76,8 @@ calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
 preambule1=r"""The number of comparisons is $N_c={}$,
 each with the sample size of $n=n'={}$.
 Each histogram have $N_b={}$ equally spaced bins.""".format(ND,NA,300)
-f=open(TDIR2+"preambule1.tex","w")
-f.write(preambule1)
-f.close()
+with f=open(TDIR2+"preambule1.tex","w"):
+    f.write(preambule1)
 
 check("antes")
 dists=[g.kolmogorovSmirnovDistance(
