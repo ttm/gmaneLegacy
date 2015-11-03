@@ -346,7 +346,7 @@ for dists in distsAllN:
 #labelsh=[r"$\sigma$"]+[r"$|C'({})|$".format(alfa) for alfa in alfas]
 labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 #caption+=r"""Number of rejections of the null hypothesis for different values of $\alpha$."""
-fname="tabNormDiff3.tex"
+fname="tabNormDiffDispersion.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
         
 #################
