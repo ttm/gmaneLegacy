@@ -97,20 +97,22 @@ g.kolmogorovSmirnovDistance(sinal1,sinal31),
 # texto total.
 labels=("H,H1,H2","B,B1,B2","M,M1,M2",r"E,E1,E2")
 labelsh=("label","description","chars","tokens","sentences",
-        r"$\mu(kw)$",r"$\sigma(kw)$",
-        r"$\mu(sw)$",r"$\sigma(sw)$")
+        r"$|kw|$", r"$\mu(kw)$",r"$\sigma(kw)$",
+        r"$|sw|$", r"$\mu(sw)$",r"$\sigma(sw)$")
 textos3=l_
 med3=[g.medidasTokens(i) for i in textos3]
 med3_=[g.medidasTamanhosTokens(i) for i in med3]
+sinal31_ =[len(i["kw"]) for i in  med3]
 sinal31 =[i["mkw"] for i in  med3_]
 sinal31b=[i["dkw"] for i in  med3_]
+sinal32_ =[len(i["sw"]) for i in  med3]
 sinal32 =[i["msw"] for i in  med3_]
 sinal32b=[i["dsw"] for i in  med3_]
 data=[["Hamlet by Shakespeare","King James Version of the Holly Bible", "Moby Dick by Herman Melville",r"Esa\'u e Jac\'o from Machado de Assis"]]
 data+=[ll]
 data+=[llF]
 data+=[llS]
-data+=[sinal31,sinal31b,sinal32,sinal32b]
+data+=[sinal31_,sinal31,sinal31b,sinal32_,sinal32,sinal32b]
 #data_=list(zip(data))
 data_=[[i[j] for i in data] for j in range(4)]
 caption="""General description of the texts used to exemplify the use of the $c$ statistic.

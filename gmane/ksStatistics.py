@@ -1,4 +1,5 @@
 import time, numpy as n, gmane as g
+from scipy import stats as st
 from .tableHelpers import lTable
 TT=time.time()
 def dl(fname,hl,vl,over=0):
@@ -34,6 +35,28 @@ def kolmogorovSmirnovDistance(seq1,seq2,bins=300):
     fact=((n1+n2)/(n1*n2))**0.5
     calpha=Dnn/fact
     return calpha
+def kolmogorovSmirnovDistance_(seq1,seq2,bins=300):
+    """Calculate distance between histograms
+    
+    Adapted from the Kolmogorov-Smirnov test,
+    returns calpha, fact and Dnn"""
+    amin=min(min(seq1),min(seq2))
+    amax=max(max(seq1),max(seq2))
+    bins=n.linspace(amin,amax,bins+1,endpoint=True)
+    h1=n.histogram(seq1,bins,density=True)[0]
+    h2=n.histogram(seq2,bins,density=True)[0]
+    space=bins[1]-bins[0]
+    cs1=n.cumsum(h1*space)
+    cs2=n.cumsum(h2*space)
+
+    dc=n.abs(cs1-cs2)
+    Dnn=max(dc)
+    n1=len(seq1)
+    n2=len(seq2)
+    fact=((n1*n2)/(n1+n2))**0.5
+    calpha=Dnn*fact
+    return calpha, fact, Dnn
+
 def min3(narray):
     narray_=n.array(narray)
     args=narray_.argsort()
@@ -72,12 +95,12 @@ class KSReferences:
         #self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
         #self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
         #self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesSamples(NC,NB,table_dir)
-        self.makeNormalDifferencesSamples2(NC,NB,table_dir)
-        self.makeUniformDifferencesSamples(NC,NB,table_dir)
-        self.makeUniformDifferencesSamples2(NC,NB,table_dir)
-        self.makeWeibullDifferencesSamples(NC,NB,table_dir)
-        self.makePowerDifferencesSamples(NC,NB,table_dir)
+        #self.makeNormalDifferencesSamples(NC,NB,table_dir)
+        #self.makeNormalDifferencesSamples2(NC,NB,table_dir)
+        #self.makeUniformDifferencesSamples(NC,NB,table_dir)
+        #self.makeUniformDifferencesSamples2(NC,NB,table_dir)
+        #self.makeWeibullDifferencesSamples(NC,NB,table_dir)
+        #self.makePowerDifferencesSamples(NC,NB,table_dir)
         self.enhanceTables(table_dir)
 
     def makePowerDifferencesSamples(self,NC,NB,table_dir):
@@ -99,10 +122,19 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+
+        a=st.powerlaw(1.5)
+        b=st.powerlaw(1.7)
+        domain=n.linspace(0,5.05,10000)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffP=n.abs(avals-bvals).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed power distributions but different number of samples.
         One distribution has shape parameter a={}.
-        The other distribution has a={}.""".format(*shapes)
+        The other distribution has a={}.
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(shapes[0],shapes[1],diffP)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabPowerDiffSamples.tex"
@@ -128,10 +160,21 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+        x=n.linspace(0,20,100000)
+        step=x[1]-x[0]
+        def weib(x,nn,a):
+            return (a / nn) * (x / nn)**(a - 1) * n.exp(-(x / nn)**a)
+        W=weib(x, 1., 1.5)
+        W_=W/(W*step).sum()
+        W2=weib(x, 1., 1.7)
+        W2_=W2/(W2*step).sum()
+        diffW=n.abs(W_-W2_).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed Weibull distributions but different number of samples.
         One distribution has shape parameter $a={}$.
-        The other distribution has $a={}$.""".format(*shapes)
+        The other distribution has $a={}$.
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(shapes[0],shapes[1],diffW)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabWeibullDiffSamples.tex"
@@ -157,10 +200,18 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+        a=st.uniform(0,1)
+        b=st.uniform(-0.05,1.05)
+        domain=n.linspace(0,1.05,10000)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffU2=n.abs(avals-bvals).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed uniform distributions but different number of samples.
         One distribution is uniform in [0,1].
-        The other distribution is uniform in [-0.1,1.1]."""
+        The other distribution is uniform in [-0.1,1.1].
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(diffU2)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffSamples2.tex"
@@ -187,10 +238,18 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+        a=st.uniform(0,1)
+        b=st.uniform(0.05,1.05)
+        domain=n.linspace(0,1.05,10000)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffU=n.abs(avals-bvals).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed uniform distributions but different number of samples.
         One distribution is uniform in [0,1].
-        The other distribution is uniform in [0.05,1.05]."""
+        The other distribution is uniform in [0.05,1.05].
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(diffU)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffSamples.tex"
@@ -220,11 +279,19 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+        a=st.norm(0,1)
+        b=st.norm(0,1.2)
+        domain=n.linspace(-4,4,10000)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffN2=n.abs(avals-bvals).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed normal distributions but different number of samples.
         One normal distribution has $\mu=0$ and $\sigma=1$.
         The other normal distribution have
-        $\mu={}$ and $\sigma={}$.""".format(*shape)
+        $\mu={}$ and $\sigma={}$.
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(shape[0],shape[1],diffN2)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormalDiffSamples2.tex"
@@ -251,10 +318,18 @@ class KSReferences:
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
             data_.append(list(data[i])+line); i+=1
+        a=st.norm(0,1)
+        b=st.norm(0.1,1)
+        domain=n.linspace(-4,4,10000)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffN=n.abs(avals-bvals).max()
         caption=r"""Measurements of $c$ through simulations
         with fixed normal distributions but different number of samples.
         One normal distribution has $\mu=0$ and $\sigma=1$.
-        The other normal distribution have $\mu=0.1$ and $\sigma=1$."""
+        The other normal distribution have $\mu=0.1$ and $\sigma=1$.
+        The KS statistic of these distributions converges
+        to {:.2f} when sample sizes increases.""".format(diffN)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormalDiffSamples.tex"
@@ -280,16 +355,22 @@ class KSReferences:
         me(table_dir+"tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
         dl(table_dir+"tabNormalDiffSamples",[1],[],)
         me(table_dir+"tabNormalDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabNormalDiffSamples_.tex",r"\vspace{-.3cm}",1)
         dl(table_dir+"tabNormalDiffSamples2",[1],[],)
         me(table_dir+"tabNormalDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabNormalDiffSamples2_.tex","\\vspace{-.3cm}",1)
         dl(table_dir+"tabUniformDiffSamples",[1],[],)
         me(table_dir+"tabUniformDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabUniformDiffSamples_.tex",r"\vspace{-.3cm}",1)
         dl(table_dir+"tabUniformDiffSamples2",[1],[],)
         me(table_dir+"tabUniformDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabUniformDiffSamples2_.tex",r"\vspace{-.3cm}",1)
         dl(table_dir+"tabWeibullDiffSamples",[1],[],)
         me(table_dir+"tabWeibullDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabWeibullDiffSamples_.tex",r"\vspace{-.3cm}",1)
         dl(table_dir+"tabPowerDiffSamples",[1],[],)
         me(table_dir+"tabPowerDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        g.fSize(table_dir+"tabPowerDiffSamples_.tex",r"\vspace{-.3cm}",1)
 
 
     def makePreambule(self,NC,NE,NE2,NB,aux_dir):

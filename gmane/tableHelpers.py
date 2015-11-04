@@ -1,12 +1,15 @@
 import numpy as n, string, re
-def fSize(tablefname,ftag="scriptsize"):
+def fSize(tablefname,ftag="scriptsize",write=False):
     """Change size of table font"""
     with open(tablefname,"r") as f:
         lines=f.read()
     l=lines.split("\n")
     l.insert(1,ftag)
     l="\n".join(l)
-    return l
+    if not write:
+        return l
+    else:
+        writeTex(l,tablefname)
 
 
 def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"]):
@@ -173,7 +176,7 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
         elif ttype in ("audioGeneral","musicGeneral","osGeneral"):
             data="".join([((str(labels[i])+" & %s & %d " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsGeneral":
-            data="".join([((str(labels[i])+" & %s & %d & %d & %d & %.3f & %.3f & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+            data="".join([((str(labels[i])+" & %s & %d & %d & %d & %d & %.3f & %.3f & %d & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmSamp":
             data="".join([((str(int(labels[i]))+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":
