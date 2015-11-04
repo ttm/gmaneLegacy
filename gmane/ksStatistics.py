@@ -60,6 +60,78 @@ class KSReferences:
         self.vdict={}
         for mvar in mvars:
             self.vdict[mvar] = locals()[mvar]
+    def makeAllTables(self,NC,NE,NE2,NB,aux_dir,table_dir):
+        self.makePreambule(NC,NE,NE2,NB,aux_dir)
+        self.makeNormalVerification(NC,NE,NE2,NB,table_dir)
+        self.makeUniformVerification(NC,NE,NE2,NB,table_dir)
+        self.makeWeibullVerification(NC,NE,NE2,NB,table_dir)
+        self.makePowerVerification(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
+        self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
+        self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
+        self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesSamples(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesSamples2(NC,NE,NE2,NB,table_dir)
+        self.enhanceTables(table_dir)
+    def makeNormalDifferencesSamples2(self,NC,NE,NE2,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.normal(0,1,xxx),n.random.normal(0,1.1,xxx)) for i in range(NC)]
+
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed normal distributions but different number of samples.
+        One normal distribution has $\mu=0$ and $\sigma=1$.
+        The other normal distribution have $\mu=0$ and $\sigma=1.1$."""
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabNormalDiffSamples2.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
+
+    def makeNormalDifferencesSamples(self,NC,NE,NE2,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.normal(0,1,xxx),n.random.normal(0.1,1,xxx)) for i in range(NC)]
+
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed normal distributions but different number of samples.
+        One normal distribution has $\mu=0$ and $\sigma=1$.
+        The other normal distribution have $\mu=0.1$ and $\sigma=1$."""
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabNormalDiffSamples.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
     def enhanceTables(self,table_dir):
         dl(table_dir+"tabNormNull",[1],[])
         dl(table_dir+"tabUniformNull",[1],[])
@@ -78,19 +150,6 @@ class KSReferences:
         dl(table_dir+"tabPowerDiffShape",[1],[],)
         me(table_dir+"tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
 
-    def makeAllTables(self,NC,NE,NE2,NB,aux_dir,table_dir):
-        self.makePreambule(NC,NE,NE2,NB,aux_dir)
-        self.makeNormalVerification(NC,NE,NE2,NB,table_dir)
-        self.makeUniformVerification(NC,NE,NE2,NB,table_dir)
-        self.makeWeibullVerification(NC,NE,NE2,NB,table_dir)
-        self.makePowerVerification(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
-        self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
-        self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
-        self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
-        self.enhanceTables(table_dir)
 
     def makePreambule(self,NC,NE,NE2,NB,aux_dir):
         fname=aux_dir+"preambule1.tex"

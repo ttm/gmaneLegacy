@@ -6,7 +6,7 @@ from IPython.lib.deepreload import reload as dreload
 #importlib.reload(g.loadMessages)
 #importlib.reload(g.listDataStructures)
 #importlib.reload(g.textUtils)
-#importlib.reload(g.tableHelpers)
+importlib.reload(g.tableHelpers)
 importlib.reload(g.ksStatistics)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV

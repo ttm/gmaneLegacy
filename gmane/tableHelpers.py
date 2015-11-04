@@ -99,7 +99,7 @@ def markEntries(table,marker):
     return lines
 def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
-    if ttype=="kolmDiff3":
+    if ttype in ("kolmDiff3","kolmSamp"):
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     elif ttype=="audioDistances":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
@@ -113,7 +113,7 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
     if column_labels:
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
-    if ttype=="kolmDiff3":
+    if ttype in ("kolmDiff3","kolmSamp"):
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
     elif ttype=="audioDistances":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
@@ -174,6 +174,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
             data="".join([((str(labels[i])+" & %s & %d " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsGeneral":
             data="".join([((str(labels[i])+" & %s & %d & %d & %d & %.3f & %.3f & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="kolmSamp":
+            data="".join([((str(int(labels[i]))+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":
             data="".join([((str(labels[i])+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff2":
