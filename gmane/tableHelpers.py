@@ -262,3 +262,19 @@ def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
 def writeTex(string,filename):
     with open(filename,"w") as f:
         f.write(string)
+def dl(fname,hl,vl,over=0):
+    """Put double lines in a Latex table text file"""
+    fname+=".tex"
+    foo=g.doubleLines(fname,hlines=hl,vlines=vl)
+    if not over:
+        tablefname=fname.replace(".tex","_.tex")
+    g.writeTex(foo,tablefname)
+def me(fname,mark,locs,over=1):
+    """Put boldface markers in items of a Latex table text file"""
+    fn=fname+".tex"
+    foo=g.markEntries_(fn,mark,locs)
+    if not over:
+        tn=tn.replace(".tex","_.tex")
+    g.writeTex(foo,fn)
+
+

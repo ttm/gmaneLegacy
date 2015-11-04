@@ -19,6 +19,8 @@ def check(amsg="string message"):
 #NA=10**3 # numero de amostras
 #ND=NC=10**2 # numero de comparações de distribuições
 ks=g.KSReferences()
+
+
 #ks.makeAllTables() # simulations
 #ks.makeKSAnalysis() # empirical
 

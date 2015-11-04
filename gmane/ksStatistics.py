@@ -61,26 +61,153 @@ class KSReferences:
         for mvar in mvars:
             self.vdict[mvar] = locals()[mvar]
     def makeAllTables(self,NC,NE,NE2,NB,aux_dir,table_dir):
-        self.makePreambule(NC,NE,NE2,NB,aux_dir)
-        self.makeNormalVerification(NC,NE,NE2,NB,table_dir)
-        self.makeUniformVerification(NC,NE,NE2,NB,table_dir)
-        self.makeWeibullVerification(NC,NE,NE2,NB,table_dir)
-        self.makePowerVerification(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
-        self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
-        self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
-        self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesSamples(NC,NE,NE2,NB,table_dir)
-        self.makeNormalDifferencesSamples2(NC,NE,NE2,NB,table_dir)
+        #self.makePreambule(NC,NE,NE2,NB,aux_dir)
+        #self.makeNormalVerification(NC,NE,NE2,NB,table_dir)
+        #self.makeUniformVerification(NC,NE,NE2,NB,table_dir)
+        #self.makeWeibullVerification(NC,NE,NE2,NB,table_dir)
+        #self.makePowerVerification(NC,NE,NE2,NB,table_dir)
+        #self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        #self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
+        #self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        #self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
+        #self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
+        #self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesSamples(NC,NB,table_dir)
+        self.makeNormalDifferencesSamples2(NC,NB,table_dir)
+        self.makeUniformDifferencesSamples(NC,NB,table_dir)
+        self.makeUniformDifferencesSamples2(NC,NB,table_dir)
+        self.makeWeibullDifferencesSamples(NC,NB,table_dir)
+        self.makePowerDifferencesSamples(NC,NB,table_dir)
         self.enhanceTables(table_dir)
-    def makeNormalDifferencesSamples2(self,NC,NE,NE2,NB,table_dir):
+
+    def makePowerDifferencesSamples(self,NC,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        shapes=(1.5,1.7)
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.power(shapes[0],xxx),
+                n.random.power(shapes[1],xxx), NB) for i in range(NC)]
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed power distributions but different number of samples.
+        One distribution has shape parameter a={}.
+        The other distribution has a={}.""".format(*shapes)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabPowerDiffSamples.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
+    def makeWeibullDifferencesSamples(self,NC,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        shapes=(1.5,1.7)
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.weibull(shapes[0],xxx),
+                n.random.weibull(shapes[1],xxx), NB) for i in range(NC)]
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed Weibull distributions but different number of samples.
+        One distribution has shape parameter $a={}$.
+        The other distribution has $a={}$.""".format(*shapes)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabWeibullDiffSamples.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
+    def makeUniformDifferencesSamples2(self,NC,NB,table_dir):
         #xx=n.arange(.7,2.7,0.2)
         xx=n.logspace(2,5,4)
         labels=xx
         distsAllW=[[kolmogorovSmirnovDistance(
-                n.random.normal(0,1,xxx),n.random.normal(0,1.1,xxx)) for i in range(NC)]
+                n.random.random(xxx)*1.2-0.1,
+                n.random.random(xxx), NB) for i in range(NC)]
+
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed uniform distributions but different number of samples.
+        One distribution is uniform in [0,1].
+        The other distribution is uniform in [-0.1,1.1]."""
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabUniformDiffSamples2.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
+
+
+    def makeUniformDifferencesSamples(self,NC,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.random(xxx)+0.05,n.random.random(xxx),NB) for i in range(NC)]
+
+                for xxx in xx]
+        data=[(n.mean(dd),n.std(dd),n.median(dd),
+            ("{:.3f},"*3)[:-1].format(*min3(dd)),
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+        data_=[]
+        i=0
+        for dists in distsAllW:
+            line=[]
+            for calpha in self.calphas:
+                line.append(sum([dist>calpha for dist in dists])/NC)
+            data_.append(list(data[i])+line); i+=1
+        caption=r"""Measurements of $c$ through simulations
+        with fixed uniform distributions but different number of samples.
+        One distribution is uniform in [0,1].
+        The other distribution is uniform in [0.05,1.05]."""
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
+        fname="tabUniformDiffSamples.tex"
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        i=0
+        check("table {} written at {}".format(fname,table_dir))
+
+
+
+    def makeNormalDifferencesSamples2(self,NC,NB,table_dir):
+        #xx=n.arange(.7,2.7,0.2)
+        xx=n.logspace(2,5,4)
+        labels=xx
+        shape=(0,1.2)
+        distsAllW=[[kolmogorovSmirnovDistance(
+                n.random.normal(0,1,xxx),
+                    n.random.normal(shape[0],shape[1],xxx),NB) for i in range(NC)]
 
                 for xxx in xx]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
@@ -96,7 +223,8 @@ class KSReferences:
         caption=r"""Measurements of $c$ through simulations
         with fixed normal distributions but different number of samples.
         One normal distribution has $\mu=0$ and $\sigma=1$.
-        The other normal distribution have $\mu=0$ and $\sigma=1.1$."""
+        The other normal distribution have
+        $\mu={}$ and $\sigma={}$.""".format(*shape)
         labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormalDiffSamples2.tex"
@@ -104,12 +232,13 @@ class KSReferences:
         i=0
         check("table {} written at {}".format(fname,table_dir))
 
-    def makeNormalDifferencesSamples(self,NC,NE,NE2,NB,table_dir):
+    def makeNormalDifferencesSamples(self,NC,NB,table_dir):
         #xx=n.arange(.7,2.7,0.2)
         xx=n.logspace(2,5,4)
         labels=xx
         distsAllW=[[kolmogorovSmirnovDistance(
-                n.random.normal(0,1,xxx),n.random.normal(0.1,1,xxx)) for i in range(NC)]
+                n.random.normal(0,1,xxx),
+                n.random.normal(0.1,1,xxx), NB) for i in range(NC)]
 
                 for xxx in xx]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
@@ -149,6 +278,18 @@ class KSReferences:
         me(table_dir+"tabWeibullDiffShape_","\\bf",[(9,i) for i in  range(0,12)])
         dl(table_dir+"tabPowerDiffShape",[1],[],)
         me(table_dir+"tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
+        dl(table_dir+"tabNormalDiffSamples",[1],[],)
+        me(table_dir+"tabNormalDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        dl(table_dir+"tabNormalDiffSamples2",[1],[],)
+        me(table_dir+"tabNormalDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
+        dl(table_dir+"tabUniformDiffSamples",[1],[],)
+        me(table_dir+"tabUniformDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        dl(table_dir+"tabUniformDiffSamples2",[1],[],)
+        me(table_dir+"tabUniformDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
+        dl(table_dir+"tabWeibullDiffSamples",[1],[],)
+        me(table_dir+"tabWeibullDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
+        dl(table_dir+"tabPowerDiffSamples",[1],[],)
+        me(table_dir+"tabPowerDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
 
 
     def makePreambule(self,NC,NE,NE2,NB,aux_dir):
