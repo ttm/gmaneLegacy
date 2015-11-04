@@ -348,7 +348,7 @@ labelsh+=[r"$\overline{{C({})}}$".format(alfa) for alfa in alfas]
 #caption+=r"""Number of rejections of the null hypothesis for different values of $\alpha$."""
 fname="tabNormDiffDispersion.tex"
 g.lTable(labels,labelsh,data_,caption,TDIR+fname,"kolmDiff3")
-        
+
 #################
 ## segunda tabela de diferencas de distribuicoes normais
 # variacao da media
