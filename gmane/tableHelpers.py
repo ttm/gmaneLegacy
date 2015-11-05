@@ -196,6 +196,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
             data="".join([((str(labels[i])+" & %.3f & %.3f & %s & %s "+" & %.3f "*9+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":
             data="".join([((str(labels[i])+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="textGeral":
+            data="".join([str(labels[i])+((" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff2":
             data="".join([((str(labels[i])+" & %.3f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff":

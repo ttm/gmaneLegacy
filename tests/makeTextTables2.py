@@ -27,6 +27,7 @@ importlib.reload(g.pca)
 importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
 importlib.reload(g.textUtils)
+importlib.reload(g.tableHelpers)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
@@ -69,31 +70,31 @@ wordnet_measures2=[]
 def check(amsg="string message"):
     global TT
     print(amsg, time.time()-TT); TT=time.time()
-for lid in dl.lists[34:36]:
-    lid=lid[0]
-    es=ES[count].structs; count+=1
-    ds=es[1]; np=es[-1]
-    measures.append(g.generalMeasures(ds,np))
-    check("general measures")
-    t=g.makeText(ds)[0]
-    check("make text")
-    char_measures.append(g.medidasLetras(t))
-    check("char_measures")
-    tok_measures.append(g.medidasTokens(t))
-    check("tok measures")
-    size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
-    check("size measures")
-    sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
-    check("sent measures")
-    msg_size_measures.append(g.medidasTamanhosMensagens(ds))
-    check("msg size")
-    pos_measures.append(g.medidasPOS(sent_size_measures[-1]["sTS"]))
-    check("pos measures")
-    #wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
-    wordnet_measures.append(g.medidasWordnet(pos_measures[-1]["tags"]))
-    check("wn measures")
-    wordnet_measures2.append(g.medidasWordnet2(wordnet_measures[-1]))
-    check("wn2 measures")
+#for lid in dl.lists[34:36]:
+#    lid=lid[0]
+#    es=ES[count].structs; count+=1
+#    ds=es[1]; np=es[-1]
+#    measures.append(g.generalMeasures(ds,np))
+#    check("general measures")
+#    t=g.makeText(ds)[0]
+#    check("make text")
+#    char_measures.append(g.medidasLetras(t))
+#    check("char_measures")
+#    tok_measures.append(g.medidasTokens(t))
+#    check("tok measures")
+#    size_measures.append(g.medidasTamanhosTokens(tok_measures[-1]))
+#    check("size measures")
+#    sent_size_measures.append(g.medidasTamanhosSentencas(t,tok_measures[-1]))
+#    check("sent measures")
+#    msg_size_measures.append(g.medidasTamanhosMensagens(ds))
+#    check("msg size")
+#    pos_measures.append(g.medidasPOS(sent_size_measures[-1]["sTS"]))
+#    check("pos measures")
+#    #wordnet_measures.append(g.medidasWordnet(tok_measures[-1]["kwss"]))
+#    wordnet_measures.append(g.medidasWordnet(pos_measures[-1]["tags"]))
+#    check("wn measures")
+#    wordnet_measures2.append(g.medidasWordnet2(wordnet_measures[-1]))
+#    check("wn2 measures")
 
 # fazer kolmogorov-smirnov
 
@@ -117,11 +118,40 @@ deltaAnos=(ultima-primeira)
 deltaAnos_=deltaAnos.days/365.2425
 #date1=primeira.isoformat().split("T")[0]
 #date2=ultima.isoformat().split("T")[0]
-date1=primeira.isoformat()[-4:]
-date2=ultima.isoformat(  )[-4:]
+date1=primeira.isoformat()[:-6]
+date2=ultima.isoformat(  )[:-6]
 ds=es.structs[1]
 N=ds.n_authors
+M=ds.n_messages
 Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
+pr=es.structs[-1]
+Ns=[len(i) for i in pr.sectorialized_agents__]
+Ms=[sum([len(ds.author_messages[i]) for i in j])
+        for j in pr.sectorialized_agents__]
+Gammas=[sum([len([i for i in ds.author_messages[aid] if i[1]==None])
+           for aid in sa]) for sa in pr.sectorialized_agents__]
+G=[100*i/j for i,j in zip(Gammas,Ms)]
+def perc(alist):
+    if type(alist) in (type([1,2]), type((2,4))):
+        return [100*i/sum(alist) for i in alist]
+    else:
+        return 100*alist/alist.sum()
+Ns_=perc(Ns)
+Ms_=perc(Ms)
+Gammas_=perc(Gammas)
+data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[Gamma/M]+G]
+#data_=[[i[j] for i in data] for j in range(]
+labelsh=("","g.","p.","i.","h.")
+labels=(r"$N$",r"$N_{\%}$",r"$M$",r"$M_{\%}$",
+        r"$\Gamma$",r"$\Gamma_{\%}$",r"$100\frac{M}{Gamma}$")
+caption=r"Distribution of participants and of messages in each of the Erd\"os sector. Total time period of {:.2f} years".format(deltaAnos_)
+table_dir="/home/r/repos/artigoTextoNasRedes/tables/"
+fname="geralInline.tex"
+g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+# acrescentar gamma de thread que obteve ao menos uma resposta
+
+
+
 #M_=-ds.n_messages
 #data_.append([date1,date2,N,Gamma])
 ##tstring=g.makeTables(labels_,data_)
