@@ -135,18 +135,18 @@ class KSReferences:
         #self.makeUniformVerification(NC,NE,NE2,NB,table_dir)
         #self.makeWeibullVerification(NC,NE,NE2,NB,table_dir)
         #self.makePowerVerification(NC,NE,NE2,NB,table_dir)
-        #self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        #self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
-        #self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
-        #self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesMean(NC,NE,NE2,NB,table_dir)
+        self.makeUniformDifferencesDispersion(NC,NE,NE2,NB,table_dir)
+        self.makeUniformDifferencesMean(NC,NE,NE2,NB,table_dir)
         self.makeWeibullDifferencesShape(NC,NE,NE2,NB,table_dir)
-        #self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
-        #self.makeNormalDifferencesSamples(NC,NB,table_dir)
-        #self.makeNormalDifferencesSamples2(NC,NB,table_dir)
-        #self.makeUniformDifferencesSamples(NC,NB,table_dir)
-        #self.makeUniformDifferencesSamples2(NC,NB,table_dir)
-        #self.makeWeibullDifferencesSamples(NC,NB,table_dir)
-        #self.makePowerDifferencesSamples(NC,NB,table_dir)
+        self.makePowerDifferencesShape(NC,NE,NE2,NB,table_dir)
+        self.makeNormalDifferencesSamples(NC,NB,table_dir)
+        self.makeNormalDifferencesSamples2(NC,NB,table_dir)
+        self.makeUniformDifferencesSamples(NC,NB,table_dir)
+        self.makeUniformDifferencesSamples2(NC,NB,table_dir)
+        self.makeWeibullDifferencesSamples(NC,NB,table_dir)
+        self.makePowerDifferencesSamples(NC,NB,table_dir)
         self.enhanceTables(table_dir)
 
     def makePowerDifferencesSamples(self,NC,NB,table_dir):
@@ -154,37 +154,35 @@ class KSReferences:
         xx=n.logspace(2,5,4)
         labels=xx
         shapes=(1.5,1.7)
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.power(shapes[0],xxx),
                 n.random.power(shapes[1],xxx), NB) for i in range(NC)]
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-
-        a=st.powerlaw(1.5)
-        b=st.powerlaw(1.7)
-        domain=n.linspace(0,5.05,10000)
-        avals=a.cdf(domain)
-        bvals=b.cdf(domain)
-        diffP=n.abs(avals-bvals).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        diffP=dnnPower(shapes[0],shapes[1])
         caption=r"""Measurements of $c$ through simulations
         with fixed power distributions but different number of samples.
         One distribution has shape parameter a={}.
         The other distribution has a={}.
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(shapes[0],shapes[1],diffP)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(shapes[0],shapes[1],diffP)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabPowerDiffSamples.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
     def makeWeibullDifferencesSamples(self,NC,NB,table_dir):
@@ -192,74 +190,77 @@ class KSReferences:
         xx=n.logspace(2,5,4)
         labels=xx
         shapes=(1.5,1.7)
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.weibull(shapes[0],xxx),
                 n.random.weibull(shapes[1],xxx), NB) for i in range(NC)]
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-        x=n.linspace(0,20,100000)
-        step=x[1]-x[0]
-        W=weib(x, 1., 1.5)
-        W_=W/(W*step).sum()
-        W2=weib(x, 1., 1.7)
-        W2_=W2/(W2*step).sum()
-        diffW=n.abs(W_-W2_).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        #x=n.linspace(0,20,100000)
+        #step=x[1]-x[0]
+        #W=weib(x, 1., 1.5)
+        #W_=W/(W*step).sum()
+        #W2=weib(x, 1., 1.7)
+        #W2_=W2/(W2*step).sum()
+        #diffW=n.abs(W_-W2_).max()
+        diffW=dnnWeib(shapes[0],shapes[1])
         caption=r"""Measurements of $c$ through simulations
         with fixed Weibull distributions but different number of samples.
         One distribution has shape parameter $a={}$.
         The other distribution has $a={}$.
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(shapes[0],shapes[1],diffW)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(shapes[0],shapes[1],diffW)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabWeibullDiffSamples.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
     def makeUniformDifferencesSamples2(self,NC,NB,table_dir):
         #xx=n.arange(.7,2.7,0.2)
         xx=n.logspace(2,5,4)
         labels=xx
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.random(xxx)*1.2-0.1,
                 n.random.random(xxx), NB) for i in range(NC)]
-
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-        a=st.uniform(0,1)
-        b=st.uniform(-0.05,1.05)
-        domain=n.linspace(0,1.05,10000)
-        avals=a.cdf(domain)
-        bvals=b.cdf(domain)
-        diffU2=n.abs(avals-bvals).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        diffU2=dnnUni(0,1,-.1,1.1)
         caption=r"""Measurements of $c$ through simulations
         with fixed uniform distributions but different number of samples.
         One distribution is uniform in [0,1].
         The other distribution is uniform in [-0.1,1.1].
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(diffU2)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(diffU2)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffSamples2.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
 
@@ -268,36 +269,35 @@ class KSReferences:
         #xx=n.arange(.7,2.7,0.2)
         xx=n.logspace(2,5,4)
         labels=xx
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.random(xxx)+0.05,n.random.random(xxx),NB) for i in range(NC)]
 
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-        a=st.uniform(0,1)
-        b=st.uniform(0.05,1.05)
-        domain=n.linspace(0,1.05,10000)
-        avals=a.cdf(domain)
-        bvals=b.cdf(domain)
-        diffU=n.abs(avals-bvals).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        diffU=dnnUni(0,1,0.05,1.05)
         caption=r"""Measurements of $c$ through simulations
         with fixed uniform distributions but different number of samples.
         One distribution is uniform in [0,1].
         The other distribution is uniform in [0.05,1.05].
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(diffU)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(diffU)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffSamples.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
 
@@ -308,38 +308,37 @@ class KSReferences:
         xx=n.logspace(2,5,4)
         labels=xx
         shape=(0,1.2)
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.normal(0,1,xxx),
                     n.random.normal(shape[0],shape[1],xxx),NB) for i in range(NC)]
 
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-        a=st.norm(0,1)
-        b=st.norm(0,1.2)
-        domain=n.linspace(-4,4,10000)
-        avals=a.cdf(domain)
-        bvals=b.cdf(domain)
-        diffN2=n.abs(avals-bvals).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        diffN2=dnnNorm(0,1,shape[0],shape[1])
         caption=r"""Measurements of $c$ through simulations
         with fixed normal distributions but different number of samples.
         One normal distribution has $\mu=0$ and $\sigma=1$.
         The other normal distribution have
         $\mu={}$ and $\sigma={}$.
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(shape[0],shape[1],diffN2)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(shape[0],shape[1],diffN2)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","$m(c)$","$min(c)$","$max(c)$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormalDiffSamples2.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
 
@@ -347,44 +346,47 @@ class KSReferences:
         #xx=n.arange(.7,2.7,0.2)
         xx=n.logspace(2,5,4)
         labels=xx
-        distsAllW=[[kolmogorovSmirnovDistance(
+        distsAllW=[[kolmogorovSmirnovDistance_(
                 n.random.normal(0,1,xxx),
                 n.random.normal(0.1,1,xxx), NB) for i in range(NC)]
 
                 for xxx in xx]
+        distsAllWC=[[i[0] for i in j] for j in distsAllW]
+        dnns=[[i[2] for i in j] for j in distsAllW]
         data=[(n.mean(dd),n.std(dd),n.median(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllW]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllWC]
         data_=[]
         i=0
-        for dists in distsAllW:
+        for dists in distsAllWC:
             line=[]
+            dnn=dnns[i]
+            kline=[n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
-        a=st.norm(0,1)
-        b=st.norm(0.1,1)
-        domain=n.linspace(-4,4,10000)
-        avals=a.cdf(domain)
-        bvals=b.cdf(domain)
-        diffN=n.abs(avals-bvals).max()
+            data_.append(list(data[i])+kline+line); i+=1
+        diffN=dnnNorm(0,1,0.1,1)
         caption=r"""Measurements of $c$ through simulations
         with fixed normal distributions but different number of samples.
         One normal distribution has $\mu=0$ and $\sigma=1$.
         The other normal distribution have $\mu=0.1$ and $\sigma=1$.
         The KS statistic of these distributions converges
-        to {:.2f} when sample sizes increases.""".format(diffN)
-        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        to {:.4f} as sample sizes increases.""".format(diffN)
+        labelsh=[r"$n=n'$",r"$\mu(c)$",r"$\sigma(c)$",r"$m(c)$",r"$min(c)$",r"$max(c)$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormalDiffSamples.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmSamp_")
         i=0
         check("table {} written at {}".format(fname,table_dir))
     def enhanceTables(self,table_dir):
         dl(table_dir+"tabNormNull",[1],[])
+        me(table_dir+"tabNormNull_","\\bf",[(i,1) for i in      range(1,7)])
         dl(table_dir+"tabUniformNull",[1],[])
+        me(table_dir+"tabUniformNull_","\\bf",[(i,1) for i in      range(1,7)])
         dl(table_dir+"tabWeibullNull",[1],[])
+        me(table_dir+"tabWeibullNull_","\\bf",[(i,1) for i in      range(1,7)])
         dl(table_dir+"tabPowerNull",[1],[])
+        me(table_dir+"tabPowerNull_","\\bf",[(i,1) for i in      range(1,7)])
         dl(table_dir+"tabNormDiff3",[1],[],)
         me(table_dir+"tabNormDiff3_","\\bf",[(6,i) for i in         range(0,12)])
         dl(table_dir+"tabNormDiffMean",[1],[],)
@@ -409,22 +411,22 @@ class KSReferences:
         g.fSize(table_dir+"tabPowerDiffShape_.tex",r"\scriptsize",1)
         dl(table_dir+"tabNormalDiffSamples",[1],[],)
         me(table_dir+"tabNormalDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabNormalDiffSamples_.tex",r"\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabNormalDiffSamples_.tex",r"\vspace{-.3cm}\scriptsize",1)
         dl(table_dir+"tabNormalDiffSamples2",[1],[],)
         me(table_dir+"tabNormalDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabNormalDiffSamples2_.tex","\\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabNormalDiffSamples2_.tex","\\vspace{-.3cm}\\scriptsize",1)
         dl(table_dir+"tabUniformDiffSamples",[1],[],)
         me(table_dir+"tabUniformDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabUniformDiffSamples_.tex",r"\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabUniformDiffSamples_.tex",r"\vspace{-.3cm}\scriptsize",1)
         dl(table_dir+"tabUniformDiffSamples2",[1],[],)
         me(table_dir+"tabUniformDiffSamples2_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabUniformDiffSamples2_.tex",r"\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabUniformDiffSamples2_.tex",r"\vspace{-.3cm}\scriptsize",1)
         dl(table_dir+"tabWeibullDiffSamples",[1],[],)
         me(table_dir+"tabWeibullDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabWeibullDiffSamples_.tex",r"\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabWeibullDiffSamples_.tex",r"\vspace{-.3cm}\scriptsize",1)
         dl(table_dir+"tabPowerDiffSamples",[1],[],)
         me(table_dir+"tabPowerDiffSamples_","\\bf",[(i,0) for i in         range(1,5)])
-        g.fSize(table_dir+"tabPowerDiffSamples_.tex",r"\vspace{-.3cm}",1)
+        g.fSize(table_dir+"tabPowerDiffSamples_.tex",r"\vspace{-.3cm}\scriptsize",1)
 
 
     def makePreambule(self,NC,NE,NE2,NB,aux_dir):
@@ -633,7 +635,7 @@ class KSReferences:
             ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllNC]
         i=0
         labels=xxN
-        labelsh=[r"$\sigma$",r"$\mu(c)$",r"$\sigma(c)$",r"$min(c)$",r"$max(c)$","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$\sigma$",r"$\mu(c)$",r"$\sigma(c)$",r"$min(c)$",r"$max(c)$","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         data=distsAllN_
         caption=r"""Measurements of $c$ through simulations
         with normal distributions.
@@ -679,7 +681,7 @@ class KSReferences:
         One normal distribution is fixed, with $\mu=0$ and $\sigma=1$,
         and compared agaist normal distributions with different values of $\mu$ and fixed $\sigma=1$."""
 
-        labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","$min(c)$","$max(c)$","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","$min(c)$","$max(c)$","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormDiffMean.tex"
         lTable(labels,labelsh,data2_,caption,table_dir+fname,"kolmDiff3_")
@@ -711,7 +713,7 @@ class KSReferences:
         is also centered around 0.5,
         but spread over $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries."""
 
-        labelsh=[r"$b$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$b$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffSpread.tex"
         lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3_")
@@ -745,7 +747,7 @@ class KSReferences:
         have varied mean values but always
         spread over a fixed $b=b_u-b_l$ there $b_l$ and $b_u$ are the lower and upper boudaries."""
 
-        labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$\mu$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabUniformDiffMean.tex"
         lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3_")
@@ -780,7 +782,7 @@ class KSReferences:
         The other Weibull distribution in each comparison
         has varied values of $a$."""
 
-        labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabWeibullDiffShape.tex"
         lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3_")
@@ -811,7 +813,7 @@ class KSReferences:
         One power distribution has the fixed exponent parameter $1-a=2.5$.
         The other power function distribution in each comparison
         has varied values of $a$."""
-        labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$"]
+        labelsh=[r"$a$",r"$\mu(c)$",r"$\sigma(c)$","min(c)","max(c)","$D$",r"$\mu(D_{F,F'})$",r"$\sigma(D_{F,F'})$"]
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabPowerDiffShape.tex"
         lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3_")

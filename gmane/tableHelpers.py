@@ -12,7 +12,7 @@ def fSize(tablefname,ftag="scriptsize",write=False):
         writeTex(l,tablefname)
 
 
-def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"]):
+def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"],hlines_=[]):
     """make some double lines in a latex table"""
     with open(tablefname,"r") as f:
         lines=f.read()
@@ -40,6 +40,17 @@ def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"]):
             print("mais de uma linha igual ERRO!!!")
         else:
             print("linha não existe!!! ERRO!!")
+    ii=hlines_
+    for i in ii:
+        linha=linhas[i]
+        if lines__.count(linha)==1:
+            linesF=linesF.replace(linha+"\\hline",linha)
+            print("TIRA LINHAAAAAAAA",linha)
+        elif lines__.count(linha)>1:
+            print("mais de uma linha igual ERRO!!!")
+        else:
+            print("linha não existe!!! ERRO!!")
+    #linesF=lines__[:]
     return linesF
 def markEntries_(tablefname,marker,locs=[("i","j")]):
     with open(tablefname,"r") as f:
@@ -102,7 +113,7 @@ def markEntries(table,marker):
     return lines
 def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
-    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp"):
+    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp"):
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     elif ttype=="audioDistances":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
@@ -116,7 +127,7 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
     if column_labels:
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
-    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp"):
+    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp"):
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
     elif ttype=="audioDistances":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
@@ -179,6 +190,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
             data="".join([((str(labels[i])+" & %s & %d & %d & %d & %d & %.3f & %.3f & %d & %.3f & %.3f " +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmSamp":
             data="".join([((str(int(labels[i]))+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*6+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
+        elif ttype=="kolmSamp_":
+            data="".join([((str(int(labels[i]))+" & %.3f & %.3f & %.3f & %s & %s "+" & %.3f "*8+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3_":
             data="".join([((str(labels[i])+" & %.3f & %.3f & %s & %s "+" & %.3f "*9+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff3":

@@ -88,10 +88,10 @@ sinal31b=[i["dkw"] for i in  med3_]
 sinal32 =[i["msw"] for i in  med3_]
 sinal32b=[i["dsw"] for i in  med3_]
 
-print(g.kolmogorovSmirnovDistance(sinal1,sinal2),
-g.kolmogorovSmirnovDistance(sinal1,sinal21),
-g.kolmogorovSmirnovDistance(sinal1,sinal31),
-)
+#print(g.kolmogorovSmirnovDistance(sinal1,sinal2),
+#g.kolmogorovSmirnovDistance(sinal1,sinal21),
+#g.kolmogorovSmirnovDistance(sinal1,sinal31),
+#)
 
 # renderiza tabelinha com caracteristicas gerais de cada
 # texto total.
@@ -158,79 +158,105 @@ check("fim")
 
 # fazer distancia de KS para cada par
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
-                   todas_medidas[i][0],todas_medidas[j][0]
-                         )
-        )
+        ksd=g.kolmogorovSmirnovDistance_(
+                   todas_medidas[i][0],todas_medidas[j][0])
+        data[-1].append( ksd[0] )
+        data2[-1].append( ksd[2] )
 labels=( "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
+labels_=[(l,"") for l in labels]
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
+labels__=[i for j in labels_ for i in j]
 labelsh=("", "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
 fname="textsDistances.tex"
 caption=r"Values of $c$ for histograms drawn from mean of the sizes of the known words."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
-
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
-                   todas_medidas[i][1],todas_medidas[j][1]
-                         )
-        )
+        ksd=g.kolmogorovSmirnovDistance_(
+                   todas_medidas[i][1],todas_medidas[j][1])
+        data[-1].append(ksd[0] )
+        data2[-1].append(ksd[2] )
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
 fname="textsDistances2.tex"
 caption=r"Values of $c'$ for histograms drawn from the standard deviation of the sizes of the known words."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
-                   todas_medidas[i][2],todas_medidas[j][2]
-                         )
-        )
+        ksd=g.kolmogorovSmirnovDistance_(
+                   todas_medidas[i][2],todas_medidas[j][2])
+        data[-1].append(  ksd[0] )
+        data2[-1].append( ksd[2] )
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
 fname="textsDistances3.tex"
 caption=r"Values of $c'$ for histograms drawn from the mean of the sizes of the stopwords."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
+        ksd=g.kolmogorovSmirnovDistance_(
                    todas_medidas[i][3],todas_medidas[j][3]
                          )
-        )
+        data[-1].append(  ksd[0] )
+        data2[-1].append( ksd[2] )
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
 fname="textsDistances4.tex"
 caption=r"Values of $c'$ for histograms drawn from the standard deviation of the sizes of the stopwords."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
-                   todas_medidas[i][4],todas_medidas[j][4]
-                         )
-        )
+        ksd=g.kolmogorovSmirnovDistance_(
+                   todas_medidas[i][4],todas_medidas[j][4] )
+        data[-1].append( ksd[0] )
+        data2[-1].append( ksd[2] )
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
 fname="textsDistances2b.tex"
 caption=r"Values of $c'$ for histograms drawn from the sizes of the known words."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 data=[]
+data2=[]
 for i in range(12):
     data.append([])
+    data2.append([])
     for j in range(12):
-        data[-1].append( g.kolmogorovSmirnovDistance(
-                   todas_medidas[i][5],todas_medidas[j][5]
-                         )
-        )
+        ksd=g.kolmogorovSmirnovDistance_(
+                   todas_medidas[i][5],todas_medidas[j][5])
+        data[-1].append( ksd[0] )
+        data2[-1].append( ksd[2] )
+data_=[(i,j) for i,j in zip(data,data2)]
+data__=[i for j in data_ for i in j]
 fname="textsDistances4b.tex"
 caption=r"Values of $c'$ for histograms drawn from sizes of the stopwords."
-g.lTable(labels,labelsh,data,caption,TDIR+fname,"textsDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"textsDistances")
 
 

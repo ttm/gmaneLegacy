@@ -7,74 +7,80 @@ dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
 TDIR="/home/r/repos/kolmogorov-smirnov/tables/"
-def dl(fname,hl,vl,over=0):
+def dl(fname,hl,vl,hl_=[],over=1):
     tablefname=TDIR+fname
     tablefname+=".tex"
-    foo=g.doubleLines(tablefname,hlines=hl,vlines=vl)
+    foo=g.doubleLines(tablefname,hlines=hl,vlines=vl,hlines_=hl_)
     if not over:
         tablefname=tablefname.replace(".tex","_.tex")
     g.writeTex(foo,tablefname)
-def me(fname,mark,locs,over=1):
+def me(fname,mark,locs,over=0):
     fn=TDIR+fname+".tex"
     foo=g.markEntries_(fn,mark,locs)
     if not over:
-        tn=tn.replace(".tex","_.tex")
+        fn=fn.replace(".tex","_.tex")
     g.writeTex(foo,fn)
 
-dl("tabNormNull",[1],[])
-dl("tabUniformNull",[1],[])
-dl("tabWeibullNull",[1],[])
-dl("tabPowerNull",[1],[])
-
-dl("tabNormDiff3",[1],[],)
-#g.markEntries_(TDIR+"tabNormDiff3.tex","\\bf",[(1,i) for i in         range(0,12)])
-me("tabNormDiff3_","\\bf",[(6,i) for i in         range(0,12)])
-
-dl("tabNormDiffMean",[1],[],)
-#g.markEntries_(TDIR+"tabNormDiffMean.tex","\\bf",[(1,i) for i in      range(0,12)])
-me("tabNormDiffMean_","\\bf",[(1,i) for i in      range(0,12)])
-
-dl("tabUniformDiffSpread",[1],[],)
-me("tabUniformDiffSpread_","\\bf",[(7,i) for i in range(0,12)])
-
-dl("tabUniformDiffMean",[1],[],)
-me("tabUniformDiffMean_","\\bf",[(1,i) for i in   range(0,12)])
-
-dl("tabWeibullDiffShape",[1],[],)
-me("tabWeibullDiffShape_","\\bf",[(9,i) for i in  range(0,12)])
-
-dl("tabPowerDiffShape",[1],[],)
-me("tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
+#dl("tabNormNull",[1],[])
+#dl("tabUniformNull",[1],[])
+#dl("tabWeibullNull",[1],[])
+#dl("tabPowerNull",[1],[])
+#
+#dl("tabNormDiff3",[1],[],)
+##g.markEntries_(TDIR+"tabNormDiff3.tex","\\bf",[(1,i) for i in         range(0,12)])
+#me("tabNormDiff3_","\\bf",[(6,i) for i in         range(0,12)])
+#
+#dl("tabNormDiffMean",[1],[],)
+##g.markEntries_(TDIR+"tabNormDiffMean.tex","\\bf",[(1,i) for i in      range(0,12)])
+#me("tabNormDiffMean_","\\bf",[(1,i) for i in      range(0,12)])
+#
+#dl("tabUniformDiffSpread",[1],[],)
+#me("tabUniformDiffSpread_","\\bf",[(7,i) for i in range(0,12)])
+#
+#dl("tabUniformDiffMean",[1],[],)
+#me("tabUniformDiffMean_","\\bf",[(1,i) for i in   range(0,12)])
+#
+#dl("tabWeibullDiffShape",[1],[],)
+#me("tabWeibullDiffShape_","\\bf",[(9,i) for i in  range(0,12)])
+#
+#dl("tabPowerDiffShape",[1],[],)
+#me("tabPowerDiffShape_","\\bf",[(5,i) for i in    range(0,12)])
 
 
 dl("textsGeneral",[1],[1],)
 me("textsGeneral_","\\bf",[(i,0) for i in range(1,5)])
-dl("textsDistances",[1,4,7,10],[1,4,7,10],)
-me("textsDistances_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances_","\\bf",[(0,i) for i in range(1,13)])
-dl("textsDistances2",[1,4,7,10],[1,4,7,10],)
-me("textsDistances2_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances2_","\\bf",[(0,i) for i in range(1,13)])
-dl("textsDistances2b",[1,4,7,10],[1,4,7,10],)
-me("textsDistances2b_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances2b_","\\bf",[(0,i) for i in range(1,13)])
-dl("textsDistances3",[1,4,7,10],[1,4,7,10],)
-me("textsDistances3_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances3_","\\bf",[(0,i) for i in range(1,13)])
-dl("textsDistances4",[1,4,7,10],[1,4,7,10],)
-me("textsDistances4_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances4_","\\bf",[(0,i) for i in range(1,13)])
-dl("textsDistances4b",[1,4,7,10],[1,4,7,10],)
-me("textsDistances4b_","\\bf",[(i,0) for i in range(1,13)])
-me("textsDistances4b_","\\bf",[(0,i) for i in range(1,13)])
+
+me("textsDistances","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
+
+me("textsDistances2","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances2_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances2_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
+
+me("textsDistances2b","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances2b_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances2b_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
+
+me("textsDistances3","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances3_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances3_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
+
+me("textsDistances4","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances4_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances4_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
+
+me("textsDistances4b","\\bf",[(i,0) for i in range(1,25,2)])
+me("textsDistances4b_","\\bf",[(0,i) for i in range(1,13)],1)
+dl("textsDistances4b_",[1,4*2-1,7*2-1,10*2-1],[1,4,7,10],list(range(2,26,2)))
 
 
-dl("audioGeneral",[1],[1],)
-me("audioGeneral_","\\bf",[(i,0) for i in range(1,16)])
+me("audioGeneral","\\bf",[(i,0) for i in range(1,16)])
+dl("audioGeneral_",[1,4,7,10,13],[1],)
 
-dl("audioDistances",[1,4,7,10,13],[1,4,7,10,13],)
-me("audioDistances_","\\bf",[(i,0) for i in range(1,16)])
-me("audioDistances_","\\bf",[(0,i) for i in range(1,16)])
+me("audioDistances","\\bf",[(i,0) for i in range(1,31,2)])
+me("audioDistances_","\\bf",[(0,i) for i in range(1,16)],1)
+dl("audioDistances_",[1,4*2-1,7*2-1,10*2-1,13*2-1],[1,4,7,10,13],list(range(2,31,2)),)
 
 
 dl("musicGeneral",[1],[1],)

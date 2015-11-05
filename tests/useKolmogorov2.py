@@ -15,45 +15,53 @@ def normalize(sig):
 wfiles=[wavfile.read(TDIR_+fname) for fname in fnames]
 wfiles_=[normalize(i[1]) for i in wfiles]
 wt=[w.wavedec(i,"db8") for i in wfiles_]
-wt_=[]
-for i in range(len(wt)):
-    wt_+=[wt[i][0],wt[i][11]]
-dists=[]
-check("antes")
-for i in wt_:
-    dists+=[[]]
-    for j in wt_:
-        dists[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
-        check(("j",j))
-    check(("i",i))
-dists2=[]
-for w1 in wfiles_:
-    dists2+=[[]]
-    for w2 in wfiles_:
-        dists2[-1]+=[g.kolmogorovSmirnovDistance(w1,w2)]
-        check(("w1",w1))
-    check(("w2",w2))
+#wt_=[]
+#for i in range(len(wt)):
+#    wt_+=[wt[i][0],wt[i][11]]
+#dists=[]
+#check("antes")
+#for i in wt_:
+#    dists+=[[]]
+#    for j in wt_:
+#        dists[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
+#        check(("j",j))
+#    check(("i",i))
+#dists2=[]
+#for w1 in wfiles_:
+#    dists2+=[[]]
+#    for w2 in wfiles_:
+#        dists2[-1]+=[g.kolmogorovSmirnovDistance(w1,w2)]
+#        check(("w1",w1))
+#    check(("w2",w2))
 S=[]
 for i in range(len(wt)):
     S+=[wfiles_[i],wt[i][0],wt[i][11]]
 dists2=[]
+dists3=[]
 check("antes")
 for i in S:
     dists2+=[[]]
+    dists3+=[[]]
     for j in S:
-        dists2[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
-        check(("j",j))
-    check(("i",i))
+        ksd=g.kolmogorovSmirnovDistance_(i,j)
+        dists2[-1]+=[ksd[0]]
+        dists3[-1]+=[ksd[2]]
+        check(("j"))
+    check(("i"))
+data_=[(i,j) for i,j in zip(dists2,dists3)]
+data__=[i for j in data_ for i in j]
 #labels=[[i.format(j) for i in("$S{}$",r"$W_1 {}$","$W_2 {}$")]
 #         for j in range(1,6)]
 labels=[[i.format(j) for i in("S{}",r"W1-{}","W2-{}")]
          for j in range(1,6)]
 labels=[i for j in labels for i in j]
+labels_=[(l,"") for l in labels]
+labels__=[i for j in labels_ for i in j]
 labelsh=[""]+labels
 fname="audioDistances.tex"
 caption=r"""Values of $c$ for histograms drawn from sound PCM samples and wavelet leaf coefficients.
 The different types of the signals yield greater $c$ values."""
-g.lTable(labels,labelsh,dists2,caption,TDIR+fname,"audioDistances")
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"audioDistances")
 
 labelsh=("label","description","events")
 data=[["recorded 'front center'",
