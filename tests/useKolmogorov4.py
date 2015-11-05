@@ -52,12 +52,18 @@ f.close()
 
 
 dists=[]
+dists2=[]
 for i in pp_:
     dists+=[[]]
+    dists2+=[[]]
     for j in pp_:
-        dists[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
+        ksd=g.kolmogorovSmirnovDistance_(i,j)
+        dists[-1]+=[ksd[0]]
+        dists2[-1]+=[ksd[2]]
         check(("j"))
     check(("i"))
+data_=[(i,j) for i,j in zip(dists,dists2)]
+data__=[i for j in data_ for i in j]
 check("kolm")
 fname="osDistances.tex"
 caption=r"Values of $c$ for histograms drawn from laptop system resource status measures."
@@ -67,7 +73,9 @@ labels=["cpu1","cpu2","cpu3",
             "p2","m2",
             "p3","m3"]
 labelsh=[""]+labels
-g.lTable(labels,labelsh,dists,caption,TDIR+fname,"osDistances")
+labels_=[(l,"") for l in labels]
+labels__=[i for j in labels_ for i in j]
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"osDistances")
 
 ## tabgeral
 labelsh=("label","description","events")

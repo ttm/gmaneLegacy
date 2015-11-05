@@ -55,9 +55,9 @@ data__=[i for j in data_ for i in j]
 labels=[[i.format(j) for i in("S{}",r"W1-{}","W2-{}")]
          for j in range(1,6)]
 labels=[i for j in labels for i in j]
+labelsh=[""]+labels
 labels_=[(l,"") for l in labels]
 labels__=[i for j in labels_ for i in j]
-labelsh=[""]+labels
 fname="audioDistances.tex"
 caption=r"""Values of $c$ for histograms drawn from sound PCM samples and wavelet leaf coefficients.
 The different types of the signals yield greater $c$ values."""

@@ -83,21 +83,21 @@ me("audioDistances_","\\bf",[(0,i) for i in range(1,16)],1)
 dl("audioDistances_",[1,4*2-1,7*2-1,10*2-1,13*2-1],[1,4,7,10,13],list(range(2,31,2)),)
 
 
-dl("musicGeneral",[1],[1],)
-me("musicGeneral_","\\bf",[(i,0) for i in range(1,9)])
+me("musicGeneral","\\bf",[(i,0) for i in range(1,9)])
+dl("musicGeneral_",[1,2,4,6,8],[1],)
 
-dl("musicDistances",[2,4,6,8],[2,4,6,8],)
-me("musicDistances_","\\bf",[(i,0) for i in range(1,9)])
-me("musicDistances_","\\bf",[(0,i) for i in range(1,9)])
+me("musicDistances","\\bf",[(i,0) for i in range(1,17,2)])
+me("musicDistances_","\\bf",[(0,i) for i in range(1,9)],1)
+dl("musicDistances_",[2*2-1,4*2-1,6*2-1,8*2-1],[2,4,6,8],list(range(2,17,2)))
 g.writeTex(g.fSize(TDIR+"musicDistances_.tex","\\scriptsize"),TDIR+"musicDistances_.tex")
 
 
-dl("osGeneral",[1],[1],)
-me("osGeneral_","\\bf",[(i,0) for i in range(1,11)])
+me("osGeneral","\\bf",[(i,0) for i in range(1,11)])
+dl("osGeneral_",[1,4,5,7,9],[1],)
 
-dl("osDistances",[4,5,7,9,11],[4,5,7,9,11],)
-me("osDistances_","\\bf",[(i,0) for i in range(1,11)])
-me("osDistances_","\\bf",[(0,i) for i in range(1,11)])
+me("osDistances","\\bf",[(i,0) for i in range(1,21,2)])
+me("osDistances_","\\bf",[(0,i) for i in range(1,11)],1)
+dl("osDistances_",[4*2-1,5*2-1,7*2-1,9*2-1],[4,5,7,9],list(range(2,21,2)))
 g.writeTex(g.fSize(TDIR+"osDistances_.tex","\\scriptsize"),TDIR+"osDistances_.tex")
 
 

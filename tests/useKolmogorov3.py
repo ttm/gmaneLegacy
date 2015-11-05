@@ -53,14 +53,25 @@ def Z(a):
     """The z-score"""
     a_=n.array(a)
     return (a_-a_.mean())/a_.std()
-pp_=[Z(ppp) for ppp in pp]
+def Z_(a):
+    """The z-score"""
+    a_=n.array(a)
+    return (a_-a_.mean())
+
+pp_=[Z_(ppp) for ppp in pp]
 dists=[]
+dists2=[]
 for i in pp_:
     dists+=[[]]
+    dists2+=[[]]
     for j in pp_:
-        dists[-1]+=[g.kolmogorovSmirnovDistance(i,j)]
-        check(("j",j))
-    check(("i",i))
+        ksd=g.kolmogorovSmirnovDistance_(i,j)
+        dists[-1]+=[ksd[0]]
+        dists2[-1]+=[ksd[2]]
+        check(("j"))
+    check(("i"))
+data_=[(i,j) for i,j in zip(dists,dists2)]
+data__=[i for j in data_ for i in j]
 fname="musicDistances.tex"
 caption=r"Values of $c$ for histograms drawn from the pitches of classical compositions."
 labels=["Pale",
@@ -69,7 +80,9 @@ labels=["Pale",
             "Beet1","Beet2",
             r"Sch\"on"]
 labelsh=[""]+labels
-g.lTable(labels,labelsh,dists,caption,TDIR+fname,"musicDistances")
+labels_=[(l,"") for l in labels]
+labels__=[i for j in labels_ for i in j]
+g.lTable(labels__,labelsh,data__,caption,TDIR+fname,"musicDistances")
 
 ## tabgeral
 labelsh=("label","description","events")

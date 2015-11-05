@@ -169,9 +169,9 @@ for i in range(12):
         data2[-1].append( ksd[2] )
 labels=( "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
 labels_=[(l,"") for l in labels]
+labels__=[i for j in labels_ for i in j]
 data_=[(i,j) for i,j in zip(data,data2)]
 data__=[i for j in data_ for i in j]
-labels__=[i for j in labels_ for i in j]
 labelsh=("", "H","H1","H2","B","B1","B2","M","M1","M2","E","E1","E2")
 fname="textsDistances.tex"
 caption=r"Values of $c$ for histograms drawn from mean of the sizes of the known words."

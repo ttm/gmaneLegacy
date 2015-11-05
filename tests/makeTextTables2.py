@@ -26,7 +26,7 @@ from IPython.lib.deepreload import reload as dreload
 importlib.reload(g.pca)
 importlib.reload(g.loadMessages)
 importlib.reload(g.listDataStructures)
-importlib.reload(g.utils)
+importlib.reload(g.textUtils)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 
@@ -101,6 +101,30 @@ for lid in dl.lists[34:36]:
 # matriz de correlação
 # autovetores e autovalores
 # valores finais nos 2 últimas componentes
+
+# tabela geral
+# achar metadados de datas e período total em anos,
+# mensagens faltantes 
+# fazer contagem de mensagens, sentenças, tokens,
+# numero de threads etc
+
+# faz caption e escreve a tabela
+es=ES[0]
+ts=es.structs[2]
+dt=ts.datetimes
+primeira,ultima=dt[0],dt[-1]
+deltaAnos=(ultima-primeira)
+deltaAnos_=deltaAnos.days/365.2425
+#date1=primeira.isoformat().split("T")[0]
+#date2=ultima.isoformat().split("T")[0]
+date1=primeira.isoformat()[-4:]
+date2=ultima.isoformat(  )[-4:]
+ds=es.structs[1]
+N=ds.n_authors
+Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
+#M_=-ds.n_messages
+#data_.append([date1,date2,N,Gamma])
+##tstring=g.makeTables(labels_,data_)
 
 
 
