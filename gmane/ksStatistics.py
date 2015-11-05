@@ -56,6 +56,15 @@ def kolmogorovSmirnovDistance_(seq1,seq2,bins=300):
     fact=((n1*n2)/(n1+n2))**0.5
     calpha=Dnn*fact
     return calpha, fact, Dnn
+def dnnNorm(m1,d1,m2,d2,lb=-4,rb=4,NE=1000000):
+        a=st.norm(m1,d1)
+        b=st.norm(m2,d2)
+        domain=n.linspace(lb,rb,NE)
+        avals=a.cdf(domain)
+        bvals=b.cdf(domain)
+        diffN=n.abs(avals-bvals).max()
+        return diffN
+
 
 def min3(narray):
     narray_=n.array(narray)
@@ -345,6 +354,11 @@ class KSReferences:
         me(table_dir+"tabNormDiff3_","\\bf",[(6,i) for i in         range(0,12)])
         dl(table_dir+"tabNormDiffMean",[1],[],)
         me(table_dir+"tabNormDiffMean_","\\bf",[(1,i) for i in      range(0,12)])
+
+        dl(table_dir+"tabNormDiffDispersion",[1],[],)
+        me(table_dir+"tabNormDiffDispersion_","\\bf",[(6,i) for i in      range(0,14)])
+        g.fSize(table_dir+"tabNormDiffDispersion_.tex",r"\scriptsize",1)
+
         dl(table_dir+"tabUniformDiffSpread",[1],[],)
         me(table_dir+"tabUniformDiffSpread_","\\bf",[(7,i) for i in range(0,12)])
         dl(table_dir+"tabUniformDiffMean",[1],[],)
@@ -569,15 +583,17 @@ class KSReferences:
 
     def makeNormalDifferencesDispersion(self,NC,NE,NE2,NB,table_dir):
         xxN=n.linspace(.5,2,16,endpoint=True)
-        distsAllN=[[kolmogorovSmirnovDistance(
+        distsAllN=[[kolmogorovSmirnovDistance_(
                 n.random.normal(0,xxx,NE),n.random.normal(0,1,NE2)) for i in range(NC)]
                 for xxx in xxN]
-        distsAllN_=[(n.mean(dd),n.std(dd),n.median(dd),
+        distsAllNC=[[i[0] for i in j] for j in distsAllN]
+        dnns=[[i[2] for i in j] for j in distsAllN]
+        distsAllN_=[(n.mean(dd),n.std(dd),
             ("{:.3f},"*3)[:-1].format(*min3(dd)),
-            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllN]
+            ("{:.3f},"*3)[:-1].format(*max3(dd))) for dd in distsAllNC]
         i=0
         labels=xxN
-        labelsh=[r"$\sigma$",r"$\mu(c)$",r"$\sigma(c)$","m(c)","min(c)","max(c)"]
+        labelsh=[r"$\sigma$",r"$\mu(c)$",r"$\sigma(c)$",r"$min(c)$",r"$max(c)$","$D$",r"$\mu(D_{n,n'})$",r"$\sigma(D_{n,n'})$",]
         data=distsAllN_
         caption=r"""Measurements of $c$ through simulations
         with normal distributions.
@@ -586,15 +602,18 @@ class KSReferences:
         and different values of $\sigma$."""
         data_=[]
         i=0
-        for dists in distsAllN:
+        for dists in distsAllNC:
             line=[]
+            dnn=dnns[i]
+            kline=[dnnNorm(0,1,0,xxN[i],-4,4), n.mean(dnn), n.std(dnn)]
             for calpha in self.calphas:
                 line.append(sum([dist>calpha for dist in dists])/NC)
-            data_.append(list(data[i])+line); i+=1
+            data_.append(list(data[i])+kline+line); i+=1
         labelsh+=[r"$\overline{{C({})}}$".format(alpha) for alpha in self.alphas]
         fname="tabNormDiffDispersion.tex"
-        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3")
+        lTable(labels,labelsh,data_,caption,table_dir+fname,"kolmDiff3_")
         print("table {} written at {}".format(fname,table_dir))
+
     def makeNormalDifferencesMean(self,NC,NE,NE2,NB,table_dir):
         xxN2=n.linspace(0,1,11,endpoint=True)
         labels=xxN2
