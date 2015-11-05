@@ -1,4 +1,5 @@
 import numpy as n, string, re
+import gmane as g
 def fSize(tablefname,ftag="scriptsize",write=False):
     """Change size of table font"""
     with open(tablefname,"r") as f:

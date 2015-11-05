@@ -139,16 +139,70 @@ def perc(alist):
 Ns_=perc(Ns)
 Ms_=perc(Ms)
 Gammas_=perc(Gammas)
-data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[Gamma/M]+G]
 #data_=[[i[j] for i in data] for j in range(]
+# acrescentar gamma de thread que obteve ao menos uma resposta
+# ou o tamanho medio da thread por setor
+####
+# *) guarda todas as mensagens raiz, que somam Gamma
+roots=[[[i for i in ds.author_messages[aid] if i[1]==None]
+           for aid in sa] for sa in pr.sectorialized_agents__]
+roots_=[i for j in roots for i in j]
+# *) a partir de cada uma delas, procura outras que tenham
+# ela como resposta e assim por diante,
+# até não achar mais resposta, guarda o número de mensagens
+# encontradas
+roots__=[[[i[j][0] for j in range(len(i))] for i in rr if i] for rr in roots]
+rr=[]
+
+
+def digRoot(msgid):
+    layers=[[msgid]]
+    while len(layers[-1]):
+        layer=layers[-1]
+        layers+=[[]]
+        for mid in layer:
+            if mid in ds.responses.keys():
+                layers[-1]+=[i[0] for i in ds.responses[mid]]
+    return len(layers)
+roots_sectors=[]
+tlength_sectors=[]
+for setor in pr.sectorialized_agents__:
+    roots_sector=[]
+    tlength_sector=[]
+    for agentid in setor:
+        messages=ds.author_messages[agentid]
+        for message in messages:
+            if message[1]==None: # nova thread, guarda ID
+                roots_sector.append(message[0])
+                tlength_sector.append(digRoot(message[0]))
+    roots_sectors.append(roots_sector)
+    tlength_sectors.append(tlength_sector)
+tls=[i for j in tlength_sectors for i in j]
+mt=[n.mean(i) for i in tlength_sectors]
+st=[n.std(i) for i in tlength_sectors]
+mt_ =n.mean(tls)
+st_ =n.std(tls)
 labelsh=("","g.","p.","i.","h.")
 labels=(r"$N$",r"$N_{\%}$",r"$M$",r"$M_{\%}$",
-        r"$\Gamma$",r"$\Gamma_{\%}$",r"$100\frac{M}{Gamma}$")
+        r"$\Gamma$",r"$\Gamma_{\%}$",r"$100\frac{M}{Gamma}$",
+        r"$\mu(\gamma)$",r"$\sigma(\gamma)$")
+data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[Gamma/M]+G,[mt_]+mt,[st_]+st]
 caption=r"Distribution of participants and of messages in each of the Erd\"os sector. Total time period of {:.2f} years".format(deltaAnos_)
 table_dir="/home/r/repos/artigoTextoNasRedes/tables/"
 fname="geralInline.tex"
 g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
-# acrescentar gamma de thread que obteve ao menos uma resposta
+dl=g.tableHelpers.dl
+me=g.tableHelpers.me
+dl(table_dir+fname[:-4],[1],[1])
+
+
+#lens=[digRoot(i) for i in roots_]
+
+# *) tira média e desvio do número mensagens em cada thread
+
+####
+# embeleza tabela com dl e ma
+
 
 
 
