@@ -15,7 +15,7 @@ bvals=b.cdf(domain)
 diffN2=n.abs(avals-bvals).max()
 
 a=st.uniform(0,1)
-b=st.uniform(0.05,1.05)
+b=st.uniform(0.05,1.0)
 domain=n.linspace(0,1.05,10000)
 avals=a.cdf(domain)
 bvals=b.cdf(domain)
@@ -53,8 +53,10 @@ def weib(x,nn,a):
 #scale = count.max()/weib(x, 1., 5.).max()
 W=weib(x, 1., 1.5)
 W_=W/(W*step).sum()
+W__=n.cumsum(W_)
 W2=weib(x, 1., 1.7)
 W2_=W2/(W2*step).sum()
+W2__=n.cumsum(W2_)
 diffW=n.abs(W_-W2_).max()
 #p.plot(x, W_)
 #p.plot(x, W2_)
@@ -73,6 +75,28 @@ print("distancias de KS para os modelos matematicos:", diffN,diffN2,diffU,diffU2
 # 0.0398776116762 0.0439947104098 0.0952338090952 0.047619047619 0.128565475845 0.0460149130584
 
 
+# X = (-n.ln(U))^{1/a}
+lb,rb,NE,shape1,shape2=0,10,10000,1.5,1.7
+x=n.linspace(lb,rb,NE)
+step=x[1]-x[0]
+W=weib(x, 1., shape1)
+W_=W/((W*step).sum())
+W__=n.cumsum(W_)
+W2=weib(x, 1., shape2)
+W2_=W2/((W2*step).sum())
+W2__=n.cumsum(W2_)
+diffW=n.abs(W__-W2__).max()
 
+
+lb,rb,NE,shape1,shape2=0,10,10000,1.5,1.7
+x=n.linspace(lb,rb,NE)
+step=x[1]-x[0]
+W=weib(x, 1., shape1)
+W_=W/((W).sum())
+W__=n.cumsum(W_)
+W2=weib(x, 1., shape2)
+W2_=W2/((W2).sum())
+W2__=n.cumsum(W2_)
+diffW=n.abs(W__-W2__).max()
 
 
