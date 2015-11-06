@@ -38,31 +38,130 @@ class EmailStructures:
         del np2_.binomial
         print("{0:.2f} for network partition".format(time.time()-TT)); TT=time.time()
         self.structs=lm, ds, ts, iN, nm, np2_
-def generalMeasures(ds,np):
+def perc(alist):
+    if type(alist) in (type([1,2]), type((2,4))):
+        return [100*i/sum(alist) for i in alist]
+    else:
+        return 100*alist/alist.sum()
+def digRoot(msgid,ds):
+    layers=[[msgid]]
+    while len(layers[-1]):
+        layer=layers[-1]
+        layers+=[[]]
+        for mid in layer:
+            if mid in ds.responses.keys():
+                layers[-1]+=[i[0] for i in ds.responses[mid]]
+    return layers,len(layers)
+
+def generalMeasures(ds,np,ts):
     """Return overall measures from list datastructures and network partitioning"""
-    date1=ds.messages[ds.message_ids[0]][2].isoformat().split("T")[0]
-    date2=ds.messages[ds.message_ids[-1]][2].isoformat().split("T")[0]
+    #date1=ds.messages[ds.message_ids[0]][2].isoformat().split("T")[0]
+    #date2=ds.messages[ds.message_ids[-1]][2].isoformat().split("T")[0]
+    dt=ts.datetimes
+    primeira,ultima=dt[0],dt[-1]
+    date1=primeira.isoformat()[:-6]
+    date2=ultima.isoformat(  )[:-6]
+    deltaAnos=(ultima-primeira)
+    deltaAnos_=deltaAnos.days/365.2425
+
     N=ds.n_authors
     Ns=[len(i) for i in np.sectorialized_agents__]
-    Ns_=[100*len(i)/N for i in np.sectorialized_agents__]
+    Ns_=perc(Ns)
     M_=ds.n_messages-ds.n_empty
-    Mh=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[2]])
-    Mi=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[1]])
-    Mp=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[0]])
-    M=[Mh,Mi,Mp][::-1]
-    M2=[100*i/ds.n_messages for i in M]
-    MN=M_/N
-    MN_=[i/j if j!=0 else n.inf for i,j in zip(M,Ns)]
-    idsh=[i[0] for j in np.sectorialized_agents__[2] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
-    idsi=[i[0] for j in np.sectorialized_agents__[1] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
-    idsp=[i[0] for j in np.sectorialized_agents__[0] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
-    idsh_=len(idsh)
-    idsi_=len(idsi)
-    idsp_=len(idsp)
-    ids=[idsh_,idsi_,idsp_][::-1]
-    Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
-    ids_=[100*ii/Gamma for ii in ids]
-    return date1,date2,N,Ns,Ns_,M,M2,Gamma,ids,ids_,M_,MN,MN_
+    M=ds.n_messages
+    #Mh=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[2]])
+    #Mi=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[1]])
+    #Mp=sum([len(ds.author_messages[author]) for author in np.sectorialized_agents__[0]])
+    #Ms=[Mh,Mi,Mp][::-1]
+    Ms=[sum([len(ds.author_messages[i]) for i in j])
+        for j in np.sectorialized_agents__]
+    #M2=[100*i/ds.n_messages for i in Ms]
+    Ms_=perc(Ms)
+    NM=N/M
+    NM_=100*NM
+    NM_missing=M_/N
+    NM_missing_=100*NM_missing
+    NMs=[i/j if j!=0 else n.inf for i,j in zip(Ns,Ms)]
+    NMs_=perc(NMs)
+    #idsh=[i[0] for j in np.sectorialized_agents__[2] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    #idsi=[i[0] for j in np.sectorialized_agents__[1] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    #idsp=[i[0] for j in np.sectorialized_agents__[0] for i in ds.author_messages[j] if ds.messages[i[0]][1]==None]
+    #idsh_=len(idsh)
+    #idsi_=len(idsi)
+    #idsp_=len(idsp)
+    #ids=[idsh_,idsi_,idsp_][::-1]
+    #ids_=[100*ii/Gamma for ii in ids]
+    #Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
+    Gammas=[sum([len([i for i in ds.author_messages[aid] if i[1]==None])
+           for aid in sa]) for sa in np.sectorialized_agents__]
+    Gammas_=perc(Gammas)
+    G_=[100*i/j for i,j in zip(Gammas,Ms)]
+    # Gammas_==ids_
+    #roots=[[[i for i in ds.author_messages[aid] if i[1]==None]
+    #           for aid in sa] for sa in pr.sectorialized_agents__]
+    #roots_=[i for j in roots for i in j]
+    ## *) a partir de cada uma delas, procura outras que tenham
+    ## ela como resposta e assim por diante,
+    ## até não achar mais resposta, guarda o número de mensagens
+    ## encontradas
+    #roots__=[[[i[j][0] for j in range(len(i))] for i in rr if i] for rr in roots]
+    #rr=[]
+    roots_sectors=[]
+    tlength_sectors=[]
+    threads_sectors=[]
+    for setor in np.sectorialized_agents__:
+        roots_sector=[]
+        tlength_sector=[]
+        threads_sector=[]
+        for agentid in setor:
+            messages=ds.author_messages[agentid]
+            for message in messages:
+                if message[1]==None: # nova thread, guarda ID
+                    roots_sector.append(message[0])
+                    t_sector,lsector=digRoot(message[0],ds)
+                    tlength_sector.append(lsector)
+                    threads_sector.append(t_sector)
+        roots_sectors.append(roots_sector)
+        tlength_sectors.append(tlength_sector)
+        threads_sectors.append(threads_sector)
+    mt=[n.mean(i) for i in tlength_sectors]
+    st=[n.std(i) for i in tlength_sectors]
+    tls=[i for j in tlength_sectors for i in j]
+    mt_ =n.mean(tls)
+    st_ =n.std(tls)
+    mvars=("date1","date2","deltaAnos_",
+            "N","Ns","Ns_","M","M_","Ms","Ms_",
+            "NM","NM_","NMs","NMs_","NM_missing","NM_missing_",
+            "Gammas","Gammas_","G_",
+            "roots_sectors","tlength_sectors","threads_sectors",
+            "mt","st","tls","mt_","st_")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+    #return date1,date2,N,Ns,Ns_,Ms,M2,Gamma,ids,ids_,M_,MN,MN_
+def makeGeneralTable(generalMeasures_instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="geralInline.tex"):
+    gms=generalMeasures_instance
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$N$",r"$N_{\%}$",r"$M$",r"$M_{\%}$",
+            r"$\Gamma$",r"$\Gamma_{\%}$",r"$\frac{\Gamma}{M}\%$",
+            r"$\mu(\gamma)$",r"$\sigma(\gamma)$")
+    N,Ns,Ns_,M,Ms,Ms_,Gammas,Gammas_,G_,mt_,mt,st_,st,deltaAnos_,date1,date2=[gms[i]
+            for i in ("N","Ns","Ns_","M","Ms","Ms_","Gammas","Gammas_","G_","mt_","mt","st_","st","deltaAnos_","date1","date2")]
+    Gamma=sum(Gammas)
+    data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[100*Gamma/M]+G_,[mt_]+mt,[st_]+st]
+    caption=r"""Distribution of participants, messages and threads among each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
+    {{\bf h.}} for hubs) in a total time period of {:.2f} years (from {} to {}). $N$ is the number of participants, $M$ is the number of messages, $\Gamma$ is the number of threads, and $\gamma$ is the number of messages in a thread.
+    The \% denotes the usual `per cent' with respecto to the total quantity ($100\%$ for {{\bf g.}})
+    while $\mu$ and $\sigma$ denote mean and standard deviation.""".format(deltaAnos_,date1,date2)
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    dl=g.tableHelpers.dl
+    me=g.tableHelpers.me
+    me(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    dl(table_dir+fname[:-4]+"_",[1],[1],list(range(2,8,2))+[8,9])
+
+
+
 replacement_patterns = [
 (r'won\'t', 'will not'),
 (r'can\'t', 'can not'),

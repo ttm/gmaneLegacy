@@ -111,105 +111,184 @@ def check(amsg="string message"):
 
 # faz caption e escreve a tabela
 es=ES[0]
-ts=es.structs[2]
-dt=ts.datetimes
-primeira,ultima=dt[0],dt[-1]
-deltaAnos=(ultima-primeira)
-deltaAnos_=deltaAnos.days/365.2425
-#date1=primeira.isoformat().split("T")[0]
-#date2=ultima.isoformat().split("T")[0]
-date1=primeira.isoformat()[:-6]
-date2=ultima.isoformat(  )[:-6]
 ds=es.structs[1]
-N=ds.n_authors
-M=ds.n_messages
-Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
+ts=es.structs[2]
 pr=es.structs[-1]
-Ns=[len(i) for i in pr.sectorialized_agents__]
-Ms=[sum([len(ds.author_messages[i]) for i in j])
-        for j in pr.sectorialized_agents__]
-Gammas=[sum([len([i for i in ds.author_messages[aid] if i[1]==None])
-           for aid in sa]) for sa in pr.sectorialized_agents__]
-G=[100*i/j for i,j in zip(Gammas,Ms)]
-def perc(alist):
-    if type(alist) in (type([1,2]), type((2,4))):
-        return [100*i/sum(alist) for i in alist]
-    else:
-        return 100*alist/alist.sum()
-Ns_=perc(Ns)
-Ms_=perc(Ms)
-Gammas_=perc(Gammas)
-#data_=[[i[j] for i in data] for j in range(]
-# acrescentar gamma de thread que obteve ao menos uma resposta
-# ou o tamanho medio da thread por setor
-####
-# *) guarda todas as mensagens raiz, que somam Gamma
-roots=[[[i for i in ds.author_messages[aid] if i[1]==None]
-           for aid in sa] for sa in pr.sectorialized_agents__]
-roots_=[i for j in roots for i in j]
-# *) a partir de cada uma delas, procura outras que tenham
-# ela como resposta e assim por diante,
-# até não achar mais resposta, guarda o número de mensagens
-# encontradas
-roots__=[[[i[j][0] for j in range(len(i))] for i in rr if i] for rr in roots]
-rr=[]
+gmeasures=g.generalMeasures(ds,pr,ts)
+g.makeGeneralTable(gmeasures)
+#dt=ts.datetimes
+#primeira,ultima=dt[0],dt[-1]
+#deltaAnos=(ultima-primeira)
+#deltaAnos_=deltaAnos.days/365.2425
+##date1=primeira.isoformat().split("T")[0]
+##date2=ultima.isoformat().split("T")[0]
+#date1=primeira.isoformat()[:-6]
+#date2=ultima.isoformat(  )[:-6]
+#ds=es.structs[1]
+#N=ds.n_authors
+#M=ds.n_messages
+#Gamma=len([i for i in ds.message_ids if ds.messages[i][1]==None])
+#pr=es.structs[-1]
+#Ns=[len(i) for i in pr.sectorialized_agents__]
+#Ms=[sum([len(ds.author_messages[i]) for i in j])
+#        for j in pr.sectorialized_agents__]
+##Gammas=[sum([len([i for i in ds.author_messages[aid] if i[1]==None])
+#           for aid in sa]) for sa in pr.sectorialized_agents__]
+#G=[100*i/j for i,j in zip(Gammas,Ms)]
+#def perc(alist):
+#    if type(alist) in (type([1,2]), type((2,4))):
+#        return [100*i/sum(alist) for i in alist]
+#    else:
+#        return 100*alist/alist.sum()
+##Ns_=perc(Ns)
+##Ms_=perc(Ms)
+##Gammas_=perc(Gammas)
+##data_=[[i[j] for i in data] for j in range(]
+## acrescentar gamma de thread que obteve ao menos uma resposta
+## ou o tamanho medio da thread por setor
+#####
+## *) guarda todas as mensagens raiz, que somam Gamma
+#roots=[[[i for i in ds.author_messages[aid] if i[1]==None]
+#           for aid in sa] for sa in pr.sectorialized_agents__]
+#roots_=[i for j in roots for i in j]
+## *) a partir de cada uma delas, procura outras que tenham
+## ela como resposta e assim por diante,
+## até não achar mais resposta, guarda o número de mensagens
+## encontradas
+#roots__=[[[i[j][0] for j in range(len(i))] for i in rr if i] for rr in roots]
+#rr=[]
+#
+#
+#def digRoot(msgid):
+#    layers=[[msgid]]
+#    while len(layers[-1]):
+#        layer=layers[-1]
+#        layers+=[[]]
+#        for mid in layer:
+#            if mid in ds.responses.keys():
+#                layers[-1]+=[i[0] for i in ds.responses[mid]]
+#    return layers,len(layers)
+#roots_sectors=[]
+#tlength_sectors=[]
+#threads_sectors=[]
+#for setor in pr.sectorialized_agents__:
+#    roots_sector=[]
+#    tlength_sector=[]
+#    threads_sector=[]
+#    for agentid in setor:
+#        messages=ds.author_messages[agentid]
+#        for message in messages:
+#            if message[1]==None: # nova thread, guarda ID
+#                roots_sector.append(message[0])
+#                t_sector,lsector=digRoot(message[0])
+#                tlength_sector.append(lsector)
+#                threads_sector.append(t_sector)
+#    roots_sectors.append(roots_sector)
+#    tlength_sectors.append(tlength_sector)
+#    threads_sectors.append(threads_sector)
+#tls=[i for j in tlength_sectors for i in j]
+#mt=[n.mean(i) for i in tlength_sectors]
+#st=[n.std(i) for i in tlength_sectors]
+#mt_ =n.mean(tls)
+#st_ =n.std(tls)
+#labelsh=("","g.","p.","i.","h.")
+#labels=(r"$N$",r"$N_{\%}$",r"$M$",r"$M_{\%}$",
+#        r"$\Gamma$",r"$\Gamma_{\%}$",r"$\frac{\Gamma}{M}\%$",
+#        r"$\mu(\gamma)$",r"$\sigma(\gamma)$")
+#data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[100*Gamma/M]+G,[mt_]+mt,[st_]+st]
+#caption=r"""Distribution of participants, messages and threads among each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
+#{{\bf h.}} for hubs) in a total time period of {:.2f} years (from {} to {}). $N$ is the number of participants, $M$ is the number of messages, $\Gamma$ is the number of threads, and $\gamma$ is the number of messages in a thread.
+#The \% denotes the usual `per cent' with respecto to the total quantity ($100\%$ for {{\bf g.}})
+#while $\mu$ and $\sigma$ denote mean and standard deviation.""".format(deltaAnos_,date1,date2)
+#table_dir="/home/r/repos/artigoTextoNasRedes/tables/"
+#fname="geralInline.tex"
+#g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+#dl=g.tableHelpers.dl
+#me=g.tableHelpers.me
+#me(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+#dl(table_dir+fname[:-4]+"_",[1],[1],list(range(2,8,2))+[8,9])
+
+# tabela chars
 
 
-def digRoot(msgid):
-    layers=[[msgid]]
-    while len(layers[-1]):
-        layer=layers[-1]
-        layers+=[[]]
-        for mid in layer:
-            if mid in ds.responses.keys():
-                layers[-1]+=[i[0] for i in ds.responses[mid]]
-    return len(layers)
-roots_sectors=[]
-tlength_sectors=[]
-for setor in pr.sectorialized_agents__:
-    roots_sector=[]
-    tlength_sector=[]
-    for agentid in setor:
-        messages=ds.author_messages[agentid]
-        for message in messages:
-            if message[1]==None: # nova thread, guarda ID
-                roots_sector.append(message[0])
-                tlength_sector.append(digRoot(message[0]))
-    roots_sectors.append(roots_sector)
-    tlength_sectors.append(tlength_sector)
-tls=[i for j in tlength_sectors for i in j]
-mt=[n.mean(i) for i in tlength_sectors]
-st=[n.std(i) for i in tlength_sectors]
-mt_ =n.mean(tls)
-st_ =n.std(tls)
-labelsh=("","g.","p.","i.","h.")
-labels=(r"$N$",r"$N_{\%}$",r"$M$",r"$M_{\%}$",
-        r"$\Gamma$",r"$\Gamma_{\%}$",r"$100\frac{M}{Gamma}$",
-        r"$\mu(\gamma)$",r"$\sigma(\gamma)$")
-data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[Gamma/M]+G,[mt_]+mt,[st_]+st]
-caption=r"Distribution of participants and of messages in each of the Erd\"os sector. Total time period of {:.2f} years".format(deltaAnos_)
-table_dir="/home/r/repos/artigoTextoNasRedes/tables/"
-fname="geralInline.tex"
-g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
-dl=g.tableHelpers.dl
-me=g.tableHelpers.me
-dl(table_dir+fname[:-4],[1],[1])
 
+## medidasLetras()
+nc=[ll.nc for ll in                     mlCHARS] # caracteres
+ne=[100*(ll.ne/ll.nc) for ll in         mlCHARS] # espacos
+np=[100*(ll.np/(ll.nc-ll.ne)) for ll in mlCHARS] # punctuation
+nd=[100*(ll.nd/(ll.nc-ll.ne)) for ll in mlCHARS] # digits
+nl=[100*(ll.nl/(ll.nc-ll.ne)) for ll in mlCHARS] # letras 
+nv=[100*(ll.nv/(ll.nl)) for ll in       mlCHARS] # vogais
+nu=[100*(ll.nm/ll.nl) for ll in         mlCHARS] # uppercase
 
-#lens=[digRoot(i) for i in roots_]
+# p
+ncp=[ll.nc for ll in                     mlCHARSp] # caracteres
+nep=[100*(ll.ne/ll.nc) for ll in         mlCHARSp] # espacos
+npp=[100*(ll.np/(ll.nc-ll.ne)) for ll in mlCHARSp] # punctuation
+ndp=[100*(ll.nd/(ll.nc-ll.ne)) for ll in mlCHARSp] # digits
+nlp=[100*(ll.nl/(ll.nc-ll.ne)) for ll in mlCHARSp] # letras 
+nvp=[100*(ll.nv/(ll.nl)) for ll in       mlCHARSp] # vogais
+nup=[100*(ll.nm/ll.nl) for ll in         mlCHARSp] # uppercase
 
-# *) tira média e desvio do número mensagens em cada thread
+# i
+nci=[ll.nc for ll in                     mlCHARSi] # caracteres
+nei=[100*(ll.ne/ll.nc) for ll in         mlCHARSi] # espacos
+npi=[100*(ll.np/(ll.nc-ll.ne)) for ll in mlCHARSi] # punctuation
+ndi=[100*(ll.nd/(ll.nc-ll.ne)) for ll in mlCHARSi] # digits
+nli=[100*(ll.nl/(ll.nc-ll.ne)) for ll in mlCHARSi] # letras 
+nvi=[100*(ll.nv/(ll.nl)) for ll in       mlCHARSi] # vogais
+nui=[100*(ll.nm/ll.nl) for ll in         mlCHARSi] # uppercase
 
-####
-# embeleza tabela com dl e ma
+# h
+nch=[ll.nc for ll in                     mlCHARSh] # caracteres
+neh=[100*(ll.ne/ll.nc) for ll in         mlCHARSh] # espacos
+nph=[100*(ll.np/(ll.nc-ll.ne)) for ll in mlCHARSh] # punctuation
+ndh=[100*(ll.nd/(ll.nc-ll.ne)) for ll in mlCHARSh] # digits
+nlh=[100*(ll.nl/(ll.nc-ll.ne)) for ll in mlCHARSh] # letras 
+nvh=[100*(ll.nv/(ll.nl)) for ll in       mlCHARSh] # vogais
+nuh=[100*(ll.nm/ll.nl) for ll in         mlCHARSh] # uppercase
 
+labels=(r"$n\,chars$",r"$\left(\frac{n\,spaces}{n\,chars}\right)\times 100$",r"$\left(\frac{n\,punct}{n\,chars-n\,spaces}\right)\times 100$",r"$\left(\frac{n\,digits}{n\,chars-n\,spaces}\right)\times 100$",r"$\left(\frac{n\,letters}{n\,chars-n\,spaces}\right)\times 100$",r"$\left(\frac{n\,vogals}{n\,letters}\right)\times 100$",r"$\left(\frac{n\,Uppercase}{n\,letters}\right)\times 100$")
+nc_=[]
+for i in xrange(4):
+    nc_+=[nc[i],ncp[i],nci[i],nch[i]]
+nc__=[]
+for i in xrange(4):
+    nc__+=[nc[i],100*ncp[i]/nc[i],100*nci[i]/nc[i],100*nch[i]/nc[i]]
 
-
-
-#M_=-ds.n_messages
-#data_.append([date1,date2,N,Gamma])
-##tstring=g.makeTables(labels_,data_)
-
+np_=[]
+for i in xrange(4):
+    np_+=[np[i],npp[i],npi[i],nph[i]]
+ne_=[]
+for i in xrange(4):
+    ne_+=[ne[i],nep[i],nei[i],neh[i]]
+nd_=[]
+for i in xrange(4):
+    nd_+=[nd[i],ndp[i],ndi[i],ndh[i]]
+nl_=[]
+for i in xrange(4):
+    nl_+=[nl[i],nlp[i],nli[i],nlh[i]]
+#
+#
+#
+#nnn=(nc__,
+#     ne_,
+#     np_,
+#     nd_,
+#     nl_,
+#     nv+nvp+nvi+nvh,
+#     nu+nup+nui+nuh)
+#i=0
+#for ll in labels:
+#    mstring= "%s " % (ll,)
+#    if i == 0:
+#        #print ("%s"+" & %i & %i & %i & %i"*4 +" \\\\") % tuple([ll]+nnn[i]); i+=1
+#        mstring += (" & %i & %.2f & %.2f & %.2f"*4 +" \\\\") % tuple(nnn[i]); i+=1
+#    else:
+#        mstring+= (" & %.2f & %.2f & %.2f & %.2f"*4 +" \\\\") % tuple(nnn[i]); i+=1
+#    mstring+="\\hline"
+#    print(mstring)
+#
 
 
 
