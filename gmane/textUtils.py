@@ -7,9 +7,16 @@ puncts=set(string.punctuation)
 #w=open("./wordsEn.txt","r")
 #w=w.read()
 #WL=w.split()
-WL=k.corpus.words.words()
-WL.append("email")
-WL.append("e-mail")
+WL2=k.corpus.words.words()
+#w=open("./wordlist.txt","r")
+w=open("./words.txt","r")
+# https://raw.githubusercontent.com/dwyl/english-words/master/words.txt
+w=w.read()
+WL=w.split()
+
+#WL.append("email")
+#WL.append("e-mail")
+#WL.append("having")
 WL_=set(WL)
 WLP=k.corpus.floresta.words()
 WLP_=set(WLP)
@@ -251,6 +258,101 @@ def medidasTokensQ(T,lang="en"):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+def makeTokenSizesTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokenSizesInline.tex"):
+    tms=medidasTokens__instance
+    mvars=("Mtoken","Stoken","Mknownw","Sknownw",
+            "Mknownw_diff","Sknownw_diff",
+            "Mstopw","Sstopw")
+    tms_=[[tms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=( r"$\mu(\overline{tokens})$",r"$\sigma(\overline{tokens})$",
+            r"$\mu(\overline{knownw})$",r"$\sigma(\overline{knownw})$",
+            r"$\mu(\overline{knownw \neq})$",r"$\sigma(\overline{knownw \neq})$",
+            r"$\mu(\overline{stopw})$",r"$\sigma(\overline{stopw})$")
+    caption=r"""Token sizes in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    #data=list(map(list, zip(*tms_)))
+    data=tms_
+    #ntoks=data[0]
+    #ntoks_=perc_(ntoks)
+    #data=n.array(data[1:])
+    #data=n.vstack((ntoks,ntoks_,data*100))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral_")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8])
+
+
+def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokensInline.tex"):
+    tms=medidasTokens__instance
+    mvars=("tokens",
+            "tokens_diff",
+            "knownw",
+            "knownw_diff",
+            "stopw",
+            "punct",
+            "contract")
+    tms_=[[tms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$tokens$",
+            r"$tokens_{\%}$",
+            r"$tokens \neq$",
+            r"$\frac{knownw}{tokens}$",
+            r"$\frac{knownw \neq}{knownw}$",
+            r"$\frac{stopw}{knownw}$",
+            r"$\frac{punct}{tokens}$",
+            r"$\frac{contrac}{tokens}$",
+            )
+    caption=r"""tokens in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
+    {{\bf h.}} for hubs)."""
+    #data=list(map(list, zip(*tms_)))
+    data=tms_
+    ntoks=data[0]
+    ntoks_=perc_(ntoks)
+    data=n.array(data[1:])
+    data=n.vstack((ntoks,ntoks_,data*100))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,5,7,8])
+
+def medidasTokens__(lt=("texts",),ct=("ncontractions",)):
+    return [medidasTokens_(i,j) for i,j in zip(lt,ct)]
+def medidasTokens_(T,ncontract):
+    wtok=k.tokenize.wordpunct_tokenize(T)
+    wtok_=[t.lower() for t in wtok]
+    tokens=len(wtok) #
+    tokens_=set(wtok)
+    tokens_diff=len(tokens_)/tokens # 
+    punct=sum([sum([tt in puncts for tt in t])==len(t) for t in wtok_])
+    punct/=tokens
+    known=[i for i in wtok_ if (i not in stopwords) and (i in WL_)]
+    knownw=len(known)
+    known_=set(known)
+    knownw_diff=len(known_)/knownw
+    stop=[i for i in wtok_ if i in stopwords]
+    stopw=len(stop)/knownw
+    knownw/=tokens
+    contract=ncontract/tokens
+
+    # media e desvio de tamanhos:
+    # tokens,
+    Mtoken,Stoken=mediaDesvio_(wtok_)
+    # known words sem stop,
+    Mknownw,Sknownw=mediaDesvio_(known)
+    # known words sem stop e sem repetição
+    Mknownw_diff,Sknownw_diff=mediaDesvio_(known_)
+    # stop words
+    Mstopw,Sstopw=mediaDesvio_(stop)
+
+    #stokwn=[len(i) for i in known]
+    #skownw=[len(i) for i in known]
+    mvars=("tokens","tokens_diff","punct",
+            "knownw","knownw_diff","stopw","contract",
+            "Mtoken","Stoken","Mknownw","Sknownw",
+            "Mknownw_diff","Sknownw_diff",
+            "Mstopw","Sstopw")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
 
 def medidasTokens(T):
     atime=time.time()
@@ -326,19 +428,13 @@ def makeCharTable(charsMeasures_instance, table_dir="/home/r/repos/artigoTextoNa
             r"$\frac{uppercase}{letters}$",
             )
 
-#    N,Ns,Ns_,M,Ms,Ms_,Gammas,Gammas_,G_,mt_,mt,st_,st,deltaAnos_,date1,date2=[gms[i]
-#            for i in ("N","Ns","Ns_","M","Ms","Ms_","Gammas","Gammas_","G_","mt_","mt","st_","st","deltaAnos_","date1","date2")]
-#    Gamma=sum(Gammas)
-#    data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[100*Gamma/M]+G_,[mt_]+mt,[st_]+st]
     caption=r"""Characters in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
     {{\bf h.}} for hubs)."""
-    #data=[[cms[i][j] for i in range(len(cms[0]))] for j]
     data=list(map(list, zip(*cms)))
     nchars=data[0]
     nchars_=perc_(nchars)
     data=n.array(data[1:])
     data=n.vstack((nchars,nchars_,data*100))
-    #g.lTable(labels,labelsh,cms,caption,table_dir+fname,"textGeral")
     g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
     ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,5,7,8])
@@ -360,6 +456,9 @@ def medidasLetras(T):
     nd=sum([t.isdigit() for t in T])
     return nc,ne/nc,np/(nc-ne),nd/(nc-ne),nl/(nc-ne),nv/nl,nm/nl
 
+def mediaDesvio_(medidas):
+    medidas_=[len(i) for i in medidas]
+    return n.mean(medidas_),n.std(medidas_)
 def mediaDesvio(tid="astring",adict={"stringkey":"tokens"}):
     tid_=tid+"_"
     toks=[len(i) for i in adict[tid]]
@@ -377,7 +476,6 @@ def mediaDesvio(tid="astring",adict={"stringkey":"tokens"}):
     fdict["d"+tid_]=dtid_
 
     return fdict
-
 def medidasTamanhosTokens(medidas_tokens):
     mdict={}
     MT=medidas_tokens
