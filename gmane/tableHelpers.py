@@ -150,6 +150,7 @@ def lTable(labels,labelsh,data,caption,filename,ttype="kolmNull"):
     #    print(str(tval)+".00",str(tval))
     #    t1=t1.replace(" {}.00 ".format(tval)," {} ".format(tval))
     t2=encapsulateTable(t1,labelsh,caption,ttype)
+    print(filename,"RPINTEEEEEEEED")
     writeTex(t2,filename)
 #def makeTables2(data,two_decimal=False):
 #    """Variation of makeTables for tables withour row labels"""

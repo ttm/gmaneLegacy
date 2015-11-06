@@ -18,6 +18,8 @@ stopwordsP=set(k.corpus.stopwords.words("portuguese"))
 f=open("pickledir/brill_taggerT2M1","rb")
 brill_tagger=pickle.load(f)
 f.close()
+DL=g.tableHelpers.dl
+ME=g.tableHelpers.me
 
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
@@ -38,6 +40,11 @@ class EmailStructures:
         del np2_.binomial
         print("{0:.2f} for network partition".format(time.time()-TT)); TT=time.time()
         self.structs=lm, ds, ts, iN, nm, np2_
+def perc_(alist):
+    if type(alist) in (type([1,2]), type((2,4))):
+        return [100*i/sum(alist[1:]) for i in alist]
+    else:
+        return 100*alist/alist[1:].sum()
 def perc(alist):
     if type(alist) in (type([1,2]), type((2,4))):
         return [100*i/sum(alist) for i in alist]
@@ -185,6 +192,22 @@ class RegexpReplacer(object):
             count_+=count
         return s, count_
 REPLACER=RegexpReplacer()
+def makeText_(ds,pr):
+    texts=[]
+    textG=""
+    for sector in pr.sectorialized_agents__:
+        texts+=[""]
+        for author in sector:
+            for message in ds.author_messages[author]:
+                mid=message[0]
+                text=ds.messages[mid][3]
+                texts[-1]+=text
+                textG+=text
+    texts=[textG]+texts
+    foo=[REPLACER.replace(i) for i in texts]
+    texts_=[i[0] for i in foo]
+    ncontractions=[i[1] for i in foo]
+    return texts_,ncontractions
 def makeText(ds,mid=None):
     if not mid:
         t=[ds.messages[i][3] for i in ds.message_ids]
@@ -290,6 +313,37 @@ def medidasTokens(T):
         vdict[mvar] = locals()[mvar]
     return vdict
 
+def makeCharTable(charsMeasures_instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="charsInline.tex"):
+    cms=charsMeasures_instance
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$chars$",
+            r"$chars_{\%}$",
+            r"$\frac{spaces}{chars}$",
+            r"$\frac{punct}{chars-spaces}$",
+            r"$\frac{digits}{chars-spaces}$",
+            r"$\frac{letters}{chars-spaces}$",
+            r"$\frac{vogals}{letters}$",
+            r"$\frac{uppercase}{letters}$",
+            )
+
+#    N,Ns,Ns_,M,Ms,Ms_,Gammas,Gammas_,G_,mt_,mt,st_,st,deltaAnos_,date1,date2=[gms[i]
+#            for i in ("N","Ns","Ns_","M","Ms","Ms_","Gammas","Gammas_","G_","mt_","mt","st_","st","deltaAnos_","date1","date2")]
+#    Gamma=sum(Gammas)
+#    data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[100*Gamma/M]+G_,[mt_]+mt,[st_]+st]
+    caption=r"""Characters in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
+    {{\bf h.}} for hubs)."""
+    #data=[[cms[i][j] for i in range(len(cms[0]))] for j]
+    data=list(map(list, zip(*cms)))
+    nchars=data[0]
+    nchars_=perc_(nchars)
+    data=n.array(data[1:])
+    data=n.vstack((nchars,nchars_,data*100))
+    #g.lTable(labels,labelsh,cms,caption,table_dir+fname,"textGeral")
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,5,7,8])
+def medidasLetras_(LT=["list","of","strings"]):
+        return [medidasLetras(i) for i in LT]
 def medidasLetras(T):
     # quantos caracteres
     nc=len(T)
@@ -304,7 +358,7 @@ def medidasLetras(T):
     np=sum([t in puncts for t in T])
     # numerais
     nd=sum([t.isdigit() for t in T])
-    return nc,ne/nc,nl/(nc-ne),nm/nl,nv/nl,np/(nc-ne),nd/(nc-ne)
+    return nc,ne/nc,np/(nc-ne),nd/(nc-ne),nl/(nc-ne),nv/nl,nm/nl
 
 def mediaDesvio(tid="astring",adict={"stringkey":"tokens"}):
     tid_=tid+"_"

@@ -36,5 +36,5 @@ from .textUtils import EmailStructures, generalMeasures, makeText, medidasLetras
 from .ksStatistics import KSReferences, kolmogorovSmirnovDistance, kolmogorovSmirnovDistance_
 
 from . import ksStatistics as KS
-
+from . import textUtils
 
