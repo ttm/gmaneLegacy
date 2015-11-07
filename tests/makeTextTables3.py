@@ -70,7 +70,14 @@ g.textUtils.makePOSTable(pos_measures,TDIR)
 
 wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
 wn_measures2=g.textUtils.medidasWordnet2_(wn_measures); check("medidas wordnet2")
-g.textUtils.makeWordnetTable(wn_measures2,TDIR)
+g.textUtils.makeWordnetTable(wn_measures2,TDIR) # medias e desvios das incidencias dos atributos
+
+g.textUtils.makeWordnetTable2(wn_measures2,TDIR) # contagem dos synsets raiz
+g.textUtils.makeWordnetTable2b(wn_measures2,TDIR) # contagem dos synsets raiz
+g.textUtils.makeWordnetTable2c(wn_measures2,TDIR) # contagem dos synsets raiz
+g.textUtils.makeWordnetTable2d(wn_measures2,TDIR) # contagem dos synsets raiz
+
+#g.textUtils.makeWordnetTable3(wn_measures2,TDIR) # tabelas anteriores, mas separadas as 4 classes morfossintáticas
 
 
 

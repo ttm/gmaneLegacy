@@ -714,6 +714,69 @@ def medidasPOS(sentences_tokenized):
         vdict[mvar] = locals()[mvar]
     return vdict
 
+def S(acounter):
+    return sorted(acounter.items(),key=lambda x: -x[1])
+def makeWordnetTable2(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2.tex"):
+    """Table about the most incident roots"""
+    t0=[c.Counter([i[0].name() for i in j["top_hypernyms"]]) for j in wn_dict_list]
+    t0_=[S(i) for i in t0]
+    labels=[i[0] for i in t0_[0][:12]]
+    wms_=[[t0[i][j] for i in range(4)] for j in labels]
+    labelsh=("","g.","p.","i.","h.")
+    caption=r"""Counts for the most incident synsets at the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    data=wms_
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral__")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1])
+def makeWordnetTable2b(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2b.tex"):
+    """Table about the most incident roots"""
+    t1=[c.Counter([i[1].name() for i in j["top_hypernyms"] if len(i)>1]) for j in wn_dict_list]
+    t1_=[S(i) for i in t1]
+    labels=[i[0] for i in t1_[0][:12]]
+    wms_=[[t1[i][j] for i in range(4)] for j in labels]
+    labelsh=("","g.","p.","i.","h.")
+    labels=[i.replace("_","\_") for i in labels]
+    caption=r"""Counts for the most incident synsets one step from the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    data=wms_
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral__")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1])
+def makeWordnetTable2c(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2c.tex"):
+    """Table about the most incident roots"""
+    t2=[c.Counter([i[2].name() for i in j["top_hypernyms"] if len(i)>2]) for j in wn_dict_list]
+    t2_=[S(i) for i in t2]
+    labels=[i[0] for i in t2_[0][:12]]
+    wms_=[[t2[i][j] for i in range(4)] for j in labels]
+    labelsh=("","g.","p.","i.","h.")
+    labels=[i.replace("_","\_") for i in labels]
+    caption=r"""Counts for the most incident synsets two steps from the root in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    data=wms_
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral__")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1])
+def makeWordnetTable2d(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2d.tex"):
+    """Table about the most incident roots"""
+    t3=[c.Counter([i[3].name() for i in j["top_hypernyms"] if len(i)>3]) for j in wn_dict_list]
+    t3_=[S(i) for i in t3]
+    labels=[i[0] for i in t3_[0][:12]]
+    wms_=[[t3[i][j] for i in range(4)] for j in labels]
+    labelsh=("","g.","p.","i.","h.")
+    labels=[i.replace("_","\_") for i in labels]
+    caption=r"""Counts for the fourth closest synset to the root in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    data=wms_
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral__")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1])
+
+
+
+
+    # fazer para as outras raizes
+    #t1=S(c.Counter([[i["top_hypernyms"][1].name() for i in j if len(i["top_hypernyms"])>1] for j in wn_measures2]))
+    #t2=S(c.Counter([[i["top_hypernyms"][2].name() for i in j if len(i["top_hypernyms"])>2] for j in wn_measures2]))
+    #t3=S(c.Counter([[i["top_hypernyms"][3].name() for i in j if len(i["top_hypernyms"])>3] for j in wn_measures2]))
+
+    # escolhe os 4 mais proximos da raiz, faz o hisograma por camada
 def makeWordnetTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline.tex"):
     wms=wn_dict_list
     mvars=("mmind","dmind",
