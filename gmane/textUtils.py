@@ -258,6 +258,34 @@ def medidasTokensQ(T,lang="en"):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+def makeSentencesTable(medidasSentencas_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="sentencesInline.tex"):
+    sms=medidasSentencas_dict
+    mvars=("nsents",
+            "Mchars_sents","Schars_sents",
+            "Mtoks_sents","Stoks_sents",
+            "Mknownw_sents","Sknownw_sents",
+            "Mstopw_sents","Sstopw_sents",
+            "Mpuncts_sents","Spuncts_sents",)
+    sms_=[[sms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$sents$",r"$sents_{\%}$",
+            r"$\mu_S(chars)$", r"$\sigma_S(chars)$",
+            r"$\mu_S(tokens)$",r"$\sigma_S(tokens)$",
+            r"$\mu_S(knownw)$",r"$\sigma_S(knownw)$",
+            r"$\mu_S(stopw)$", r"$\sigma_S(stopw)$",
+            r"$\mu_S(puncts)$",r"$\sigma_S(puncts)$",
+            )
+    caption=r"""Sentences sizes in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    #data=list(map(list, zip(*tms_)))
+    data=sms_
+    nsents=data[0]
+    nsents_=perc_(nsents)
+    data=n.array(data[1:])
+    data=n.vstack((nsents,nsents_,data))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12])
+
 def makeTokenSizesTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokenSizesInline.tex"):
     tms=medidasTokens__instance
     mvars=("Mtoken","Stoken","Mknownw","Sknownw",
@@ -487,8 +515,35 @@ def medidasTamanhosTokens(medidas_tokens):
     mdict.update(mediaDesvio("sw",MT))
     return mdict
 
+def medidasSentencas_(Ts=['list',"of","strings"]):
+    return [medidasSentencas(i) for i in Ts]
+def medidasSentencas(T):
+    TS=k.sent_tokenize(T)
+    tokens_sentences=[k.tokenize.wordpunct_tokenize(i) for i in TS] ### Para os POS tags
+    knownw_sentences=[[i for i in ts if (i not in stopwords) and (i in WL_)] for ts in tokens_sentences]
+    stopw_sentences =[[i for i in ts if i in stopwords] for ts in tokens_sentences]
+    puncts_sentences=[[i for i in ts if
+         (len(i)==sum([(ii in puncts) for ii in i]))]
+         for ts in tokens_sentences] #
+    Mchars_sents,  Schars_sents  = mediaDesvio_(TS)
+    Mtoks_sents,   Stoks_sents   = mediaDesvio_(tokens_sentences)
+    Mknownw_sents, Sknownw_sents = mediaDesvio_(knownw_sentences)
+    Mstopw_sents,  Sstopw_sents  = mediaDesvio_(stopw_sentences)
+    Mpuncts_sents, Spuncts_sents = mediaDesvio_(puncts_sentences)
+    nsents=len(TS)
+    mvars=("Mchars_sents","Schars_sents",
+            "Mtoks_sents","Stoks_sents",
+            "Mknownw_sents","Sknownw_sents",
+            "Mstopw_sents","Sstopw_sents",
+            "Mpuncts_sents","Spuncts_sents","nsents")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+
+
+
 def medidasTamanhosSentencas(T,medidas_tokens):
-    mdict={}
     MT=medidas_tokens
     ############
     # medidas de sentencas
