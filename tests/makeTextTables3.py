@@ -51,6 +51,7 @@ g.makeGeneralTable(gmeasures,TDIR)
 #g.makeGeneralTable(cmeasures)
 
 ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
+
 char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
 g.textUtils.makeCharTable(char_measures,TDIR)
 
@@ -63,6 +64,9 @@ g.textUtils.makeSentencesTable(sent_measures,TDIR)
 
 msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
 g.textUtils.makeMessagesTable(msg_measures,TDIR)
+
+pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
+g.textUtils.makePOSTable(pos_measures,TDIR)
 
 
 

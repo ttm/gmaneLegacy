@@ -547,7 +547,7 @@ def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoText
     data=n.vstack((nmsgs,nmsgs_,data))
     g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
     ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
-    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14,16])
 
 
 def medidasMensagens_(ds,msg_ids):
@@ -604,7 +604,8 @@ def medidasSentencas(T):
             "Mtoks_sents","Stoks_sents",
             "Mknownw_sents","Sknownw_sents",
             "Mstopw_sents","Sstopw_sents",
-            "Mpuncts_sents","Spuncts_sents","nsents")
+            "Mpuncts_sents","Spuncts_sents","nsents",
+            "tokens_sentences")
     vdict={}
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
@@ -667,13 +668,35 @@ def medidasTamanhosMensagens(ds, tids=None):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+def medidasPOS_(list_of_list_of_sentences_tokenized):
+    # [i["tokens_sentences"] for i in sent_measures]
+    return [medidasPOS(i) for i in list_of_list_of_sentences_tokenized]
 def medidasPOS(sentences_tokenized):
     """Measures of POS tags
 
     Receives a sequence of sentences,
     each as a sequence of tokens.
     Returns a set measures of POS tags,
-    and the tagged sentences"""
+    and the tagged sentences.
+
+    Convention:
+    VERB - verbs (all tenses and modes)
+    NOUN - nouns (common and proper)
+    PRON - pronouns 
+    ADJ - adjectives
+    ADV - adverbs
+    ADP - adpositions (prepositions and postpositions)
+    CONJ - conjunctions
+    DET - determiners
+    NUM - cardinal numbers
+    PRT - particles or other function words
+    X - other: foreign words, typos, abbreviations
+    . - punctuation
+    
+    See "A Universal Part-of-Speech Tagset"
+    by Slav Petrov, Dipanjan Das and Ryan McDonald
+    for more details:
+        http://arxiv.org/abs/1104.2086"""
 
     tags=brill_tagger.tag_sents(sentences_tokenized)
     tags_=[item for sublist in tags for item in sublist]
@@ -684,12 +707,81 @@ def medidasPOS(sentences_tokenized):
        	factor=100.0/sum(htags.values())
         htags_={}
         for i in htags.keys(): htags_[i]=htags[i]*factor    
-        htags__=c.OrderedDict(sorted(htags_.items(), key=lambda x: x[1]))
+        htags__=c.OrderedDict(sorted(htags_.items(), key=lambda x: -x[1]))
     mvars=("htags__","tags")
     vdict={}
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     return vdict
+
+def makePOSTable(posMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="posInline.tex"):
+    pms=posMensagens_dict
+#    pms_=[list(i["htags__"].items()) for i in pms]
+    #mvars=[list(i["htags__"].keys()) for i in pms]
+    #mvars=list(pms[0]["htags__"].keys())
+    mvars=['NOUN', 'X', 'ADP', 'DET', 'VERB', 'ADJ', 'ADV', 'PRT', 'PRON', 'NUM', 'CONJ',"."]
+    pms__=[[pms[j]["htags__"][i] if (i in pms[j]["htags__"].keys()) else 0 for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=mvars[:-1]+["PUNC"]
+    caption=r"""POS tags in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs).
+    Universal POS tags~\cite{{petrov}}:
+    VERB - verbs (all tenses and modes);
+    NOUN - nouns (common and proper);
+    PRON - pronouns;
+    ADJ - adjectives;
+    ADV - adverbs;
+    ADP - adpositions (prepositions and postpositions);
+    CONJ - conjunctions;
+    DET - determiners;
+    NUM - cardinal numbers;
+    PRT - particles or other function words;
+    X - other: foreign words, typos, abbreviations;
+    PUNCT - punctuation.
+"""
+    #data=list(map(list, zip(*tms_)))
+    data=pms__
+    #nmsgs=data[0]
+    #nmsgs_=perc_(nmsgs)
+    #data=n.array(data[1:])
+    #data=n.vstack((nmsgs,nmsgs_,data))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral_")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,7,9,10,11,12])
+
+
+def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="messagesInline.tex"):
+    mms=medidasMensagens_dict
+    mvars=("nmsgs",
+            "Msents_msgs","Ssents_msgs",
+            "Mtokens_msgs","Stokens_msgs",
+            "Mknownw_msgs","Sknownw_msgs",
+            "Mstopw_msgs","Sstopw_msgs",
+            "Mpuncts_msgs","Spuncts_msgs",
+            "Mchars_msgs","Schars_msgs",
+            )
+    mms_=[[mms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$msgs$",r"$msgs_{\%}$",
+            r"$\mu_M(sents)$", r"$\sigma_M(sents)$",
+            r"$\mu_M(tokens)$",r"$\sigma_M(tokens)$",
+            r"$\mu_M(knownw)$",r"$\sigma_M(knownw)$",
+            r"$\mu_M(stopw)$", r"$\sigma_M(stopw)$",
+            r"$\mu_M(puncts)$",r"$\sigma_M(puncts)$",
+            r"$\mu_M(chars)$", r"$\sigma_M(chars)$",
+            )
+
+    caption=r"""Messages sizes in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    #data=list(map(list, zip(*tms_)))
+    data=mms_
+    nmsgs=data[0]
+    nmsgs_=perc_(nmsgs)
+    data=n.array(data[1:])
+    data=n.vstack((nmsgs,nmsgs_,data))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14])
+
+
 
 def filtro(wt_):
     # faz separação dos tokens para analise com wordnet
