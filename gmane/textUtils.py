@@ -201,20 +201,23 @@ class RegexpReplacer(object):
 REPLACER=RegexpReplacer()
 def makeText_(ds,pr):
     texts=[]
+    msg_ids=[]
     textG=""
     for sector in pr.sectorialized_agents__:
         texts+=[""]
+        msg_ids.append([])
         for author in sector:
             for message in ds.author_messages[author]:
                 mid=message[0]
                 text=ds.messages[mid][3]
                 texts[-1]+=text
                 textG+=text
+                msg_ids[-1].append(mid)
     texts=[textG]+texts
     foo=[REPLACER.replace(i) for i in texts]
     texts_=[i[0] for i in foo]
     ncontractions=[i[1] for i in foo]
-    return texts_,ncontractions
+    return texts_,ncontractions, msg_ids
 def makeText(ds,mid=None):
     if not mid:
         t=[ds.messages[i][3] for i in ds.message_ids]
@@ -514,7 +517,73 @@ def medidasTamanhosTokens(medidas_tokens):
     mdict.update(mediaDesvio("kwsw",MT))
     mdict.update(mediaDesvio("sw",MT))
     return mdict
+def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="messagesInline.tex"):
+    mms=medidasMensagens_dict
+    mvars=("nmsgs",
+            "Msents_msgs","Ssents_msgs",
+            "Mtokens_msgs","Stokens_msgs",
+            "Mknownw_msgs","Sknownw_msgs",
+            "Mstopw_msgs","Sstopw_msgs",
+            "Mpuncts_msgs","Spuncts_msgs",
+            "Mchars_msgs","Schars_msgs",
+            )
+    mms_=[[mms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=(r"$msgs$",r"$msgs_{\%}$",
+            r"$\mu_M(sents)$", r"$\sigma_M(sents)$",
+            r"$\mu_M(tokens)$",r"$\sigma_M(tokens)$",
+            r"$\mu_M(knownw)$",r"$\sigma_M(knownw)$",
+            r"$\mu_M(stopw)$", r"$\sigma_M(stopw)$",
+            r"$\mu_M(puncts)$",r"$\sigma_M(puncts)$",
+            r"$\mu_M(chars)$", r"$\sigma_M(chars)$",
+            )
 
+    caption=r"""Messages sizes in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    #data=list(map(list, zip(*tms_)))
+    data=mms_
+    nmsgs=data[0]
+    nmsgs_=perc_(nmsgs)
+    data=n.array(data[1:])
+    data=n.vstack((nmsgs,nmsgs_,data))
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14])
+
+
+def medidasMensagens_(ds,msg_ids):
+    return [medidasMensagens(ds,mids) for mids in [None]+list(msg_ids)]
+def medidasMensagens(ds,tids=None):
+    # TTM
+    if not tids:
+        mT=[ds.messages[i][3] for i in ds.message_ids]
+    else:
+        mT=[ds.messages[i][3] for i in tids]
+    tokens_msgs=[k.tokenize.wordpunct_tokenize(t) for t in mT] # tokens
+    knownw_msgs=[[i for i in toks if (i not in stopwords) and (i in WL_)] for toks in tokens_msgs]
+    stopw_msgs=[[i for i in toks if i in stopwords] for toks in tokens_msgs]
+    puncts_msgs=[[i for i in toks if
+         (len(i)==sum([(ii in puncts) for ii in i]))]
+         for toks in tokens_msgs] #
+    sents_msgs=[k.sent_tokenize(t) for t in mT] # tokens
+    nmsgs=len(mT)
+    Mchars_msgs,   Schars_msgs  = mediaDesvio_(mT)
+    Mtokens_msgs,  Stokens_msgs = mediaDesvio_(tokens_msgs)
+    Mknownw_msgs,  Sknownw_msgs = mediaDesvio_(knownw_msgs)
+    Mstopw_msgs,   Sstopw_msgs  = mediaDesvio_(stopw_msgs)
+    Mpuncts_msgs,  Spuncts_msgs = mediaDesvio_(puncts_msgs)
+    Msents_msgs,Ssents_msgs     = mediaDesvio_(sents_msgs)
+    mvars=("nmsgs",
+            "Msents_msgs","Ssents_msgs",
+            "Mtokens_msgs","Stokens_msgs",
+            "Mknownw_msgs","Sknownw_msgs",
+            "Mstopw_msgs","Sstopw_msgs",
+            "Mpuncts_msgs","Spuncts_msgs",
+            "Mchars_msgs","Schars_msgs",
+            )
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
 def medidasSentencas_(Ts=['list',"of","strings"]):
     return [medidasSentencas(i) for i in Ts]
 def medidasSentencas(T):

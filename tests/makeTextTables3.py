@@ -50,7 +50,7 @@ g.makeGeneralTable(gmeasures,TDIR)
 #cmeasures=g.charsMeasures(ds,pr,ts)
 #g.makeGeneralTable(cmeasures)
 
-ts,ncontractions=g.textUtils.makeText_(ds,pr); check("make text")
+ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
 char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
 g.textUtils.makeCharTable(char_measures,TDIR)
 
@@ -60,4 +60,10 @@ g.textUtils.makeTokenSizesTable(tok_measures,TDIR)
 
 sent_measures=g.textUtils.medidasSentencas_(ts); check("medidas sentenças")
 g.textUtils.makeSentencesTable(sent_measures,TDIR)
+
+msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
+g.textUtils.makeMessagesTable(msg_measures,TDIR)
+
+
+
 
