@@ -714,6 +714,43 @@ def medidasPOS(sentences_tokenized):
         vdict[mvar] = locals()[mvar]
     return vdict
 
+def makeWordnetTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline.tex"):
+    wms=wn_dict_list
+    mvars=("mmind","dmind",
+           "mmaxd","dmaxd",
+           "mnhol_","dnhol_",
+           "mnmer_","dnmer_",
+           "mndomains","dndomains",
+           "mnsimilar","dnsimilar",
+           "mnverb_groups","dnverb_groups",
+           "mnlemmas","dnlemmas",
+           "mnentailments","dnentailments",
+           "mnhypo_","dnhypo_",
+           "mnhyper_","dnhyper_",
+           )
+
+    wms_=[[wms[j][i] for j in range(4)] for i in mvars]
+    labelsh=("","g.","p.","i.","h.")
+    labels=("$\mu(min\,depth)$","$\sigma(min\,depth)$",
+            "$\mu(max\,depth)$",r"$\sigma(max\,depth)$",
+            "$\mu(holonyms)$",    "$\sigma(holonyms)$",
+            "$\mu(meronyms)$",    "$\sigma(meronyms)$",
+            "$\mu(domains)$",     "$\sigma(domains)$",
+            "$\mu(similar)$",     "$\sigma(similar)$",
+            "$\mu(verb\,groups)$","$\sigma(verb\,groups)$",
+            "$\mu(lemmas)$",      "$\sigma(lemmas)$",
+            "$\mu(entailments)$", "$\sigma(entailments)$",
+            "$\mu(hyponyms)$",    "$\sigma(hyponyms)$",
+            "$\mu(hypernyms)$",   "$\sigma(hypernyms)$",
+        )
+    caption=r"""Measures of wordnet features in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    data=wms_
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral_")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14,16,18,20,22])
+
+
+
 def makePOSTable(posMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="posInline.tex"):
     pms=posMensagens_dict
 #    pms_=[list(i["htags__"].items()) for i in pms]
@@ -824,6 +861,10 @@ def traduzPOS(astring):
     else:
         return "NOPOS"
         
+def medidasWordnet_(list_words_with_pos_tags):
+    return [medidasWordnet(i) for i in list_words_with_pos_tags]
+def medidasWordnet2_(list_wn_stuff):
+    return [medidasWordnet2(i) for i in list_wn_stuff]
 def medidasWordnet(words_with_pos_tags):
     WT=words_with_pos_tags
     WT_=[(i[0].lower(),i[1]) for j in WT for i in j]
@@ -845,7 +886,7 @@ def medidasWordnet(words_with_pos_tags):
     # estatísticas sobre posok
     # quais as tags?
     posok_=[i[1].pos() for i in posok]
-    ftags=[posok_.count(i)/len(posok) for i in ('s', 'a', 'n', 'r', 'v')]
+    ftags=[100*posok_.count(i)/len(posok) for i in ('s', 'a', 'n', 'r', 'v')]
     mvars=("WT_","wlists","posok","posnok","ftags")
     vdict={}
     for mvar in mvars:
@@ -855,33 +896,45 @@ def medidasWordnet2(wndict):
     sss=wndict["posok"]
     sss_=[i[1] for i in sss]
     hyperpaths=[i.hypernym_paths() for i in sss_]
-    top_hypernyms=[i[0][:4] for i in hyperpaths]
-    lexnames=[i.lexname().split(".")[-1] for i in sss_]
+    top_hypernyms=[i[0][:4] for i in hyperpaths] # fazer histograma por camada
+    lexnames=[i.lexname().split(".")[-1] for i in sss_] # rever
 
     mhol=[len(i.member_holonyms()) for i in sss_]
     phol=[len(i.part_holonyms()) for i in sss_]
     shol=[len(i.substance_holonyms()) for i in sss_]
-    hol=[mhol[i]+phol[i]+shol[i] for i in range(len(sss_))]
+    nhol_=[mhol[i]+phol[i]+shol[i] for i in range(len(sss_))] ###
 
-    mmer=[len(i.member_meronyms()) for i in sss_]
+    mmer=[len(i.member_meronyms()) for i in sss_] #
     pmer=[len(i.part_meronyms()) for i in sss_]
     smer=[len(i.substance_meronyms()) for i in sss_]
-    mer=[mmer[i]+pmer[i]+smer[i] for i in range(len(sss_))]
+    nmer_=[mmer[i]+pmer[i]+smer[i] for i in range(len(sss_))] ###
 
-    nlemmas=[len(i.lemmas()) for i in sss_]
+    nlemmas=[len(i.lemmas()) for i in sss_] ###
     nhyperpaths=[len(i) for i in hyperpaths]
     shyperpaths=[len(i) for j in hyperpaths for i in j]
-    nihypernyms=[len(i.instance_hypernyms()) for i in sss_]
+
     nentailments=[len(i.entailments()) for i in sss_]
-    nhypo=[len(i.hyponyms()) for i in sss_]
-    nhiypo=[len(i.instance_hyponyms()) for i in sss_]
-    maxd=[i.max_depth() for i in sss_]
-    mind=[i.min_depth() for i in sss_]
-    nregion_domains=[len(i.region_domains()) for i in sss_]
+
+    nhypernyms=[len(i.hypernyms()) for i in sss_]
+    nihypernyms=[len(i.instance_hypernyms()) for i in sss_]
+    nhyper_=[nhypernyms[i]+nihypernyms[i] for i in range(len(sss_))]
+
+    nhypo=[len(i.hyponyms()) for i in sss_] ###
+    nihypo=[len(i.instance_hyponyms()) for i in sss_]
+    nhypo_=[nhypo[i]+nihypo[i] for i in range(len(sss_))]
+
+    maxd=[i.max_depth() for i in sss_] ###
+    mind=[i.min_depth() for i in sss_] ###
+
+    nregion_domains=[len(i.region_domains()) for i in sss_] #
     ntopic_domains= [len(i.topic_domains())  for i in sss_]
     nusage_domains= [len(i.usage_domains())  for i in sss_]
+    ndomains=[nregion_domains[i]+ntopic_domains[i]+nusage_domains[i]
+            for i in range(len(sss_))] ###
+
     nsimilar=[    len(i.similar_tos()) for i in sss_]
     nverb_groups=[len(i.verb_groups()) for i in sss_]
+
     mvars=list(locals().keys()); mvars.remove("wndict")
     mvars_=mvars[:]
     mvars_.remove("sss_");       mvars_.remove("sss");

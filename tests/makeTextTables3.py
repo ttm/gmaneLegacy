@@ -68,6 +68,31 @@ g.textUtils.makeMessagesTable(msg_measures,TDIR)
 pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
 g.textUtils.makePOSTable(pos_measures,TDIR)
 
+wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
+wn_measures2=g.textUtils.medidasWordnet2_(wn_measures); check("medidas wordnet2")
+g.textUtils.makeWordnetTable(wn_measures2,TDIR)
+
+
+
+# 2 tabelas?
+# uma com medidas de medias e desvios de hiperonimos e hiponimos, 
+# outra com a maior incidencia das raizes
+# fazer separado para as pos tags?
+# sim.
+
+# terminar de fazer o roteiro da analise com kolm e pca
+# jogar tudo no SI para varias listas
+# fazer tabelas com medias gerais das medidas, dentre todas as listas
+
+# colocar resultados principais no documento principal,
+# com os textos perfeitos
+
+
+
+
+
+
+
 
 
 
