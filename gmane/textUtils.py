@@ -3,6 +3,10 @@
 # e entrega os objetos certinho
 import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os
 from nltk.corpus import wordnet as wn
+import builtins as B
+B.me=[]
+B.tt_=[]
+B.tt=[]
 puncts=set(string.punctuation)
 #w=open("./wordsEn.txt","r")
 #w=w.read()
@@ -717,16 +721,28 @@ def medidasPOS(sentences_tokenized):
 
 def S(acounter):
     return sorted(acounter.items(),key=lambda x: -x[1])
-def auxWnTb(labels,labelsh,data,level,tabfname,wn_dict_list):
+def auxWnTb(tt,level,tabfname,wn_dict_list):
+    tt_=[S(i) for i in tt]
+    labels=[i[0] for i in tt_[0][:12]]
     if labels:
-        if level=="0":
+        wms_=[[tt[i][j] for i in range(4)] for j in labels]
+        labels=[i.replace("_","\_") for i in labels]
+        if level=="root":
             caption=r"""Counts for the most incident synsets at the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs). Yes.""".format(level)
         else:
             caption=r"""Counts for the most incident synsets {} step from the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs).""".format(level)
         # normalizar este data com relação às colunas
-        g.lTable(labels,labelsh,data,caption,tabfname,"textGeral__")
+        B.me.append(wms_)
+        B.tt_.append(tt_)
+        B.tt.append(tt)
+        data=n.array(wms_)
+        data=100*data/data.sum(axis=0)
+        data=data[:12]
+        data=n.vstack((data,data.sum(axis=0)))
+        labels+=[r"{{\bf total}}"]
+        g.lTable(labels,labelsh,data,caption,tabfname,"textGeral_")
         ME(tabfname[:-4],"\\bf",[(0,i) for i in range(1,5)])
-        DL(tabfname[:-4]+"_",[1],[1])
+        DL(tabfname[:-4]+"_",[1,-3],[1])
     else:
         print(tabfname.split("/")[-1], "No labels:",labels,
                 "\nPropably no hypernyms:",
@@ -736,37 +752,20 @@ def auxWnTb(labels,labelsh,data,level,tabfname,wn_dict_list):
 def makeWordnetTable2a(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2a.tex"):
     """Table about the most incident roots"""
     t0=[c.Counter([i[0].name() for i in j["top_hypernyms"]]) for j in wn_dict_list]
-    t0_=[S(i) for i in t0]
-    labels=[i[0] for i in t0_[0][:12]]
-    wms_=[[t0[i][j] for i in range(4)] for j in labels]
-    auxWnTb(labels,labelsh,wms_,"root",table_dir+fname,wn_dict_list)
+    auxWnTb(t0,"root",table_dir+fname,wn_dict_list)
 def makeWordnetTable2b(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2b.tex"):
     """Table about the most incident roots"""
     t1=[c.Counter([i[1].name() for i in j["top_hypernyms"] if len(i)>1]) for j in wn_dict_list]
-    t1_=[S(i) for i in t1]
-    labels=[i[0] for i in t1_[0][:12]]
-    wms_=[[t1[i][j] for i in range(4)] for j in labels]
-    labels=[i.replace("_","\_") for i in labels]
     #auxWnTb(labels,labelsh,data,level,tabfname)
-    auxWnTb(labels,labelsh,wms_,"one",table_dir+fname,wn_dict_list)
+    auxWnTb(t1,"one",table_dir+fname,wn_dict_list)
 def makeWordnetTable2c(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2c.tex"):
     """Table about the most incident roots"""
     t2=[c.Counter([i[2].name() for i in j["top_hypernyms"] if len(i)>2]) for j in wn_dict_list]
-    t2_=[S(i) for i in t2]
-    labels=[i[0] for i in t2_[0][:12]]
-    wms_=[[t2[i][j] for i in range(4)] for j in labels]
-    labelsh=("","g.","p.","i.","h.")
-    labels=[i.replace("_","\_") for i in labels]
-    auxWnTb(labels,labelsh,wms_,"one",table_dir+fname,wn_dict_list)
+    auxWnTb(t2,"two",table_dir+fname,wn_dict_list)
 def makeWordnetTable2d(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2d.tex"):
     """Table about the most incident roots"""
     t3=[c.Counter([i[3].name() for i in j["top_hypernyms"] if len(i)>3]) for j in wn_dict_list]
-    t3_=[S(i) for i in t3]
-    labels=[i[0] for i in t3_[0][:12]]
-    wms_=[[t3[i][j] for i in range(4)] for j in labels]
-    labelsh=("","g.","p.","i.","h.")
-    labels=[i.replace("_","\_") for i in labels]
-    auxWnTb(labels,labelsh,wms_,"one",table_dir+fname,wn_dict_list)
+    auxWnTb(t3,"three",table_dir+fname,wn_dict_list)
 def makeWordnetPOSTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnPOSInline.tex"):
     wms=wn_dict_list
     labels=["N","ADJ","VERB","ADV","POS","POS!"]
