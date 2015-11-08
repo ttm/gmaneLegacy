@@ -70,19 +70,20 @@ g.textUtils.makePOSTable(pos_measures,TDIR)
 
 wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
 g.textUtils.makeWordnetPOSTable(wn_measures,TDIR ) # medias e desvios das incidencias dos atributos
-poss=("n","as","v","r")
-g.textUtils.makeWordnetPOSTables(wn_measures,TDIR,poss ) # escreve arquivo com todas as 5 tabelas para cada pos
+
+wn_measures2_pos=g.textUtils.medidasWordnet2_POS(wn_measures); check("medidas wordnet 2")
+g.textUtils.makeWordnetTables2_POS(wn_measures2_pos,TDIR) # escreve arquivo com todas as 5 tabelas para cada pos
 
 # tabela com incidência de cada uma destas classes no wn
 #  e número de palavras descartadas (dentre as que foram etiquetadas pos)
 # e dentre os tokens totais
-for pos in poss:
-    wn_measures2=g.textUtils.medidasWordnet2_(wn_measures,pos); check("medidas wordnet2")
-    g.textUtils.makeWordnetTable(wn_measures2,TDIR  ,fname="wnInline2-{}.tex".format(pos)) # medias e desvios das incidencias dos atributos
-    g.textUtils.makeWordnetTable2a( wn_measures2,TDIR,fname="wnInline2a-{}.tex".format(pos)) # contagem dos synsets raiz
-    g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,fname="wnInline2b-{}.tex".format(pos)) # contagem dos synsets raiz
-    g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,fname="wnInline2c-{}.tex".format(pos)) # contagem dos synsets raiz
-    g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,fname="wnInline2d-{}.tex".format(pos)) # contagem dos synsets raiz
+#for pos in poss:
+#    wn_measures2=g.textUtils.medidasWordnet2_(wn_measures,pos); check("medidas wordnet2")
+#    g.textUtils.makeWordnetTable(wn_measures2,TDIR  ,fname="wnInline2-{}.tex".format(pos)) # medias e desvios das incidencias dos atributos
+#    g.textUtils.makeWordnetTable2a( wn_measures2,TDIR,fname="wnInline2a-{}.tex".format(pos)) # contagem dos synsets raiz
+#    g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,fname="wnInline2b-{}.tex".format(pos)) # contagem dos synsets raiz
+#    g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,fname="wnInline2c-{}.tex".format(pos)) # contagem dos synsets raiz
+#    g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,fname="wnInline2d-{}.tex".format(pos)) # contagem dos synsets raiz
 
 #g.textUtils.makeWordnetTable3(wn_measures2,TDIR) # tabelas anteriores, mas separadas as 4 classes morfossintáticas
 

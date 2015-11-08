@@ -1,7 +1,7 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle
+import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os
 from nltk.corpus import wordnet as wn
 puncts=set(string.punctuation)
 #w=open("./wordsEn.txt","r")
@@ -723,6 +723,7 @@ def auxWnTb(labels,labelsh,data,level,tabfname,wn_dict_list):
             caption=r"""Counts for the most incident synsets at the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs). Yes.""".format(level)
         else:
             caption=r"""Counts for the most incident synsets {} step from the semantic roots in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs).""".format(level)
+        # normalizar este data com relação às colunas
         g.lTable(labels,labelsh,data,caption,tabfname,"textGeral__")
         ME(tabfname[:-4],"\\bf",[(0,i) for i in range(1,5)])
         DL(tabfname[:-4]+"_",[1],[1])
@@ -768,15 +769,42 @@ def makeWordnetTable2d(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRede
     auxWnTb(labels,labelsh,wms_,"one",table_dir+fname,wn_dict_list)
 def makeWordnetPOSTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnPOSInline.tex"):
     wms=wn_dict_list
-    labels=["N","ADJ","VERB","ADV"]
+    labels=["N","ADJ","VERB","ADV","POS","POS!"]
     data=[[wms[i]["ftags"][j] for i in range(4)] for j in range(4)]
     # incluir % com relação aas palavras totais etiquetadas
-    caption=r"""Measures of wordnet features in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
+    # variaveis [posok WL_ e posnok
+    data+=[[100*len(wms[i]["posok"])/len(wms[i]["WT_"]) for i in range(4)]]
+    data+=[[100*(len(wms[i]["posok"])/(len(wms[i]["posok"])+len(wms[i]["posnok"]))) for i in range(4)]]
+    caption=r"""Percentage of synsets with each of the POS tags used by Wordnet. The last lines give the percentage of words considered from all of the tokens (POS) and from the words with synset (POS!). The tokens not considered are punctuations, unrecognized words, words without synsets, stopwords and words for which Wordnet has no synset  tagged with POS tags . Values for each Erd\"os sectors are in the columns {{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs."""
     labelsh=("","g.","p.","i.","h.")
     g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral_")
     ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
-    DL(table_dir+fname[:-4]+"_",[1],[1])
-
+    DL(table_dir+fname[:-4]+"_",[1,-4],[1])
+def medidasWordnet2_POS(wn_measures,poss=("n","as","v","r")):
+    wn_measures2={}
+    for pos in poss:
+        wn_measures2[pos]=g.textUtils.medidasWordnet2_(wn_measures,pos)
+    return wn_measures2
+def makeWordnetTables2_POS(wn_dict_pos, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnPOSInline2",poss=("n","as","v","r"),tag=""):
+    TDIR=table_dir
+    for pos in poss:
+        wn_measures2=wn_dict_pos[pos]
+        g.textUtils.makeWordnetTable(  wn_measures2,TDIR  ,fname="{}-{}.tex". format(fname,pos,tag)) # medias e desvios das incidencias dos atributos
+        g.textUtils.makeWordnetTable2a(wn_measures2,TDIR,  fname="{}a-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,  fname="{}b-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,  fname="{}c-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,  fname="{}d-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+    # make one file from all 20 (max) tables
+    names="{}-{}_.tex","{}a-{}_.tex","{}b-{}_.tex","{}c-{}_.tex","{}d-{}_.tex"
+    tx=""
+    for pos in poss:
+        tx+="\n\n% POS -> "+pos
+        for name in names:
+            name_=TDIR+name.format(fname,pos,tag)
+            if os.path.isfile(name_):
+                tx+="\n% fname -> "+name_+"\n"
+                tx+=open(name_).read()
+    g.writeTex(tx,TDIR+fname+".tex")
 def makeWordnetTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline.tex"):
     wms=wn_dict_list
     mvars=("mmind","dmind",
