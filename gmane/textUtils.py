@@ -611,7 +611,15 @@ def makeCorrelationTable_(measures_pca, table_dir="/home/r/repos/artigoTextoNasR
     pts=[(i+1,j+1) for i,j in zip(ii,jj)]
     B.thing=nz,data,pts
     ME(table_dir+fname[:-4],"\\bf",pts)
-    DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,4,6,7,8])
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,4,
+                                         6,7,8,
+                                         10,11,12,
+                                         14,15,16,
+                                         18,19,20,
+                                         22,23,24,
+                                         26,27,28,
+                                         30,31,32,
+                                         34,35,36])
 
 
 def makeCorrelationTable(correlationMatrix, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="correlationInline.tex",mvars=[]):
@@ -1197,6 +1205,34 @@ def textosParticipante(ds,authors=None):
             msgid=msg[0]
             texts[author]+=ds.messages[msgid][-1]
     return texts
+def makePCATable_(medidas_pca,table_dir,fname="pcaInline.tex"):
+    vecs=[i["pca"].feature_vec_.real for i in medidas_pca]
+    vals=[i["pca"].eig_values_.real for i in medidas_pca]
+    labelsh=[""]+["PC{}".format(i+1) for i in range(vecs[0].shape[1])]
+    labels=medidas_pca[0]["vlabels"]
+    labels=labels+[r"$\lambda$"]
+    data=[]
+    for secn in range(len(vecs[0])):
+        for vec in vecs:
+            data.append(vec[secn])
+    caption="PCA formation"
+    data=n.vstack(data+[val[:vecs[0].shape[1]] for val in vals])
+    labels_=[(i,"","","") for i in labels]
+    labels__=[i for j in labels_ for i in j]
+    labels__[1:4]=["(p.)","(i.)","(h.)"]
+    g.lTable(labels__,labelsh,data,caption,table_dir+fname,"textPCA")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,6)]+[(i,0) for i in range(1,11)])
+    DL(table_dir+fname[:-4]+"_",[1,-6],[1],[2,3,4,
+                                         6,7,8,
+                                         10,11,12,
+                                         14,15,16,
+                                         18,19,20,
+                                         22,23,24,
+                                         26,27,28,
+                                         30,31,32,
+                                         34,35,36,
+                                         38,39,40])
+
 def makePCATable(vecs,vals,labs,table_dir,fname="pcaInline.tex"):
     labelsh=[""]+["PC{}".format(i+1) for i in range(vecs.shape[1])]
     labels=labs+[r"$\lambda$"]

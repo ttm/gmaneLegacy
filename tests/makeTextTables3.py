@@ -93,9 +93,8 @@ g.textUtils.makeKSTables(dists2,
 nm=es.structs[4]
 medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__) # retorna medidas para plotar e tabelas
 g.textUtils.makeCorrelationTable_(medidas_pca,TDIR,"correlationInline.tex")
-g.textUtils.makePCATable(mpca.feature_vec_,
-                         mpca.eig_values_,labels,TDIR,)
-mpca.plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
+g.textUtils.makePCATable_(medidas_pca,TDIR)
+medidas_pca[0]["pca"].plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
 
 # fazer matriz de correlação por spearman
 
