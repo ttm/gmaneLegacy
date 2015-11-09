@@ -225,6 +225,8 @@ class PCA:
             foo=(self.eig_values_[:4])
             foo__=r"$\lambda = $"+("%.2f, "*len(foo) % tuple(foo))
             title+=" "+foo__
+        if labels=="sym":
+            pass
 
         p.xlabel(label1, fontsize=15)
         p.ylabel(label2, fontsize=15)

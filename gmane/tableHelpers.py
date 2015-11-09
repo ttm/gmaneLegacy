@@ -1,4 +1,4 @@
-import numpy as n, string, re
+import numpy as n, string, re, builtins as B
 import gmane as g
 def fSize(tablefname,ftag="scriptsize",write=False):
     """Change size of table font"""
@@ -114,7 +114,7 @@ def markEntries(table,marker):
     return lines
 def encapsulateTable(string_table,column_labels, caption,ttype=None):
     """Uses the output of makeTables to render a complete latex table"""
-    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp"):
+    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp","textCorr"):
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
     elif ttype=="audioDistances":
         header="\\begin{table*}[h!]\n\\begin{center}\n\\begin{tabular}{| l |"+" c |"*(string_table.split("hline")[0].count("&")) +"}\\hline\n"
@@ -128,7 +128,7 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
     if column_labels:
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
     caption_="\\caption{{{}}}\n".format(caption)
-    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp"):
+    if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp","textCorr"):
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
     elif ttype=="audioDistances":
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)
@@ -150,7 +150,7 @@ def lTable(labels,labelsh,data,caption,filename,ttype="kolmNull"):
     #    print(str(tval)+".00",str(tval))
     #    t1=t1.replace(" {}.00 ".format(tval)," {} ".format(tval))
     t2=encapsulateTable(t1,labelsh,caption,ttype)
-    print(filename,"RPINTEEEEEEEED")
+    B.b=(t1,t1_,t2)
     writeTex(t2,filename)
 #def makeTables2(data,two_decimal=False):
 #    """Variation of makeTables for tables withour row labels"""
@@ -170,6 +170,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
     else:
         if labels[0]=="$cc$" and len(labels)>10:
             data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$","$bt$") else (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow)) if labels[i] != "$\\sigma_{dis}$" else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="textCorr":
+            data="".join([str(labels[i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif labels[0]=="$cc$" and len(labels)>5:
             data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$",) 
                 else 
@@ -301,7 +303,7 @@ def dl(fname,hl,vl,hl_=[],over=1):
     fname+=".tex"
     foo=g.doubleLines(fname,hlines=hl,vlines=vl,hlines_=hl_)
     if not over:
-        fname=tablefname.replace(".tex","_.tex")
+        fname=fname.replace(".tex","_.tex")
     g.writeTex(foo,fname)
 def me(fname,mark,locs,over=0):
     fn=fname+".tex"

@@ -44,6 +44,7 @@ pr=es.structs[-1]
 
 #TDIR="/home/r/repos/stabilityInteraction/tables/"
 TDIR="/home/r/repos/artigoTextoNasRedes/tables/"
+TDIRf="/home/r/repos/artigoTextoNasRedes/figs/"
 gmeasures=g.generalMeasures(ds,pr,ts)
 g.makeGeneralTable(gmeasures,TDIR)
 
@@ -98,9 +99,17 @@ medidasP=g.textUtils.medidasParticipante(textosP)
 medidas=g.textUtils.medidasPCA(medidasP,nm)
 # relaciona com cada setor para
 # tirar a correlação e PCA
-mvars=("clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents")
+mvars=["clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents"]
 mpca=g.textUtils.tPCA(medidas,mvars)
-# escolher algumas medidas a mais
+mpca.plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
+
+# escolher todas as medidas para o
+# mpca=g.textUtils.tPCA_real(medidas,mvars)
+labels=[r"$cc$",r"$d$",r"$s$",r"$\mu_S(p)$",r"$\sigma_S(p)$",r"$\mu_S(kw)$",r"$\sigma_S(kw)$",r"$\mu_S(sw)$",r"$\sigma_S(sw)$"]
+g.textUtils.makeCorrelationTable(mpca.C,TDIR,"correlationInline.tex",labels)
+
+
+
 # fazer tabela com todas a correlacoes maiores que ?
 # plotar para os setores diferentes?
 

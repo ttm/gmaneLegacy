@@ -587,6 +587,19 @@ def medidasTamanhosTokens(medidas_tokens):
     mdict.update(mediaDesvio("kwsw",MT))
     mdict.update(mediaDesvio("sw",MT))
     return mdict
+def makeCorrelationTable(correlationMatrix, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="correlationInline.tex",mvars=[]):
+    #mvars=[i.replace("_","") for i in mvars]
+    labelsh=[""]+mvars
+    labels=mvars
+    caption=r"""Correlation of textual and topological metrics."""
+    data=correlationMatrix*100
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textCorr")
+#    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+#    DL(table_dir+fname[:-4]+"_",[1],[1],[])
+    #DL(table_dir+fname[:-4],[1],[1],[],0)
+
+
+
 def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="messagesInline.tex"):
     mms=medidasMensagens_dict
     mvars=("nmsgs",
