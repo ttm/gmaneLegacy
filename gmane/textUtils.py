@@ -349,6 +349,48 @@ def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoText
     ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,5,7,8])
 
+def medidasSinais_(TS):
+    return [medidasSinais(T) for T in TS]
+def medidasSinais(T):
+    wtok=k.tokenize.wordpunct_tokenize(T)
+    lens_tok=[len(i) for i in wtok]
+    lens_word=[len(i) for i in wtok if (i not in stopwords) and (i in WL_)]
+    lens_sent=[len(i) for i in k.sent_tokenize(T)]
+    mvars=("lens_tok","lens_word","lens_sent")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
+def ksAll(sigDict,mkeys):
+    l=[]
+    for key in mkeys:
+        l.append([])
+        for i in range(4):
+            l[-1].append([])
+            for j in range(4):
+                vals=g.ksStatistics.kolmogorovSmirnovDistance__(sigDict[i][key],sigDict[j][key])
+                l[-1][-1].append(vals)
+    return l
+def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fnames=None,tags=None):
+    labels=labelsh[1:]
+    labels_=[(l,"") for l in labels]
+    labels__=[i for j in labels_ for i in j]
+    caption="KS distances on {}."
+    count=0
+    if not fnames:
+        fnames=[str(i) for i in range(len(dists))]
+    if not tags:
+        tags=[str(i) for i in range(len(dists))]
+    for meas,fname,tag in zip(dists,fnames,tags):
+        print(meas,fname,tag,"AHUIAHUIAHUIAHI")
+        fname_=table_dir+fname
+        g.lTable(labels__,labelsh,meas,caption.format(tag),
+                fname_+".tex","ksDistances")
+        ME(fname_,"\\bf",[(0,i) for i in range(1,5)]+[(i,0) for i in range(1,9)])
+#        ME(fname_+"_","\\bf",,1)
+        DL(fname_+"_",[1],[1],[2,4,6,8])
+
+
 def medidasTokens__(lt=("texts",),ct=("ncontractions",)):
     return [medidasTokens_(i,j) for i,j in zip(lt,ct)]
 def medidasTokens_(T,ncontract):

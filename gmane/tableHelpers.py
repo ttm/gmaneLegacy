@@ -182,6 +182,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
                        (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow))           if labels[i] != "$bt$" 
                       else 
                           ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="ksDistances":
+            data="".join([((str(labels[i])+" & %.3f "*4 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="audioDistances":
             data="".join([((str(labels[i])+" & %.3f "*15 +"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textsDistances":
@@ -286,6 +288,12 @@ def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
     table=header + makeTables(labels,tab_data,True) + footer
     return table
 
+def vstackTables(fname1,fname2,fname3):
+    s1=open(fname1+".tex").read()
+    s2=open(fname2+".tex").read()
+    s1_=re.split("\n\\\\end{tabular",s1)[0]
+    s2_=re.split("tabular.*\\hline\n &.*g.*hline",s2)[1]
+    writeTex(s1_+"\\hline"+s2_,fname3+".tex")
 def writeTex(string,filename):
     with open(filename,"w") as f:
         f.write(string)

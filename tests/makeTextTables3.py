@@ -52,48 +52,52 @@ g.makeGeneralTable(gmeasures,TDIR)
 
 ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
 
-char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
-g.textUtils.makeCharTable(char_measures,TDIR)
-
-tok_measures=g.textUtils.medidasTokens__(ts,ncontractions); check("medidas tokens")
-g.textUtils.makeTokensTable(tok_measures,TDIR)
-g.textUtils.makeTokenSizesTable(tok_measures,TDIR)
-
+#char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
+#g.textUtils.makeCharTable(char_measures,TDIR)
+#
+#tok_measures=g.textUtils.medidasTokens__(ts,ncontractions); check("medidas tokens")
+#g.textUtils.makeTokensTable(tok_measures,TDIR)
+#g.textUtils.makeTokenSizesTable(tok_measures,TDIR)
+##g.textUtils.makeTokenSizesTable(tok_measures,TDIR)
+#g.tableHelpers.vstackTables(TDIR+"tokensInline_",TDIR+"tokenSizesInline_",TDIR+"tokensMergedInline")
+#
 sent_measures=g.textUtils.medidasSentencas_(ts); check("medidas sentenças")
-g.textUtils.makeSentencesTable(sent_measures,TDIR)
-
-msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
-g.textUtils.makeMessagesTable(msg_measures,TDIR)
-
+#g.textUtils.makeSentencesTable(sent_measures,TDIR)
+#
+#msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
+#g.textUtils.makeMessagesTable(msg_measures,TDIR)
+#
 pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
-g.textUtils.makePOSTable(pos_measures,TDIR)
+#g.textUtils.makePOSTable(pos_measures,TDIR)
+#
+#wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
+#g.textUtils.makeWordnetPOSTable(wn_measures,TDIR ) # medias e desvios das incidencias dos atributos
+#
+#wn_measures2_pos=g.textUtils.medidasWordnet2_POS(wn_measures); check("medidas wordnet 2")
+#g.textUtils.makeWordnetTables2_POS(wn_measures2_pos,TDIR) # escreve arquivo com todas as 5 tabelas para cada pos
 
-wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
-g.textUtils.makeWordnetPOSTable(wn_measures,TDIR ) # medias e desvios das incidencias dos atributos
+sinais=g.textUtils.medidasSinais_(ts)
+dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"])
+ldists=[] # a table per entry
+for dists_meas in dists:
+    l=[]
+    for sect1_meas in dists_meas:
+        calphas=[]
+        dnns=[]
+        for sect2_val in sect1_meas:
+           calpha,dnn=sect2_val 
+           calphas+=[calpha]
+           dnns+=[dnn]
+        l+=[calphas,dnns]
+    ldists.append(l) # new table
+        
+g.textUtils.makeKSTables(ldists,
+        fnames=("ksTokens","ksWords","ksSents"),
+        tags=("size of tokens","size of known words","size of sentences"))
 
-wn_measures2_pos=g.textUtils.medidasWordnet2_POS(wn_measures); check("medidas wordnet 2")
-g.textUtils.makeWordnetTables2_POS(wn_measures2_pos,TDIR) # escreve arquivo com todas as 5 tabelas para cada pos
-
-# tabela com incidência de cada uma destas classes no wn
-#  e número de palavras descartadas (dentre as que foram etiquetadas pos)
-# e dentre os tokens totais
-#for pos in poss:
-#    wn_measures2=g.textUtils.medidasWordnet2_(wn_measures,pos); check("medidas wordnet2")
-#    g.textUtils.makeWordnetTable(wn_measures2,TDIR  ,fname="wnInline2-{}.tex".format(pos)) # medias e desvios das incidencias dos atributos
-#    g.textUtils.makeWordnetTable2a( wn_measures2,TDIR,fname="wnInline2a-{}.tex".format(pos)) # contagem dos synsets raiz
-#    g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,fname="wnInline2b-{}.tex".format(pos)) # contagem dos synsets raiz
-#    g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,fname="wnInline2c-{}.tex".format(pos)) # contagem dos synsets raiz
-#    g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,fname="wnInline2d-{}.tex".format(pos)) # contagem dos synsets raiz
-
-#g.textUtils.makeWordnetTable3(wn_measures2,TDIR) # tabelas anteriores, mas separadas as 4 classes morfossintáticas
 
 
 
-# 2 tabelas?
-# uma com medidas de medias e desvios de hiperonimos e hiponimos, 
-# outra com a maior incidencia das raizes
-# fazer separado para as pos tags?
-# sim.
 
 # terminar de fazer o roteiro da analise com kolm e pca
 # jogar tudo no SI para varias listas

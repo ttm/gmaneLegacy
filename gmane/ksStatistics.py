@@ -56,6 +56,28 @@ def kolmogorovSmirnovDistance_(seq1,seq2,bins=300):
     fact=((n1*n2)/(n1+n2))**0.5
     calpha=Dnn*fact
     return calpha, fact, Dnn
+def kolmogorovSmirnovDistance__(seq1,seq2,bins=300):
+    """Calculate distance between histograms
+    
+    Adapted from the Kolmogorov-Smirnov test,
+    returns calpha, and Dnn"""
+    amin=min(min(seq1),min(seq2))
+    amax=max(max(seq1),max(seq2))
+    bins=n.linspace(amin,amax,bins+1,endpoint=True)
+    h1=n.histogram(seq1,bins,density=True)[0]
+    h2=n.histogram(seq2,bins,density=True)[0]
+    space=bins[1]-bins[0]
+    cs1=n.cumsum(h1*space)
+    cs2=n.cumsum(h2*space)
+
+    dc=n.abs(cs1-cs2)
+    Dnn=max(dc)
+    n1=len(seq1)
+    n2=len(seq2)
+    fact=((n1*n2)/(n1+n2))**0.5
+    calpha=Dnn*fact
+    return calpha, Dnn
+
 def dnnNorm(m1,d1,m2,d2,lb=-4,rb=4,NE=1000000):
     a=st.norm(m1,d1)
     b=st.norm(m2,d2)
