@@ -109,6 +109,8 @@ labels=[r"$cc$",r"$d$",r"$s$",r"$\mu_S(p)$",r"$\sigma_S(p)$",r"$\mu_S(kw)$",r"$\
 g.textUtils.makeCorrelationTable(mpca.C,TDIR,"correlationInline.tex",labels)
 
 
+g.textUtils.makePCATable(mpca.feature_vec_,
+                         mpca.eig_values_,labels,TDIR,)
 
 # fazer tabela com todas a correlacoes maiores que ?
 # plotar para os setores diferentes?

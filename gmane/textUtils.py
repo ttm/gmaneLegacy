@@ -1150,6 +1150,14 @@ def textosParticipante(ds):
             msgid=msg[0]
             texts[author]+=ds.messages[msgid][-1]
     return texts
+def makePCATable(vecs,vals,labs,table_dir,fname="pcaInline.tex"):
+    labelsh=[""]+["PC{}".format(i+1) for i in range(vecs.shape[1])]
+    labels=labs+[r"$\lambda$"]
+    data=n.vstack((vecs,vals[:vecs.shape[1]]))
+    caption="PCA formation"
+    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral_")
+    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,6)]+[(i,0) for i in range(1,11)])
+    DL(table_dir+fname[:-4]+"_",[1,-3],[1],[2,3,5,7,8])
 def tPCA(medidas,keys):
     data=[]
     for author in medidas:
@@ -1158,7 +1166,7 @@ def tPCA(medidas,keys):
             data[-1]+=[medidas[author][key]]
     data_=n.array(data)
     data__=data_.T
-    return g.pca.PCA(data__)
+    return g.pca.PCA(data__,final_dimensions=5)
 
 
 from sklearn.feature_extraction.text import TfidfVectorizer

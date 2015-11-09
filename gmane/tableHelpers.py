@@ -170,6 +170,8 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
     else:
         if labels[0]=="$cc$" and len(labels)>10:
             data="".join([((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\n")%tuple(datarow)) if labels[i] in ("$cc$","$bt$") else (((labels[i]+" & %.2f "*len(datarow)+"\\\\\n")%tuple(datarow)) if labels[i] != "$\\sigma_{dis}$" else ((labels[i]+" & %.2f "*len(datarow)+"\\\\\\hline\\hline\n")%tuple(datarow))) for i, datarow in enumerate(data)])
+        elif ttype=="textGeral_":
+            data="".join([str(labels[i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textCorr":
             data="".join([str(labels[i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif labels[0]=="$cc$" and len(labels)>5:
@@ -205,8 +207,6 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
         elif ttype=="textGeral":
             dataFoo="".join([str(labels[:1][i])+((" & %d "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data[:1])])
             data=dataFoo+"".join([str(labels[1:][i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data[1:])])
-        elif ttype=="textGeral_":
-            data="".join([str(labels[i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="textGeral__":
             data="".join([str(labels[i])+((" & %d "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
         elif ttype=="kolmDiff2":
