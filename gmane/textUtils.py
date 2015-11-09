@@ -587,6 +587,33 @@ def medidasTamanhosTokens(medidas_tokens):
     mdict.update(mediaDesvio("kwsw",MT))
     mdict.update(mediaDesvio("sw",MT))
     return mdict
+def makeCorrelationTable_(measures_pca, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="correlationInline.tex"):
+    mp=measures_pca
+    cors=[i["pca"].C for i in mp]
+    cors_=[]
+    for secn in range(len(cors[0])):
+        for cor in cors: # cor correlation measure
+            cors_.append(cor[secn])
+    data=cors_
+    labels=mp[0]["vlabels"]
+    labelsh=[""]+labels
+    labels_=[(i,"","","") for i in labels]
+    labels__=[i for j in labels_ for i in j]
+    labels__[1:4]=["(p.)","(i.)","(h.)"]
+    caption="Pierson correlation coefficient for the topological and textual measures."
+    g.lTable(labels__,labelsh,data,caption,table_dir+fname,"textCorr")
+    # renderiza matriz como tabela
+    #ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    nz=(n.abs(n.array(data))>.6).nonzero()
+    ii=nz[0]
+    jj=nz[1]
+    #pts=[(i,j) for i,j in zip(ii,jj)]
+    pts=[(i+1,j+1) for i,j in zip(ii,jj)]
+    B.thing=nz,data,pts
+    ME(table_dir+fname[:-4],"\\bf",pts)
+    DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,4,6,7,8])
+
+
 def makeCorrelationTable(correlationMatrix, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="correlationInline.tex",mvars=[]):
     #mvars=[i.replace("_","") for i in mvars]
     labelsh=[""]+mvars
@@ -1135,6 +1162,24 @@ def medidasParticipante(dict_auth_text):
         medidas.update(medidas2)
         medidas_autor[author]=medidas
     return medidas_autor
+
+
+def medidasPCA2_(ds,nm,authors_lists=None):
+    mall=medidasPCA2(ds,nm)
+    return [mall]+[medidasPCA2(ds,nm,authors) for authors in authors_lists]
+def medidasPCA2(ds,nm,authors=None):
+    textosP= textosParticipante(ds,authors)
+    medidasP=medidasParticipante(textosP)
+    medidas_autor=g.textUtils.medidasPCA(medidasP,nm)
+
+    vkeys=["clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents"]
+    pca=g.textUtils.tPCA(medidas_autor,vkeys)
+    vlabels=[r"$cc$",r"$d$",r"$s$",r"$\mu_S(p)$",r"$\sigma_S(p)$",r"$\mu_S(kw)$",r"$\sigma_S(kw)$",r"$\mu_S(sw)$",r"$\sigma_S(sw)$"]
+    mvars=("vlabels","pca","vkeys","medidas_autor","medidasP","textosP")
+    vdict={}
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    return vdict
 def medidasPCA(medidas_participante_dict,network_measures):
     nm,mp=network_measures,medidas_participante_dict
     for author in mp:
@@ -1142,9 +1187,11 @@ def medidasPCA(medidas_participante_dict,network_measures):
         mp[author]["strength"]=nm.strengths[author]
         mp[author]["clustering"]=nm.clusterings[author]
     return mp
-def textosParticipante(ds):
+def textosParticipante(ds,authors=None):
     texts={}
-    for author in ds.author_messages:
+    if not authors:
+        authors=ds.author_messages
+    for author in authors:
         texts[author]=""
         for msg in ds.author_messages[author]:
             msgid=msg[0]

@@ -90,28 +90,37 @@ g.textUtils.makeKSTables(dists2,
         tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences"))
 
 # correlação pierson e spearman (tem necessidade das duas?)
-# pearson pegamos pelo PCA:
-# 1) fazer as medidas para cada participante
 nm=es.structs[4]
-textosP=g.textUtils.textosParticipante(ds)
-medidasP=g.textUtils.medidasParticipante(textosP)
-# 2) vincular aas medidas da rede:
-medidas=g.textUtils.medidasPCA(medidasP,nm)
-# relaciona com cada setor para
-# tirar a correlação e PCA
-mvars=["clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents"]
-mpca=g.textUtils.tPCA(medidas,mvars)
-mpca.plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
-
-# escolher todas as medidas para o
-# mpca=g.textUtils.tPCA_real(medidas,mvars)
-labels=[r"$cc$",r"$d$",r"$s$",r"$\mu_S(p)$",r"$\sigma_S(p)$",r"$\mu_S(kw)$",r"$\sigma_S(kw)$",r"$\mu_S(sw)$",r"$\sigma_S(sw)$"]
-g.textUtils.makeCorrelationTable(mpca.C,TDIR,"correlationInline.tex",labels)
-
-
+medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__) # retorna medidas para plotar e tabelas
+g.textUtils.makeCorrelationTable_(medidas_pca,TDIR,"correlationInline.tex")
 g.textUtils.makePCATable(mpca.feature_vec_,
                          mpca.eig_values_,labels,TDIR,)
+mpca.plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
 
+# fazer matriz de correlação por spearman
+
+## TTM
+## 1) fazer as medidas para cada participante
+#nm=es.structs[4]
+#textosP=g.textUtils.textosParticipante(ds)
+#medidasP=g.textUtils.medidasParticipante(textosP)
+## 2) vincular aas medidas da rede:
+#medidas=g.textUtils.medidasPCA(medidasP,nm)
+## relaciona com cada setor para
+## tirar a correlação e PCA
+#mvars=["clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents"]
+#mpca=g.textUtils.tPCA(medidas,mvars)
+#mpca.plot("plot_pca.png",pr,labels="sym",tdir=TDIRf)
+#
+## escolher todas as medidas para o
+## mpca=g.textUtils.tPCA_real(medidas,mvars)
+#labels=[r"$cc$",r"$d$",r"$s$",r"$\mu_S(p)$",r"$\sigma_S(p)$",r"$\mu_S(kw)$",r"$\sigma_S(kw)$",r"$\mu_S(sw)$",r"$\sigma_S(sw)$"]
+#g.textUtils.makeCorrelationTable(mpca.C,TDIR,"correlationInline.tex",labels)
+#g.textUtils.makePCATable(mpca.feature_vec_,
+#                         mpca.eig_values_,labels,TDIR,)
+### TTM
+
+#
 # fazer tabela com todas a correlacoes maiores que ?
 # plotar para os setores diferentes?
 
