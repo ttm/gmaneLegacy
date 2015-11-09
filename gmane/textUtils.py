@@ -349,6 +349,16 @@ def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoText
     ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(table_dir+fname[:-4]+"_",[1],[1],[2,3,5,7,8])
 
+def medidasSinais2_(medidas_pos_list):
+    return [medidasSinais2(post) for post in medidas_pos_list]
+def medidasSinais2(post):
+    sinal=[[i[1] for i in j] for j in post["tags"]]
+    sinais={}
+    sinais["adj"]=[j.count("ADJ") for j in sinal]
+    sinais["sub"]=[j.count("NOUN") for j in sinal]
+    sinais["pun"]=[j.count(".") for j in sinal]
+    return sinais
+
 def medidasSinais_(TS):
     return [medidasSinais(T) for T in TS]
 def medidasSinais(T):
@@ -372,6 +382,19 @@ def ksAll(sigDict,mkeys):
                 l[-1][-1].append(vals)
     return l
 def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fnames=None,tags=None):
+    ldists=[]
+    for dists_meas in dists:
+        l=[]
+        for sect1_meas in dists_meas:
+            calphas=[]
+            dnns=[]
+            for sect2_val in sect1_meas:
+               calpha,dnn=sect2_val 
+               calphas+=[calpha]
+               dnns+=[dnn]
+            l+=[calphas,dnns]
+        ldists.append(l) # new table
+    dists=ldists 
     labels=labelsh[1:]
     labels_=[(l,"") for l in labels]
     labels__=[i for j in labels_ for i in j]
@@ -382,7 +405,6 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
     if not tags:
         tags=[str(i) for i in range(len(dists))]
     for meas,fname,tag in zip(dists,fnames,tags):
-        print(meas,fname,tag,"AHUIAHUIAHUIAHI")
         fname_=table_dir+fname
         g.lTable(labels__,labelsh,meas,caption.format(tag),
                 fname_+".tex","ksDistances")

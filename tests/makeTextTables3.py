@@ -78,23 +78,34 @@ pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measur
 
 sinais=g.textUtils.medidasSinais_(ts)
 dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"])
-ldists=[] # a table per entry
-for dists_meas in dists:
-    l=[]
-    for sect1_meas in dists_meas:
-        calphas=[]
-        dnns=[]
-        for sect2_val in sect1_meas:
-           calpha,dnn=sect2_val 
-           calphas+=[calpha]
-           dnns+=[dnn]
-        l+=[calphas,dnns]
-    ldists.append(l) # new table
-        
-g.textUtils.makeKSTables(ldists,
+g.textUtils.makeKSTables(dists,
         fnames=("ksTokens","ksWords","ksSents"),
         tags=("size of tokens","size of known words","size of sentences"))
 
+sinais2=g.textUtils.medidasSinais2_(pos_measures)
+dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"])
+g.textUtils.makeKSTables(dists2,
+        fnames=("ksAdjs","ksSubs","ksPuns"),
+        tags=("use of adjectives","use of substantives","use of punctuations"))
+#ldists=[] # a table per entry
+#for dists_meas in dists:
+#    l=[]
+#    for sect1_meas in dists_meas:
+#        calphas=[]
+#        dnns=[]
+#        for sect2_val in sect1_meas:
+#           calpha,dnn=sect2_val 
+#           calphas+=[calpha]
+#           dnns+=[dnn]
+#        l+=[calphas,dnns]
+#    ldists.append(l) # new table
+        
+#g.textUtils.makeKSTables(ldists,
+#        fnames=("ksTokens","ksWords","ksSents"),
+#        tags=("size of tokens","size of known words","size of sentences"))
+
+# montar sinais de uso de subst, adj e pontuação.
+# tudo tag POS
 
 
 
