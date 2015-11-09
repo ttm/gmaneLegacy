@@ -86,31 +86,35 @@ sinais2=g.textUtils.medidasSinais2_(pos_measures)
 dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"])
 g.textUtils.makeKSTables(dists2,
         fnames=("ksAdjs","ksSubs","ksPuns"),
-        tags=("use of adjectives","use of substantives","use of punctuations"))
-#ldists=[] # a table per entry
-#for dists_meas in dists:
-#    l=[]
-#    for sect1_meas in dists_meas:
-#        calphas=[]
-#        dnns=[]
-#        for sect2_val in sect1_meas:
-#           calpha,dnn=sect2_val 
-#           calphas+=[calpha]
-#           dnns+=[dnn]
-#        l+=[calphas,dnns]
-#    ldists.append(l) # new table
-        
-#g.textUtils.makeKSTables(ldists,
-#        fnames=("ksTokens","ksWords","ksSents"),
-#        tags=("size of tokens","size of known words","size of sentences"))
+        tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences"))
 
-# montar sinais de uso de subst, adj e pontuação.
-# tudo tag POS
+# correlação pierson e spearman (tem necessidade das duas?)
+# pearson pegamos pelo PCA:
+# 1) fazer as medidas para cada participante
+nm=es.structs[4]
+textosP=g.textUtils.textosParticipante(ds)
+medidasP=g.textUtils.medidasParticipante(textosP)
+# 2) vincular aas medidas da rede:
+medidas=g.textUtils.medidasPCA(medidasP,nm)
+# relaciona com cada setor para
+# tirar a correlação e PCA
+mvars=("clustering","degree","strength","Mpuncts_sents","Spuncts_sents","Mknownw_sents","Sknownw_sents","Mstopw_sents","Sstopw_sents")
+mpca=g.textUtils.tPCA(medidas,mvars)
+# escolher algumas medidas a mais
+# fazer tabela com todas a correlacoes maiores que ?
+# plotar para os setores diferentes?
 
-
+# fazer pca com mais medidas
+# fazer para os setores?
 
 
-# terminar de fazer o roteiro da analise com kolm e pca
+
+
+
+# terminar de fazer o pca
+
+
+
 # jogar tudo no SI para varias listas
 # fazer tabelas com medias gerais das medidas, dentre todas as listas
 

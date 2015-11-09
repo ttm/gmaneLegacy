@@ -32,7 +32,30 @@ brill_tagger=pickle.load(f)
 f.close()
 DL=g.tableHelpers.dl
 ME=g.tableHelpers.me
-
+replacement_patterns = [
+(r'won\'t', 'will not'),
+(r'can\'t', 'can not'),
+(r'i\'m', 'i am'),
+(r'ain\'t', 'is not'),
+(r'(\w+)\'ll', '\g<1> will'),
+(r'(\w+)n\'t', '\g<1> not'),
+(r'(\w+)\'ve', '\g<1> have'),
+(r'(\w+)\'s', '\g<1> is'),
+(r'(\w+)\'re', '\g<1> are'),
+(r'(\w+)\'d', '\g<1> would')
+]
+class RegexpReplacer(object):
+    def __init__(self, patterns=replacement_patterns):
+        self.patterns = [(re.compile(regex), repl) for (regex, repl) in patterns]
+    def replace(self, text):
+        s = text
+        count_=0
+        for (pattern, repl) in self.patterns:
+            (s, count) = re.subn(pattern, repl, s)
+            count_+=count
+        return s, count_
+REPLACER=RegexpReplacer()
+R=REPLACER.replace
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
     def __init__(self,list_id,n_messages,text="yes"):
@@ -181,29 +204,7 @@ def makeGeneralTable(generalMeasures_instance, table_dir="/home/r/repos/artigoTe
 
 
 
-replacement_patterns = [
-(r'won\'t', 'will not'),
-(r'can\'t', 'can not'),
-(r'i\'m', 'i am'),
-(r'ain\'t', 'is not'),
-(r'(\w+)\'ll', '\g<1> will'),
-(r'(\w+)n\'t', '\g<1> not'),
-(r'(\w+)\'ve', '\g<1> have'),
-(r'(\w+)\'s', '\g<1> is'),
-(r'(\w+)\'re', '\g<1> are'),
-(r'(\w+)\'d', '\g<1> would')
-]
-class RegexpReplacer(object):
-    def __init__(self, patterns=replacement_patterns):
-        self.patterns = [(re.compile(regex), repl) for (regex, repl) in patterns]
-    def replace(self, text):
-        s = text
-        count_=0
-        for (pattern, repl) in self.patterns:
-            (s, count) = re.subn(pattern, repl, s)
-            count_+=count
-        return s, count_
-REPLACER=RegexpReplacer()
+
 def makeText_(ds,pr):
     texts=[]
     msg_ids=[]
@@ -415,7 +416,7 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
 
 def medidasTokens__(lt=("texts",),ct=("ncontractions",)):
     return [medidasTokens_(i,j) for i,j in zip(lt,ct)]
-def medidasTokens_(T,ncontract):
+def medidasTokens_(T,ncontract=None):
     wtok=k.tokenize.wordpunct_tokenize(T)
     wtok_=[t.lower() for t in wtok]
     tokens=len(wtok) #
@@ -1111,6 +1112,42 @@ def medidasWordnet2(wndict,pos=None):
             vdict["m"+mvar]=n.mean(locals_[mvar])
             vdict["d"+mvar]=n.std(locals_[mvar])
     return vdict
+def medidasParticipante(dict_auth_text):
+    medidas_autor={}
+    for author in dict_auth_text:
+        text=dict_auth_text[author]
+        text_,ncontract=R(text)
+        medidas=medidasSentencas(text_)
+        medidas2=medidasPOS(medidas["tokens_sentences"])
+        medidas.update(medidas2)
+        medidas_autor[author]=medidas
+    return medidas_autor
+def medidasPCA(medidas_participante_dict,network_measures):
+    nm,mp=network_measures,medidas_participante_dict
+    for author in mp:
+        mp[author]["degree"]=nm.degrees[author]
+        mp[author]["strength"]=nm.strengths[author]
+        mp[author]["clustering"]=nm.clusterings[author]
+    return mp
+def textosParticipante(ds):
+    texts={}
+    for author in ds.author_messages:
+        texts[author]=""
+        for msg in ds.author_messages[author]:
+            msgid=msg[0]
+            texts[author]+=ds.messages[msgid][-1]
+    return texts
+def tPCA(medidas,keys):
+    data=[]
+    for author in medidas:
+        data+=[[]]
+        for key in keys:
+            data[-1]+=[medidas[author][key]]
+    data_=n.array(data)
+    data__=data_.T
+    return g.pca.PCA(data__)
+
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 def tfIdf(texts):
     """Returns distance matrix for the texts"""
