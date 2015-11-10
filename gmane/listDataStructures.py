@@ -152,6 +152,7 @@ class ListDataStructures:
         #self.spurious_empty_ids=spurious_empty_ids=[]
         self.spurious_authors=spurious_authors=[]
         self.n_empty=n_empty=0#messagesLoaded.n_empty
+        self.bad_text_message_ids=[]
         for message in messagesLoaded:
             if not message.keys(): # if message is empty
                 #spurious_empty_ids.append(i)
@@ -206,10 +207,13 @@ class ListDataStructures:
                 if text=="no":
                     messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
-                    t=getBody(message)
-
-                    t=cleanText(t)
-                    messages[message["message-id"]]=(author,id_ant,date,t)
+                    try:
+                        t=getBody(message)
+                        t=cleanText(t)
+                        messages[message["message-id"]]=(author,id_ant,date,t)
+                    except:
+                        messages[message["message-id"]]=(author,id_ant,date,"")
+                        self.bad_text_message_ids.append(message["message-id"])
                 else:
                     raise TypeError("argument text accepts only 'yes' and 'no'values")
                 author_messages[author].append( (message["message-id"], id_ant, date)  )

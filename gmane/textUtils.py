@@ -1337,7 +1337,7 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     mvars=("es","gmeasures","ts","ncontractions","msg_ids",
             "char_measures","tok_measures","sent_measures",
             "msg_measures","pos_measures","ftags",
-            "sinais","sinais2","dists2","medidas_pca","LANG")
+            "sinais","sinais2","dists2","medidas_pca","LANG","tag")
     vdict={}; check("antes da escrita do pickle")
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
