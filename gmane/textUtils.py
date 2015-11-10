@@ -1342,5 +1342,5 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     for mvar in mvars:
         vdict[mvar] = locals()[mvar]
     pDump(vdict,TDIR+"vdict-{}.pickle".format(tag))
-    check("escrito pickle", lid, TDIR)
+    check("escrito pickle, {}, {}".format(lid, TDIR))
 
