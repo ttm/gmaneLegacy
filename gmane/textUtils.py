@@ -1,12 +1,17 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os
+import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os, langid
 from nltk.corpus import wordnet as wn
 import builtins as B
+TT=time.time()
+def check(amsg="string message"):
+    global TT
+    print(amsg, time.time()-TT); TT=time.time()
 B.me=[]
 B.tt_=[]
 B.tt=[]
+B.degen=[]
 puncts=set(string.punctuation)
 #w=open("./wordsEn.txt","r")
 #w=w.read()
@@ -56,12 +61,15 @@ class RegexpReplacer(object):
         return s, count_
 REPLACER=RegexpReplacer()
 R=REPLACER.replace
+def pDump(tobject,tfilename):
+    with open(tfilename,"wb") as f:
+        pickle.dump(tobject,f,-1)
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
-    def __init__(self,list_id,n_messages,text="yes"):
+    def __init__(self,list_id,n_messages,text="yes",offset=0):
         TT=time.time()
         lid=list_id; TOTAL_M=n_messages
-        lm=g.LoadMessages(lid,TOTAL_M,basedir="~/.gmane3/")
+        lm=g.LoadMessages(lid,TOTAL_M,offset=offset, basedir="~/.gmane3/")
         ds=g.ListDataStructures(lm,text="yes")
         print(lid+"{0:.2f} for loading messages and making datastructures".format(time.time()-TT)); TT=time.time()
 
@@ -196,7 +204,7 @@ def makeGeneralTable(generalMeasures_instance, table_dir="/home/r/repos/artigoTe
     {{\bf h.}} for hubs) in a total time period of {:.2f} years (from {} to {}). $N$ is the number of participants, $M$ is the number of messages, $\Gamma$ is the number of threads, and $\gamma$ is the number of messages in a thread.
     The \% denotes the usual `per cent' with respecto to the total quantity ($100\%$ for {{\bf g.}})
     while $\mu$ and $\sigma$ denote mean and standard deviation.""".format(deltaAnos_,date1,date2)
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     dl=g.tableHelpers.dl
     me=g.tableHelpers.me
@@ -293,12 +301,12 @@ def makeSentencesTable(medidasSentencas_dict, table_dir="/home/r/repos/artigoTex
     nsents_=perc_(nsents)
     data=n.array(data[1:])
     data=n.vstack((nsents,nsents_,data))
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,4,6,8,10,12])
 
-def makeTokenSizesTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokenSizesInline.tex",tag=tag):
+def makeTokenSizesTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokenSizesInline.tex",tag=None):
     tms=medidasTokens__instance
     mvars=("Mtoken","Stoken","Mknownw","Sknownw",
             "Mknownw_diff","Sknownw_diff",
@@ -316,13 +324,13 @@ def makeTokenSizesTable(medidasTokens__instance, table_dir="/home/r/repos/artigo
     #ntoks_=perc_(ntoks)
     #data=n.array(data[1:])
     #data=n.vstack((ntoks,ntoks_,data*100))
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral_")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,4,6,8])
 
 
-def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokensInline.tex",tag=tag):
+def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="tokensInline.tex",tag=None):
     tms=medidasTokens__instance
     mvars=("tokens",
             "tokens_diff",
@@ -350,7 +358,7 @@ def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoText
     ntoks_=perc_(ntoks)
     data=n.array(data[1:])
     data=n.vstack((ntoks,ntoks_,data*100))
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,3,5,7,8])
@@ -411,12 +419,12 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
     if not tags:
         tags=[str(i) for i in range(len(dists))]
     for meas,fname,tag_ in zip(dists,fnames,tags):
-        fname_=mkname(table_dir,fname,tag)
+        fname_=mkName(table_dir,fname,tag)+".tex"
         g.lTable(labels__,labelsh,meas,caption.format(tag_),
-                fname_+".tex","ksDistances")
-        ME(fname_,"\\bf",[(0,i) for i in range(1,5)]+[(i,0) for i in range(1,9)])
+                fname_,"ksDistances")
+        ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)]+[(i,0) for i in range(1,9)])
+        DL(fname_[:-4]+"_",[1],[1],[2,4,6,8])
 #        ME(fname_+"_","\\bf",,1)
-        DL(fname_+"_",[1],[1],[2,4,6,8])
 
 
 def medidasTokens__(lt=("texts",),ct=("ncontractions",)):
@@ -607,7 +615,7 @@ def makeCorrelationTable_(measures_pca, table_dir="/home/r/repos/artigoTextoNasR
     labels__=[i for j in labels_ for i in j]
     labels__[1:4]=["(p.)","(i.)","(h.)"]
     caption="Pierson correlation coefficient for the topological and textual measures."
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels__,labelsh,data,caption,fname_,"textCorr")
     # renderiza matriz como tabela
     #ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
@@ -670,7 +678,7 @@ def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoText
     nmsgs_=perc_(nmsgs)
     data=n.array(data[1:])
     data=n.vstack((nmsgs,nmsgs_,data))
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,4,6,8,10,12,14,16])
@@ -828,7 +836,7 @@ def medidasPOS(sentences_tokenized):
     tags_=[item for sublist in tags for item in sublist]
     tags__=[i[1] for i in tags_ if i[0].lower() in WL_]
     htags=c.Counter(tags__)
-
+    htags__=c.OrderedDict()
     if htags:
        	factor=100.0/sum(htags.values())
         htags_={}
@@ -866,8 +874,8 @@ def auxWnTb(tt,level,tabfname,wn_dict_list):
         DL(tabfname[:-4]+"_",[1,-3],[1])
     else:
         print(tabfname.split("/")[-1], "No labels:",labels,
-                "\nPropably no hypernyms:",
-              wn_dict_list[0]["top_hypernyms"])
+                "\nProbably no hypernyms:",
+              len(wn_dict_list[0]["top_hypernyms"]))
 
 
 def makeWordnetTable2a(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="wnInline2a.tex"):
@@ -897,10 +905,10 @@ def makeWordnetPOSTable(wn_dict_list, table_dir="/home/r/repos/artigoTextoNasRed
     data+=[[100*(len(wms[i]["posok"])/(len(wms[i]["posok"])+len(wms[i]["posnok"]))) for i in range(4)]]
     caption=r"""Percentage of synsets with each of the POS tags used by Wordnet. The last lines give the percentage of words considered from all of the tokens (POS) and from the words with synset (POS!). The tokens not considered are punctuations, unrecognized words, words without synsets, stopwords and words for which Wordnet has no synset  tagged with POS tags . Values for each Erd\"os sectors are in the columns {{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs."""
     labelsh=("","g.","p.","i.","h.")
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral_")
-    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
-    DL(table_dir+fname[:-4]+"_",[1,-4],[1])
+    ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
+    DL(fname_[:-4]+"_",[1,-4],[1])
 def medidasWordnet2_POS(wn_measures,poss=("n","as","v","r")):
     wn_measures2={}
     for pos in poss:
@@ -993,44 +1001,10 @@ def makePOSTable(posMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes
     #nmsgs_=perc_(nmsgs)
     #data=n.array(data[1:])
     #data=n.vstack((nmsgs,nmsgs_,data))
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral_")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,4,7,9,10,11,12])
-
-
-def makeMessagesTable(medidasMensagens_dict, table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fname="messagesInline.tex"):
-    mms=medidasMensagens_dict
-    mvars=("nmsgs",
-            "Msents_msgs","Ssents_msgs",
-            "Mtokens_msgs","Stokens_msgs",
-            "Mknownw_msgs","Sknownw_msgs",
-            "Mstopw_msgs","Sstopw_msgs",
-            "Mpuncts_msgs","Spuncts_msgs",
-            "Mchars_msgs","Schars_msgs",
-            )
-    mms_=[[mms[j][i] for j in range(4)] for i in mvars]
-    labelsh=("","g.","p.","i.","h.")
-    labels=(r"$msgs$",r"$msgs_{\%}$",
-            r"$\mu_M(sents)$", r"$\sigma_M(sents)$",
-            r"$\mu_M(tokens)$",r"$\sigma_M(tokens)$",
-            r"$\mu_M(knownw)$",r"$\sigma_M(knownw)$",
-            r"$\mu_M(stopw)$", r"$\sigma_M(stopw)$",
-            r"$\mu_M(puncts)$",r"$\sigma_M(puncts)$",
-            r"$\mu_M(chars)$", r"$\sigma_M(chars)$",
-            )
-
-    caption=r"""Messages sizes in each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, {{\bf h.}} for hubs)."""
-    #data=list(map(list, zip(*tms_)))
-    data=mms_
-    nmsgs=data[0]
-    nmsgs_=perc_(nmsgs)
-    data=n.array(data[1:])
-    data=n.vstack((nmsgs,nmsgs_,data))
-    g.lTable(labels,labelsh,data,caption,table_dir+fname,"textGeral")
-    ME(table_dir+fname[:-4],"\\bf",[(0,i) for i in range(1,5)])
-    DL(table_dir+fname[:-4]+"_",[1],[1],[2,4,6,8,10,12,14])
-
 
 
 def filtro(wt_):
@@ -1174,11 +1148,12 @@ def medidasParticipante(dict_auth_text):
     medidas_autor={}
     for author in dict_auth_text:
         text=dict_auth_text[author]
-        text_,ncontract=R(text)
-        medidas=medidasSentencas(text_)
-        medidas2=medidasPOS(medidas["tokens_sentences"])
-        medidas.update(medidas2)
-        medidas_autor[author]=medidas
+        if text:
+            text_,ncontract=R(text)
+            medidas=medidasSentencas(text_)
+            medidas2=medidasPOS(medidas["tokens_sentences"])
+            medidas.update(medidas2)
+            medidas_autor[author]=medidas
     return medidas_autor
 
 
@@ -1213,7 +1188,9 @@ def textosParticipante(ds,authors=None):
         texts[author]=""
         for msg in ds.author_messages[author]:
             msgid=msg[0]
-            texts[author]+=ds.messages[msgid][-1]
+            text=ds.messages[msgid][-1]
+            texts[author]+=text
+            B.LANG+=[langid.classify(text)]
     return texts
 def makePCATable_(medidas_pca,table_dir,fname="pcaInline.tex",tag=None):
     vecs=[i["pca"].feature_vec_.real for i in medidas_pca]
@@ -1230,7 +1207,7 @@ def makePCATable_(medidas_pca,table_dir,fname="pcaInline.tex",tag=None):
     labels_=[(i,"","","") for i in labels]
     labels__=[i for j in labels_ for i in j]
     labels__[1:4]=["(p.)","(i.)","(h.)"]
-    fname_=mkname(table_dir,fname,tag)
+    fname_=mkName(table_dir,fname,tag)
     g.lTable(labels__,labelsh,data,caption,fname_,"textPCA")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,6)]+[(i,0) for i in range(1,11)])
     DL(fname_[:-4]+"_",[1,-6],[1],[2,3,4,
@@ -1290,24 +1267,29 @@ def kolmogorovSmirnovDistance(seq1,seq2,bins=300):
     fact=((n1+n2)/(n1*n2))**0.5
     calpha=Dnn/fact
     return calpha
-def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None):
+def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0):
     if not tags:
-        tags=[str(i) for i in range(lids)]
+        tags=[str(i) for i in range(len(lids))]
     for lid,tag in zip(lids,tags):
-        es=g.EmailStructures(lid,TOTAL)
+        es=g.EmailStructures(lid,TOTAL,offset=offset)
+        if sum([not i for i in es.structs[-1].sectorialized_agents__]):
+            B.degen.append(lid)
+            continue
         makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
-def makeTable(lid,es,TOTAL,TDIR,FDIR,tag):
+def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     #TDIR="/home/r/repos/artigoTextoNasRedes/tables/"
     #TDIRf="/home/r/repos/artigoTextoNasRedes/figs/"
     ds=es.structs[1]
-    ts=es.structs[2]
+    timest=es.structs[2]
     pr=es.structs[-1]
     nm=es.structs[4]
+    B.LANG=[]
 
-    gmeasures=g.generalMeasures(ds,pr,ts)
+    gmeasures=g.generalMeasures(ds,pr,timest)
     g.makeGeneralTable(gmeasures,TDIR,tag=tag)
 
     ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
+    B.LANG+=[langid.classify(ts[0])]
 
     char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
     g.textUtils.makeCharTable(char_measures,TDIR,tag=tag)
@@ -1323,7 +1305,7 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag):
     msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
     g.textUtils.makeMessagesTable(msg_measures,TDIR,tag=tag)
     
-    os_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
+    pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
     g.textUtils.makePOSTable(pos_measures,TDIR,tag=tag)
     
     wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
@@ -1332,20 +1314,33 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag):
     wn_measures2_pos=g.textUtils.medidasWordnet2_POS(wn_measures); check("medidas wordnet 2")
     g.textUtils.makeWordnetTables2_POS(wn_measures2_pos,TDIR,tag=tag) # escreve arquivo com todas as 5 tabelas para cada pos
 
-    sinais=g.textUtils.medidasSinais_(ts)
-    dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"])
+    sinais=g.textUtils.medidasSinais_(ts); check("medidas sinais")
+    dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"]); check("ks sinais")
     g.textUtils.makeKSTables(dists,
             fnames=("ksTokens","ksWords","ksSents"),
             tags=("size of tokens","size of known words","size of sentences"),tag=tag)
 
-    sinais2=g.textUtils.medidasSinais2_(pos_measures)
-    dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"])
+    sinais2=g.textUtils.medidasSinais2_(pos_measures); check("medidas sinais 2")
+    dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"]); check("ks sinais 2")
     g.textUtils.makeKSTables(dists2,
             fnames=("ksAdjs","ksSubs","ksPuns"),
             tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences"),tag=tag)
 
     # correlação pierson e spearman (tem necessidade das duas?)
-    medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__) # retorna medidas para plotar e tabelas
+    medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__); check("medidas pca") # retorna medidas para plotar e tabelas
     g.textUtils.makeCorrelationTable_(medidas_pca,TDIR,"correlationInline.tex",tag=tag)
     g.textUtils.makePCATable_(medidas_pca,TDIR,tag=tag)
-    medidas_pca[0]["pca"].plot("plot_pca.png",pr,labels="sym",tdir=FDIR,tag=tag)
+    medidas_pca[0]["pca"].plot("plot_pca-{}.png".format(tag),pr,labels="sym",tdir=FDIR)
+    es.structs=es.structs[1:]
+    ftags=[i["ftags"] for i in wn_measures]
+    LANG=B.LANG
+    mvars=("es","gmeasures","ts","ncontractions","msg_ids",
+            "char_measures","tok_measures","sent_measures",
+            "msg_measures","pos_measures","ftags",
+            "sinais","sinais2","dists2","medidas_pca","LANG")
+    vdict={}; check("antes da escrita do pickle")
+    for mvar in mvars:
+        vdict[mvar] = locals()[mvar]
+    pDump(vdict,TDIR+"vdict-{}.pickle".format(tag))
+    check("escrito pickle", lid, TDIR)
+

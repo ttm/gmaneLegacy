@@ -12,6 +12,7 @@ from IPython.lib.deepreload import reload as dreload
 ##importlib.reload(g.listDataStructures)
 importlib.reload(g.textUtils)
 importlib.reload(g.tableHelpers)
+importlib.reload(g.listDataStructures)
 dreload(g,exclude="pytz")
 os.environ["PATH"]=ENV
 check("preambule1")
@@ -27,6 +28,30 @@ PDIR="pickledir/"
 dl=pRead("{}dl.pickle".format(PDIR))
 TOTAL=1000
 lids=[i[0] for i in dl.lists[:20]] # as 20 com maior numero de mensagens
-TDIR="/home/r/repos/artigoTextoNasRedes/tables/SI"
-FDIR="/home/r/repos/artigoTextoNasRedes/figs/SI"
-g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR)
+TDIR="/home/r/repos/artigoTextoNasRedes/tables/SI/"
+FDIR="/home/r/repos/artigoTextoNasRedes/figs/SI/"
+#g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,0,5)
+g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,0,5)
+
+check("FEITAS TODAS AS ANALISES COM !000 mensagens")
+
+TOTAL=2000
+TDIR="/home/r/repos/artigoTextoNasRedes/tables/SI2/"
+FDIR="/home/r/repos/artigoTextoNasRedes/figs/SI2/"
+g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,offset=1000)
+
+# implementar start from para pular os vdicts que já estiverem
+# prontos.
+# verificar quais redes são em ingles, talvez fazer já um identificador
+
+
+#ipdb> f=open(tfilename,"wb"); pickle.dump(tobject["es"],f); f.close()
+#*** TypeError: cannot serialize '_io.BufferedRandom' object
+#ipdb> f=open(tfilename,"wb"); pickle.dump(tobject["sent_measures"],f); f.close()
+#ipdb> f=open(tfilename,"wb"); pickle.dump(tobject["wn_"],f); f.close()
+#wn_measures       wn_measures2_pos  
+#ipdb> f=open(tfilename,"wb"); pickle.dump(tobject["wn_measures"],f); f.close()
+#^[[A^[[D*** TypeError: cannot serialize '_io.BufferedReader' object
+#    ipdb> f=open(tfilename,"wb"); pickle.dump(tobject["wn_measures2_pos"],f); f.close()
+#    *** TypeError: cannot serialize '_io.BufferedReader' object
+

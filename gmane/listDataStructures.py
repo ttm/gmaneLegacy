@@ -16,14 +16,41 @@ def getBody(msg):
     while msg.is_multipart():
         msg=msg.get_payload()[0]
     t=msg.get_payload(decode=True)
+    ignore=0
     for charset in getcharsets(msg):
         try:
-            t=t.decode(charset)
+            if charset=="iso-8859-2:utf-8":
+                charset="iso-8859-2"
+            elif charset=="us-ascii:utf-8":
+                charset="utf-8"
+                ignore=1
+            elif charset=="unknown-8bit":
+                charset="ascii"
+                ignore=1
+            if ignore:
+                t=t.decode(charset,"ignore")
+            else:
+                try:
+                    t=t.decode(charset)
+                except:
+                    try:
+                        t=t.decode(charset,"ignore")
+                    except:
+                        t=t.decode(errors="ignore")
+
         except LookupError:
-            handleerror2("LookupError for unknown charset:",t,charset)
-            t=t.decode()
+            try:
+                t=t.decode(charset,"ignore")
+            except LookupError:
+                handleerror2("LookupError for unknown charset:",t,charset)
     if not getcharsets(msg):
-        t=t.decode()
+        try:
+            t=t.decode()
+        except:
+            try:
+                t=t.decode("latin-1")
+            except:
+                t=t.decode(errors="ignore")
     return t
 def cleanText(text):
 #    return text

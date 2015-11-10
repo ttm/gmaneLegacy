@@ -1,5 +1,4 @@
 import numpy as n, pylab as p, matplotlib
-from scipy import stats
 
 class NetworkPCA:
     """PCA cases of interest  for observing stability in interaction networks.

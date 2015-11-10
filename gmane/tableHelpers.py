@@ -1,4 +1,4 @@
-import numpy as n, string, re, builtins as B
+import numpy as n, string, re, builtins as B, langid
 import gmane as g
 def fSize(tablefname,ftag="scriptsize",write=False):
     """Change size of table font"""
@@ -38,19 +38,18 @@ def doubleLines(tablefname,hlines=["i1","i2"],vlines=["j1","j2"],hlines_=[]):
         if lines__.count(linha)==1:
             linesF=linesF.replace(linha,linha_)
         elif lines__.count(linha)>1:
-            print("mais de uma linha igual ERRO!!!")
+            print("mais de uma linha igual ERRO!!!",tablefname)
         else:
-            print("linha não existe!!! ERRO!!")
+            print("linha não existe!!! ERRO!!",tablefname)
     ii=hlines_
     for i in ii:
         linha=linhas[i]
         if lines__.count(linha)==1:
             linesF=linesF.replace(linha+"\\hline",linha)
-            print("TIRA LINHAAAAAAAA",linha)
         elif lines__.count(linha)>1:
-            print("mais de uma linha igual ERRO!!!")
+            print("mais de uma linha igual ERRO!!!",tablefname)
         else:
-            print("linha não existe!!! ERRO!!")
+            print("linha não existe!!! ERRO!!",tablefname)
     #linesF=lines__[:]
     return linesF
 def markEntries_(tablefname,marker,locs=[("i","j")]):
@@ -67,18 +66,18 @@ def markEntries_(tablefname,marker,locs=[("i","j")]):
         elementos_[loc[1]]=elemento_
         linha_=" & ".join(elementos_)+" "+resto
         if lines.count(linha)==1:
-            print(linha,linha_)
+            #print(linha,linha_)
             lines=lines.replace(linha,linha_)
         elif lines.count(linha)>1:
-            print("mais de uma linha igual ERRO!!!")
+            print("mais de uma linha igual ERRO!!!",tablefname)
         else:
-            print("linha não existe!!! ERRO!!")
-    print("\n\n\nLINES",lines)
+            print("linha não existe!!! ERRO!!",tablefname)
+    #print("\n\n\nLINES",lines)
     return lines
 def markEntries(table,marker):
     """Make entries in a table boldface or use other markings"""
     # open rendered table as text
-    print("YEAH")
+    #print("YEAH")
     with open(table,"r") as f:
         lines=f.read()
     lines=lines.split("\n")
@@ -87,24 +86,24 @@ def markEntries(table,marker):
         i1,i2=line[-1].split("\\\\\\")
         i2="\\\\\\"+i2
         lines[i+3]=line[:-1]+[i1,i2]
-    print(lines)
-    print(len(lines[0]))
+    #print(lines)
+    #print(len(lines[0]))
     for column in range(1,len(lines[3])-1):
-        print("column")
+        #print("column")
         values=[]
         for linei in range(3,len(lines)-3):
             if lines[linei][column].strip(): # can be empty
                 value=float(lines[linei][column].split("{")[-1].split("}")[0])
                 values.append(value)
-        print(values)
+        #print(values)
         mav=max(values)
         miv=min(values)
-        print(mav,miv)
+        #print(mav,miv)
         for linei in range(3,len(lines)-3):
             if lines[linei][column].strip(): # can be empty
                 orig="{:.2f}".format(mav)
                 tnew="\\{}{{ {} }}".format(marker,mav)
-                print(orig,tnew)
+                #print(orig,tnew)
                 lines[linei][column]=lines[linei][column].replace(orig,tnew)
     lines=lines[:3]+[" & ".join(line[:-1])+line[-1] for line in lines[3:-3]]+lines[-3:]
     lines=" \n ".join(lines)
