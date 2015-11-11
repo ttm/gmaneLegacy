@@ -421,7 +421,7 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
     labels=labelsh[1:]
     labels_=[(l,"") for l in labels]
     labels__=[i for j in labels_ for i in j]
-    caption="KS distances on {}. TAG: {}."
+    caption="KS distances on {}."
     count=0
     if not fnames:
         fnames=[str(i) for i in range(len(dists))]
@@ -429,7 +429,7 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
         tags=[str(i) for i in range(len(dists))]
     for meas,fname,tag_ in zip(dists,fnames,tags):
         fname_=mkName(table_dir,fname+".tex",tag)
-        g.lTable(labels__,labelsh,meas,caption.format(tag_,tag),
+        g.lTable(labels__,labelsh,meas,caption.format(tag_),
                 fname_,"ksDistances")
         ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)]+[(i,0) for i in range(1,9)])
         DL(fname_[:-4]+"_",[1],[1],[2,4,6,8])
