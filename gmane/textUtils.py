@@ -66,10 +66,10 @@ def pDump(tobject,tfilename):
         pickle.dump(tobject,f,-1)
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
-    def __init__(self,list_id,n_messages,text="yes",offset=0):
+    def __init__(self,list_id,n_messages,text="yes",offset=0,basedir="~/.gmane3/"):
         TT=time.time()
         lid=list_id; TOTAL_M=n_messages
-        lm=g.LoadMessages(lid,TOTAL_M,offset=offset, basedir="~/.gmane3/")
+        lm=g.LoadMessages(lid,TOTAL_M,offset=offset, basedir=basedir)
         ds=g.ListDataStructures(lm,text="yes")
         print(lid+"{0:.2f} for loading messages and making datastructures".format(time.time()-TT)); TT=time.time()
 
@@ -1317,11 +1317,11 @@ def uniteTables(TDIR,tag):
     g.tableHelpers.vstackTables(foo,tt[4],foo)
 
 
-def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0):
+def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0,basedir="~./gmane3/"):
     if not tags:
         tags=[str(i) for i in range(len(lids))]
     for lid,tag in zip(lids,tags):
-        es=g.EmailStructures(lid,TOTAL,offset=offset)
+        es=g.EmailStructures(lid,TOTAL,offset=offset,basedir=basedir)
         if sum([len(i)>4 for i in es.structs[-1].sectorialized_agents__])<3:
             B.degen.append(lid)
             continue
