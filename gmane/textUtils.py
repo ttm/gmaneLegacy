@@ -34,7 +34,7 @@ WLP=k.corpus.floresta.words()
 WLP_=set(WLP)
 stopwords=set(k.corpus.stopwords.words("english"))
 stopwordsP=set(k.corpus.stopwords.words("portuguese"))
-f=open("pickledir/brill_taggerT2M1","rb")
+f=open(os.path.join(this_dir,"pickledir/brill_taggerT2M1"),"rb")
 brill_tagger=pickle.load(f)
 f.close()
 DL=g.tableHelpers.dl
