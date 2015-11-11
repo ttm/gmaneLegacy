@@ -1,4 +1,5 @@
 import numpy as n, pylab as p, matplotlib
+from scipy import stats
 
 class NetworkPCA:
     """PCA cases of interest  for observing stability in interaction networks.
@@ -119,7 +120,7 @@ class PCA:
             else:
                 M[i]=0.
         # convariance matrix:
-        self.C=n.cov(M)
+        self.C=n.cov(M,bias=1)
         self.M=M
 
         eig_values, eig_vectors = n.linalg.eig(self.C)
