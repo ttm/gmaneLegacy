@@ -292,6 +292,12 @@ def pcaTable(labels,vec_mean,vec_std,val_mean,val_std):
     footer="\\hline\\end{tabular}\n\\end{center}"
     table=header + makeTables(labels,tab_data,True) + footer
     return table
+def vstackTables_(fname1,fname2,fname3):
+    s1=open(fname1+".tex").read()
+    s2=open(fname2+".tex").read()
+    s1_=re.split("\n\\\\end{tabular",s1)[0]
+    s2_=re.split("tabular.*\\hline\n &.*g.*hline",s2)[1]
+    writeTex(s1_+"\\hline\\hline"+s2_,fname3+".tex")
 
 def vstackTables(fname1,fname2,fname3):
     s1=open(fname1+".tex").read()

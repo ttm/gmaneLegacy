@@ -1267,6 +1267,45 @@ def kolmogorovSmirnovDistance(seq1,seq2,bins=300):
     fact=((n1+n2)/(n1*n2))**0.5
     calpha=Dnn/fact
     return calpha
+def uniteTables3(TDIR,tag):
+    """junta cada POS tag da wn em uma tabelona"""
+    tt="wnPOSInline2a","wnPOSInline2b","wnPOSInline2c","wnPOSInline2d",
+    fnames=[]
+    for pos in ("n","as","v","r"):
+    #for pos in ("n",):
+        fname=TDIR+"wnPOSInline2-{}-{}".format(pos,tag)
+        for ttt in tt:
+            fnames+=[TDIR+ttt+"-{}-{}tag_".format(pos,tag)]
+        if os.path.isfile(fnames[1]+".tex"):
+            g.tableHelpers.vstackTables_(fnames[0],fnames[1],fname)
+        else:
+            shutil.copyfile(fnames[0]+".tex",fname+".tex")
+        if os.path.isfile(fnames[2]+".tex"):
+            g.tableHelpers.vstackTables_(fname,fnames[2],fname)
+        if os.path.isfile(fnames[3]+".tex"):
+            g.tableHelpers.vstackTables_(fname,fnames[3],fname)
+def uniteTables2(TDIR,tag):
+    foo=TDIR+"posMerged{}".format(tag)
+    g.tableHelpers.vstackTables(TDIR+"posInline{}_".format(tag),
+            TDIR+"wnPOSInline{}_".format(tag),foo)
+def uniteTables(TDIR,tag):
+    t1="geral"#"geralInline0_"
+    t2="chars"
+    t3="tokensMerged"
+    t4="sentences"
+    t5="messages"
+    def makeN(ss):
+        if ss==t3:
+            return ss+"Inline{}".format(tag)
+        return ss+"Inline{}_".format(tag)
+    tt=[TDIR+makeN(i) for i in (t1,t2,t3,t4,t5)]
+    foo=TDIR+"mergedA{}".format(tag)
+    g.tableHelpers.vstackTables(tt[0],tt[1],foo)
+    g.tableHelpers.vstackTables(foo,tt[2],foo)
+    g.tableHelpers.vstackTables(foo,tt[3],foo)
+    g.tableHelpers.vstackTables(foo,tt[4],foo)
+
+
 def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0):
     if not tags:
         tags=[str(i) for i in range(len(lids))]
@@ -1305,15 +1344,21 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     
     msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
     g.textUtils.makeMessagesTable(msg_measures,TDIR,tag=tag)
+
+    g.textUtils.uniteTables(TDIR,tag)
     
     pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
     g.textUtils.makePOSTable(pos_measures,TDIR,tag=tag)
     
     wn_measures=g.textUtils.medidasWordnet_([i["tags"] for i in pos_measures]); check("medidas wordnet")
     g.textUtils.makeWordnetPOSTable(wn_measures,TDIR ,tag=tag) # medias e desvios das incidencias dos atributos
+
+    g.textUtils.uniteTables2(TDIR,tag)
     
     wn_measures2_pos=g.textUtils.medidasWordnet2_POS(wn_measures); check("medidas wordnet 2")
     g.textUtils.makeWordnetTables2_POS(wn_measures2_pos,TDIR,tag=tag) # escreve arquivo com todas as 5 tabelas para cada pos
+
+    g.textUtils.uniteTables3(TDIR,tag)
 
     sinais=g.textUtils.medidasSinais_(ts); check("medidas sinais")
     dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"]); check("ks sinais")
