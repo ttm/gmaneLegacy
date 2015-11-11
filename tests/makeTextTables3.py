@@ -65,7 +65,7 @@ ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
 sent_measures=g.textUtils.medidasSentencas_(ts); check("medidas sentenças")
 #g.textUtils.makeSentencesTable(sent_measures,TDIR)
 #
-#msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
+msg_measures=g.textUtils.medidasMensagens_(ds,msg_ids); check("medidas mensagens")
 #g.textUtils.makeMessagesTable(msg_measures,TDIR)
 #
 pos_measures=g.textUtils.medidasPOS_([i["tokens_sentences"] for i in sent_measures]); check("medidas POS")
@@ -83,7 +83,7 @@ g.textUtils.makeKSTables(dists,
         fnames=("ksTokens","ksWords","ksSents"),
         tags=("size of tokens","size of known words","size of sentences"))
 
-sinais2=g.textUtils.medidasSinais2_(pos_measures)
+sinais2=g.textUtils.medidasSinais2_(pos_measures,msg_measures)
 dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"])
 g.textUtils.makeKSTables(dists2,
         fnames=("ksAdjs","ksSubs","ksPuns"),
