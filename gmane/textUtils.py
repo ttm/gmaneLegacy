@@ -1,7 +1,7 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os, langid
+import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os, langid, shutil
 from nltk.corpus import wordnet as wn
 import builtins as B
 TT=time.time()
@@ -362,15 +362,24 @@ def makeTokensTable(medidasTokens__instance, table_dir="/home/r/repos/artigoText
     g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
     DL(fname_[:-4]+"_",[1],[1],[2,3,5,7,8])
-
-def medidasSinais2_(medidas_pos_list):
-    return [medidasSinais2(post) for post in medidas_pos_list]
-def medidasSinais2(post):
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    ll=[]
+    for i in range(0, len(l), n):
+        ll.append(l[i:i+n])
+    return ll
+def medidasSinais2_(medidas_pos_list,medidas_mensagens):
+    return [medidasSinais2(post,mmU)
+            for post,mmU in zip(medidas_pos_list,medidas_mensagens)]
+def medidasSinais2(post,medidas_mensagensU):
     sinal=[[i[1] for i in j] for j in post["tags"]]
+    sinal_=chunks([i[1] for j in post["tags"] for i in j],100)
     sinais={}
     sinais["adj"]=[j.count("ADJ") for j in sinal]
     sinais["sub"]=[j.count("NOUN") for j in sinal]
     sinais["pun"]=[j.count(".") for j in sinal]
+    sinais["verb"]=[j.count("VERB") for j in sinal_]
+    sinais["chars"]=medidas_mensagensU["toks_msgs"]
     return sinais
 
 def medidasSinais_(TS):
@@ -700,13 +709,14 @@ def medidasMensagens(ds,tids=None):
          for toks in tokens_msgs] #
     sents_msgs=[k.sent_tokenize(t) for t in mT] # tokens
     nmsgs=len(mT)
+    toks_msgs=[len(i) for i in mT]
     Mchars_msgs,   Schars_msgs  = mediaDesvio_(mT)
     Mtokens_msgs,  Stokens_msgs = mediaDesvio_(tokens_msgs)
     Mknownw_msgs,  Sknownw_msgs = mediaDesvio_(knownw_msgs)
     Mstopw_msgs,   Sstopw_msgs  = mediaDesvio_(stopw_msgs)
     Mpuncts_msgs,  Spuncts_msgs = mediaDesvio_(puncts_msgs)
     Msents_msgs,Ssents_msgs     = mediaDesvio_(sents_msgs)
-    mvars=("nmsgs",
+    mvars=("nmsgs","toks_msgs",
             "Msents_msgs","Ssents_msgs",
             "Mtokens_msgs","Stokens_msgs",
             "Mknownw_msgs","Sknownw_msgs",
@@ -1274,6 +1284,7 @@ def uniteTables3(TDIR,tag):
     for pos in ("n","as","v","r"):
     #for pos in ("n",):
         fname=TDIR+"wnPOSInline2-{}-{}".format(pos,tag)
+        fnames=[]
         for ttt in tt:
             fnames+=[TDIR+ttt+"-{}-{}tag_".format(pos,tag)]
         if os.path.isfile(fnames[1]+".tex"):
@@ -1286,7 +1297,7 @@ def uniteTables3(TDIR,tag):
             g.tableHelpers.vstackTables_(fname,fnames[3],fname)
 def uniteTables2(TDIR,tag):
     foo=TDIR+"posMerged{}".format(tag)
-    g.tableHelpers.vstackTables(TDIR+"posInline{}_".format(tag),
+    g.tableHelpers.vstackTables_(TDIR+"posInline{}_".format(tag),
             TDIR+"wnPOSInline{}_".format(tag),foo)
 def uniteTables(TDIR,tag):
     t1="geral"#"geralInline0_"
@@ -1366,11 +1377,13 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
             fnames=("ksTokens","ksWords","ksSents"),
             tags=("size of tokens","size of known words","size of sentences"),tag=tag)
 
-    sinais2=g.textUtils.medidasSinais2_(pos_measures); check("medidas sinais 2")
-    dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"]); check("ks sinais 2")
+    sinais2=g.textUtils.medidasSinais2_(pos_measures,msg_measures); check("medidas sinais 2")
+    dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun","verb","chars"]); check("ks sinais 2")
     g.textUtils.makeKSTables(dists2,TDIR,
-            fnames=("ksAdjs","ksSubs","ksPuns"),
-            tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences"),tag=tag)
+            fnames=("ksAdjs","ksSubs","ksPuns","ksVerbs","ksChars"),
+            tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences","use of verbs in each 100 tokens","use of number of characters in messages"),tag=tag)
+
+
 
     # correlação pierson e spearman (tem necessidade das duas?)
     medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__); check("medidas pca") # retorna medidas para plotar e tabelas

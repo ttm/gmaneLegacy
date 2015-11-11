@@ -40,6 +40,14 @@ TDIR="/home/r/repos/artigoTextoNasRedes/tables/SI2/"
 FDIR="/home/r/repos/artigoTextoNasRedes/figs/SI2/"
 g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,offset=1000)
 
+
+# colocar nas distancias ks,
+# leitura por mensagens: de uso de verbos
+# a cada 100 tokens
+# e tamanho de msgs em caracteres
+
+
+
 # implementar start from para pular os vdicts que já estiverem
 # prontos.
 # verificar quais redes são em ingles, talvez fazer já um identificador
