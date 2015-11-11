@@ -412,15 +412,15 @@ def makeKSTables(dists,table_dir="/home/r/repos/artigoTextoNasRedes/tables/",fna
     labels=labelsh[1:]
     labels_=[(l,"") for l in labels]
     labels__=[i for j in labels_ for i in j]
-    caption="KS distances on {}."
+    caption="KS distances on {}. TAG: {}."
     count=0
     if not fnames:
         fnames=[str(i) for i in range(len(dists))]
     if not tags:
         tags=[str(i) for i in range(len(dists))]
     for meas,fname,tag_ in zip(dists,fnames,tags):
-        fname_=mkName(table_dir,fname,tag)+".tex"
-        g.lTable(labels__,labelsh,meas,caption.format(tag_),
+        fname_=mkName(table_dir,fname+".tex",tag)
+        g.lTable(labels__,labelsh,meas,caption.format(tag_,tag),
                 fname_,"ksDistances")
         ME(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)]+[(i,0) for i in range(1,9)])
         DL(fname_[:-4]+"_",[1],[1],[2,4,6,8])
@@ -918,11 +918,11 @@ def makeWordnetTables2_POS(wn_dict_pos, table_dir="/home/r/repos/artigoTextoNasR
     TDIR=table_dir
     for pos in poss:
         wn_measures2=wn_dict_pos[pos]
-        g.textUtils.makeWordnetTable(  wn_measures2,TDIR  ,fname="{}-{}.tex". format(fname,pos,tag)) # medias e desvios das incidencias dos atributos
-        g.textUtils.makeWordnetTable2a(wn_measures2,TDIR,  fname="{}a-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
-        g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,  fname="{}b-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
-        g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,  fname="{}c-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
-        g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,  fname="{}d-{}.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable(  wn_measures2,TDIR  ,fname="{}-{}-{}tag.tex". format(fname,pos,tag)) # medias e desvios das incidencias dos atributos
+        g.textUtils.makeWordnetTable2a(wn_measures2,TDIR,  fname="{}a-{}-{}tag.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2b(wn_measures2,TDIR,  fname="{}b-{}-{}tag.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2c(wn_measures2,TDIR,  fname="{}c-{}-{}tag.tex".format(fname,pos,tag)) # contagem dos synsets raiz
+        g.textUtils.makeWordnetTable2d(wn_measures2,TDIR,  fname="{}d-{}-{}tag.tex".format(fname,pos,tag)) # contagem dos synsets raiz
     # make one file from all 20 (max) tables
     names="{}-{}_.tex","{}a-{}_.tex","{}b-{}_.tex","{}c-{}_.tex","{}d-{}_.tex"
     tx=""
@@ -1272,7 +1272,7 @@ def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0):
         tags=[str(i) for i in range(len(lids))]
     for lid,tag in zip(lids,tags):
         es=g.EmailStructures(lid,TOTAL,offset=offset)
-        if sum([not i for i in es.structs[-1].sectorialized_agents__]):
+        if sum([len(i)>4 for i in es.structs[-1].sectorialized_agents__])<3:
             B.degen.append(lid)
             continue
         makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
@@ -1284,6 +1284,7 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     pr=es.structs[-1]
     nm=es.structs[4]
     B.LANG=[]
+    B.tag=tag
 
     gmeasures=g.generalMeasures(ds,pr,timest)
     g.makeGeneralTable(gmeasures,TDIR,tag=tag)
@@ -1316,13 +1317,13 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
 
     sinais=g.textUtils.medidasSinais_(ts); check("medidas sinais")
     dists=g.textUtils.ksAll(sinais,mkeys=["lens_tok","lens_word","lens_sent"]); check("ks sinais")
-    g.textUtils.makeKSTables(dists,
+    g.textUtils.makeKSTables(dists,TDIR,
             fnames=("ksTokens","ksWords","ksSents"),
             tags=("size of tokens","size of known words","size of sentences"),tag=tag)
 
     sinais2=g.textUtils.medidasSinais2_(pos_measures); check("medidas sinais 2")
     dists2=g.textUtils.ksAll(sinais2,mkeys=["adj","sub","pun"]); check("ks sinais 2")
-    g.textUtils.makeKSTables(dists2,
+    g.textUtils.makeKSTables(dists2,TDIR,
             fnames=("ksAdjs","ksSubs","ksPuns"),
             tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences"),tag=tag)
 
@@ -1343,4 +1344,5 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
         vdict[mvar] = locals()[mvar]
     pDump(vdict,TDIR+"vdict-{}.pickle".format(tag))
     check("escrito pickle, {}, {}".format(lid, TDIR))
+    del B.tag
 

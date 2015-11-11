@@ -126,6 +126,8 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
 #    header+="\\footnotesize"
     if column_labels:
         header+=("& {} "*len(column_labels)+"\\\\\\hline\n").format(*column_labels)[2:]
+    if "tag" in dir(B):
+        caption+=" TAG: {}".format(B.tag)
     caption_="\\caption{{{}}}\n".format(caption)
     if ttype in ("kolmDiff3","kolmDiff3_","kolmSamp_","kolmSamp","textCorr"):
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table*}}".format(caption_)

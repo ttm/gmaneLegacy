@@ -37,6 +37,7 @@ class TimeStatistics:
             datetimes.append(datetime[1])
         self.datetimes=datetimes
         self.n_observations=len(datetimes)
+        self.bad_datetimes=[]
         self.makeStatistics()
     def makeStatistics(self):
         """Make statistics from seconds to years"""
@@ -193,7 +194,18 @@ class TimeStatistics:
                 max_date=self.datetimes[-1]-datetime.timedelta(delta_%year)
             else:
                 max_date=self.datetimes[-1]
-            samples=[i.month-1 for i in self.datetimes if i <= max_date]
+            try:
+                samples=[i.month-1 for i in self.datetimes if i <= max_date]
+            except:
+                samples=[]
+                for i in self.datetimes:
+                    try:
+                        foo=i<=max_date
+                        if foo:
+                            samples.append(i.month-1)
+                    except:
+                        self.bad_datetimes+=[i]
+
         else:
             samples=[i.month-1 for i in self.datetimes]
         histogram=n.histogram(samples,bins=list(range(13)))[0]
