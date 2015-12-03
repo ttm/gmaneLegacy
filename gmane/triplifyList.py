@@ -73,7 +73,7 @@ def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scr
     if not os.path.isdir(fpath_+"base"):
         os.mkdir(fpath_+"base")
 #    shutil.copy("{}/*".format(fname),fpath_+"base/")
-    P.utils.zipDir(fname,fpath_+"base/msgs.zip")
+    P.utils.zipDir2(fname,fpath_+"base/msgs")
     P.rdf.writeAll(tg2,aname+"Meta",fpath_,False)
 
     # faz um README
