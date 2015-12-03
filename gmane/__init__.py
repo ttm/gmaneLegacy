@@ -37,4 +37,6 @@ from .ksStatistics import KSReferences, kolmogorovSmirnovDistance, kolmogorovSmi
 
 from . import ksStatistics as KS
 from . import textUtils
+from . import utils
+from . import triplifyList
 
