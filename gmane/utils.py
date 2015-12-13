@@ -23,19 +23,19 @@ def getBody(msg):
                 charset="ascii"
                 ignore=1
             if ignore:
-                t=t.decode(charset,"ignore")
+                t=t.decode(charset,errors="ignore")
             else:
                 try:
                     t=t.decode(charset)
                 except:
                     try:
-                        t=t.decode(charset,"ignore")
+                        t=t.decode(charset,errors="ignore")
                     except:
                         t=t.decode(errors="ignore")
 
         except LookupError:
             try:
-                t=t.decode(charset,"ignore")
+                t=t.decode(charset,errors="ignore")
             except LookupError:
                 handleerror2("LookupError for unknown charset:",t,charset)
     if not getcharsets(msg):
@@ -53,7 +53,31 @@ def cleanText(text):
     t=[line for line in t if line]
     t_=[]
     for line in t:
-        if line.startswith(">"):
+        if line.strip().startswith(">"):
+            pass
+        elif "style=" in line:
+            pass
+        elif "]$" in line:
+            pass
+        elif sum([(i in line) for i in ("if","while","for","(",")")])>=3:
+            pass
+        elif ("FLAGS" in line) and ("=" in line):
+            pass
+        elif line.strip().endswith(");"):
+            pass
+        elif line.strip().startswith("$ "):
+            pass
+        elif line.strip().startswith("return "):
+            pass
+        elif line.startswith("\./"):
+            pass
+        elif line.startswith("~/"):
+            pass
+        elif line.startswith("//"):
+            pass
+        elif line.startswith(" |"):
+            pass
+        elif line.startswith("| "):
             pass
         elif line.startswith("On Mon"):
             pass
@@ -93,3 +117,7 @@ def cleanText(text):
             t_.append(line)
     t_="\n".join(t_)
     return t_
+import urllib
+def urifyID(tid):
+#    return tid.strip().replace("@","_-AT-_").replace(">","").replace("<","").replace("[","").replace("]","")
+    return urllib.parse.quote(tid.strip().replace("@","_-AT-_").replace(">","").replace("<","").replace("[","").replace("]",""))

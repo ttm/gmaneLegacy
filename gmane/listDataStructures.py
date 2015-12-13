@@ -1,7 +1,7 @@
-import dateutil.parser
-import parsedatetime as pdt
+import dateutil.parser, parsedatetime as pdt, pytz
+import percolation as P, gmane as G
 parser=pdt.Calendar()
-import pytz
+c=P.utils.check
 class ListDataStructures:
     """Basic datastructures driven from Gmane email messages.
 
@@ -109,13 +109,13 @@ class ListDataStructures:
                 if text=="no":
                     messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
-                    try:
-                        t=G.utils.getBody(message)
-                        t=G.utils.cleanText(t)
-                        messages[message["message-id"]]=(author,id_ant,date,t)
-                    except:
-                        messages[message["message-id"]]=(author,id_ant,date,"")
-                        self.bad_text_message_ids.append(message["message-id"])
+#                    try:
+                    t=G.utils.getBody(message)
+                    t_=G.utils.cleanText(t)
+                    messages[message["message-id"]]=(author,id_ant,date,t_)
+#                    except:
+#                        messages[message["message-id"]]=(author,id_ant,date,"")
+#                        self.bad_text_message_ids.append(message["message-id"])
                 else:
                     raise TypeError("argument text accepts only 'yes' and 'no'values")
                 author_messages[author].append( (message["message-id"], id_ant, date)  )
