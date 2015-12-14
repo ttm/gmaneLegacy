@@ -1,3 +1,4 @@
+import datetime
 def getcharsets(msg):
     charsets = set({})
     for c in msg.get_charsets():
@@ -136,3 +137,18 @@ import urllib
 def urifyID(tid):
 #    return tid.strip().replace("@","_-AT-_").replace(">","").replace("<","").replace("[","").replace("]","")
     return urllib.parse.quote(tid.strip().replace("@","_-AT-_").replace(">","").replace("<","").replace("[","").replace("]",""))
+
+class FixedOffset(datetime.tzinfo):
+    """Fixed offset in minutes east from UTC."""
+    def __init__(self, offset, name):
+        self.__offset = datetime.timedelta(minutes=offset)
+        self.__name = name
+
+    def utcoffset(self, dt):
+        return self.__offset
+
+    def tzname(self, dt):
+        return self.__name
+
+    def dst(self, dt):
+        return ZERO

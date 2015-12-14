@@ -13,20 +13,24 @@ parser=html.parser.HTMLParser()
 U=parser.unescape
 c=P.utils.check
 
-def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scriptpath=None,list_id=None):
+def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scriptpath=None,umbrella_dir=None):
     if not created_at:
         created_at=datetime.datetime.now()
     if not aname:
         aname=fname.split("/")[-1].replace(".","-").replace("+","P")
+    fname_=fname.split("/")[-1]
+    PREFIX="https://raw.githubusercontent.com/OpenLinkedSocialData/{}master/".format(umbrella_dir)
     tg=P.rdf.makeBasicGraph([["po","gmane"],[P.rdf.ns.po,P.rdf.ns.gmane]],"Email messages linked data")
-
+    nchars=0
     for mid in list_data_struct.message_ids:
         message=list_data_struct.messages[mid]
         imsg=P.rdf.IC([tg],P.rdf.ns.gmane.Message,"{}".format(G.utils.urifyID(mid)))
-        if imsg == "http://purl.org/socialparticipation/gmane/Message#200406231741.i5NHfZbO019592_-AT-_sirius.codesourcery.com":
-            print("AQUIII")
+#        if imsg == "http://purl.org/socialparticipation/gmane/Message#200406231741.i5NHfZbO019592_-AT-_sirius.codesourcery.com":
+#            print("AQUIII")
         uris=[P.rdf.ns.gmane.mid,P.rdf.ns.gmane.sentAt,P.rdf.ns.gmane.body,P.rdf.ns.gmane.uid]
-        data=[U(mid),message[2],U(message[3]),message[0]]
+        tbody=U(message[3])
+        nchars+=len(tbody)
+        data=[U(mid),message[2],tbody,message[0]]
 #        P.utils.breakMe()
         P.rdf.link([tg],imsg,mid,uris,data,draw=False)
 
@@ -47,9 +51,14 @@ def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scr
     ind=P.rdf.IC([tg2],P.rdf.ns.po.Snapshot,
             aname,"Snapshot {}".format(aname))
     # escrever tb:
-    # nmsgs, nresponses
-    # nusers
+#    P.utils.breakMe()
+    nmsgs=list_data_struct.n_messages
+    nresponses=sum([i[1]!=None for i in list_data_struct.messages.values()])
+    nusers=list_data_struct.n_authors
     # nchars
+#    repourl="https://github.com/OpenLinkedSocialData/{}".format(aname)
+    repourl="https://github.com/OpenLinkedSocialData/{}tree/master/{}".format(umbrella_dir,aname)
+    metaurl="{}rdf/{}Meta.owl".format(PREFIX,aname)
     P.rdf.link([tg2],ind,"Snapshot {}".format(aname),
                           [P.rdf.ns.po.createdAt,
                           P.rdf.ns.po.triplifiedIn,
@@ -63,19 +72,27 @@ def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scr
                           P.rdf.ns.po.acquiredThrough,
                           P.rdf.ns.rdfs.comment,
                           P.rdf.ns.gmane.gmaneID,
+                          P.rdf.ns.gmane.nParticipants,
+                          P.rdf.ns.gmane.nMessages,
+                          P.rdf.ns.gmane.nResponses,
+                          P.rdf.ns.gmane.nCharacters,
                           ],
                           [created_at,
                            datetime.datetime.now(),
-                           "Gmane database and list admins",
-                           "https://github.com/ttm/{}".format(aname),
+                           "Gmane database and public list participants",
+                           repourl,
 #                           "https://raw.githubusercontent.com/ttm/{}/master/base/{}".format(aname,fname.split("/")[-1]),
-                           "https://raw.githubusercontent.com/ttm/{}/master/rdf/{}Translate.owl".format(aname,aname),
-                           "https://raw.githubusercontent.com/ttm/{}/master/rdf/{}Translate.ttl".format(aname,aname),
-                                "https://raw.githubusercontent.com/ttm/{}/master/rdf/{}Meta.owl".format(aname,aname),
-                                "https://raw.githubusercontent.com/ttm/{}/master/rdf/{}Meta.ttl".format(aname,aname),
+                           "{}rdf/{}Translate.owl".format(PREFIX,aname),
+                           "{}rdf/{}Translate.ttl".format(PREFIX,aname),
+                                metaurl,
+                                "{}rdf/{}Meta.ttl".format(PREFIX,aname),
                            "Gmane public database of email lists",
                                 comment,
-                               fname.split("/")[-1]
+                               fname_,
+                               nusers,
+                               nmsgs,
+                               nresponses,
+                               nchars
                            ])
     tg_=[tg[0]+tg2[0],tg[1]]
     fpath_="{}{}/".format(fpath,aname)
@@ -102,24 +119,32 @@ def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scr
     #nicks=queryMe(tg_[0],"SELECT ?s ?o WHERE {?s irc:nick ?o}")
 
     c("before queries")
-    nnicks=P.utils.countMe( tg_[0], "gmane:author")
-    nicks= P.utils.getAll2(  tg_[0],"gmane:author")
-    nicks_=[i.split("@")[-1] for i in nicks]
+    #nnicks=P.utils.countMe( tg_[0], "gmane:author")
+    #nicks= P.utils.getAll2(  tg_[0],"gmane:author")
+    #nicks_=[i.split("@")[-1] for i in nicks]
 
-    nreplies= P.utils.countMe(tg_[0],   "gmane:responseTo")
-    nmsgs=    P.utils.countMe(  tg_[0], "gmane:body")
+    #nreplies= P.utils.countMe(tg_[0],   "gmane:responseTo")
+    #nmsgs=    P.utils.countMe(  tg_[0], "gmane:body")
     # nchars
     c("before queries")
     with open(fpath_+"README","w") as f:
-        f.write("""This repo delivers RDF data from the email list with id {} in the Gmane public database.
-collected around {}, with messages from {} to {} and {} users.
-Total messages count {} of which {} are replies.
-The linked data is available at rdf/ dir and was
+        f.write("""This repo delivers RDF data from
+the email list with id {} in the Gmane public database.
+Collected around {}, the {} messages, 
+of which {} are replies with a total of {} chars,
+concerning {} participants, span from {} to {}.
+The linked data is available at rdf/ and was
 generated by the routine in the script/ directory.
-Original data from Gmane in data/\n
-\nUsers: {}\n""".format(
-            list_id,created_at,date1,date2,
-            nnicks,nmsgs,nreplies,nicks_))
+Metadata for discovery is in file:
+{}
+All files should be available at the git repository:
+{}
+\n""".format(
+            fname_,created_at,
+            nmsgs,nresponses,nchars,nusers,
+            date1,date2,
+            repourl,metaurl
+            ))
     return tg_
 
 

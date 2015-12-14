@@ -87,12 +87,23 @@ class ListDataStructures:
                 #date=date.replace("GMT","")
                 #date=date.replace(" CST","")
                 #date=date.replace(" CDT","")
+                date=date.replace("(KST)","")
                 date=date.replace("Thur","Thu")
+                date=date.replace("--","-")
+                if "+-" in date:
+                    date=date.split("+-")[0][:-1]
                 if "-" in date and len(date.split("-")[1])==3:
                     date=date+"0"
-                date=date.replace("--","-")
+                if "+" in date and len(date.split("+")[1])==3:
+                    date=date+"0"
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
+                    date=pytz.UTC.localize(date)
+                try:
+                    aa=date.utcoffset()
+                    aa=date.isoformat()
+                except:
+                    date=date.replace(tzinfo=None)
                     date=pytz.UTC.localize(date)
                 raw_clean_dates.append((date_,date))
                 if message['references']:
