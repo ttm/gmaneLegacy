@@ -92,10 +92,14 @@ class ListDataStructures:
                 date=date.replace("--","-")
                 if "+-" in date:
                     date=date.split("+-")[0][:-1]
-                if "-" in date and len(date.split("-")[1])==3:
+                if "-" in date and len(date.split("-")[-1])==3:
                     date=date+"0"
-                if "+" in date and len(date.split("+")[1])==3:
+                if "+" in date and len(date.split("+")[-1])==3:
                     date=date+"0"
+                if "\n" in date:
+                    date=date.split("\n")[0]
+                if date.startswith("So, "):
+                    date=date[4:]
                 date=dateutil.parser.parse(date)
                 if date.tzinfo==None: # colocando localizador em que não tem, para poder comparar
                     date=pytz.UTC.localize(date)

@@ -11,7 +11,10 @@ def handleerror2(errmsg, t,charset):
 def getBody(msg):
     while msg.is_multipart():
         msg=msg.get_payload()[0]
-    t=msg.get_payload(decode=True)
+    try:
+        t=msg.get_payload(decode=True)
+    except:
+        t=msg.get_payload()
     ignore=0
     for charset in getcharsets(msg):
         try:
@@ -32,13 +35,19 @@ def getBody(msg):
                     try:
                         t=t.decode(charset,errors="ignore")
                     except:
-                        t=t.decode(errors="ignore")
+                        if type(t)==type("asid"):
+                            return t
+                        else:
+                            t=t.decode(errors="ignore")
 
         except LookupError:
             try:
                 t=t.decode(charset,errors="ignore")
             except LookupError:
-                handleerror2("LookupError for unknown charset:",t,charset)
+                if type(t)==type("asid"):
+                    return t
+                else:
+                    handleerror2("LookupError for unknown charset:",t,charset)
     if not getcharsets(msg):
         try:
             t=t.decode()

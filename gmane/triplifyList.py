@@ -97,7 +97,7 @@ def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scr
     tg_=[tg[0]+tg2[0],tg[1]]
     fpath_="{}{}/".format(fpath,aname)
     c("before write")
-    P.rdf.writeAll(tg_,aname+"Translate",fpath_,False,1)
+    P.rdf.writeAll(tg_,aname+"Translate",fpath_,False,1,sizelimit=100000)
 
     if not os.path.isdir(fpath_+"scripts"):
         os.mkdir(fpath_+"scripts")
