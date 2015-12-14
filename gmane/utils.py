@@ -47,27 +47,35 @@ def getBody(msg):
             except:
                 t=t.decode(errors="ignore")
     return t
+
 def cleanText(text):
 #    return text
     t=text.splitlines()
     t=[line for line in t if line]
     t_=[]
     for line in t:
-        if line.strip().startswith(">"):
+        line=line.strip()
+        if line.startswith(">"):
+            pass
+        elif line.startswith("<"):
             pass
         elif "style=" in line:
             pass
         elif "]$" in line:
             pass
-        elif sum([(i in line) for i in ("if","while","for","(",")")])>=3:
+        elif "=" in line:
+            pass
+        elif "INFO" in line:
+            pass
+        elif (sum([(i in line) for i in ("if","while","for","(",")")])>=3):
             pass
         elif ("FLAGS" in line) and ("=" in line):
             pass
-        elif line.strip().endswith(");"):
+        elif line.endswith(");"):
             pass
-        elif line.strip().startswith("$ "):
+        elif line.startswith("$ "):
             pass
-        elif line.strip().startswith("return "):
+        elif line.startswith("return "):
             pass
         elif line.startswith("\./"):
             pass
@@ -97,6 +105,8 @@ def cleanText(text):
             pass
         elif line.endswith("wrote:"):
             pass
+        elif sum([line.startswith(i) for i in ("From:","Subject","To","Reply-To:","WARNING")]):
+            pass
         # uma palavra soh sem ponto final
         elif len(line.split()) == 1 and line[-1]!=".":
             pass
@@ -117,6 +127,11 @@ def cleanText(text):
             t_.append(line)
     t_="\n".join(t_)
     return t_
+import string
+#allowed=string.punctuation+string.whitespace
+allowed=string.punctuation+" \n\t"
+def hardClean(text):
+    return "".join(c for c in text if ((c.isalnum()) or (c in allowed)))
 import urllib
 def urifyID(tid):
 #    return tid.strip().replace("@","_-AT-_").replace(">","").replace("<","").replace("[","").replace("]","")

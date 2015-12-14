@@ -17,6 +17,7 @@ dreload(g,exclude="pytz")
 #dl=g.DownloadGmaneData(dpath)
 #dl.downloadedStats() # might take a while
 dpath='/home/r/.gmane4/'
+dpath='/disco/.gmane/'
 load_msgs=[]
 data_structs=[]
 scriptpath=os.path.realpath(__file__)
@@ -24,12 +25,15 @@ fpath="./publishing/"
 #for list_stat in dl.lists:
 #    list_id=list_stat[0]
 #for list_id in ['gmane.politics.organizations.metareciclagem', 'gmane.comp.gcc.libstdc++.devel', 'gmane.linux.audio.devel', 'gmane.linux.audio.users']:
-for list_id in ['gmane.comp.gcc.libstdc++.devel']:
-#    lm=g.LoadMessages(list_id,basedir=dpath,n_messages=100)
-    lm=g.LoadMessages(list_id,basedir=dpath)
+#for list_id in ['gmane.comp.gcc.libstdc++.devel']:
+for list_id in ['gmane.comp.java.hadoop.hive.user']:
+    lm=g.LoadMessages(list_id,basedir=dpath,n_messages=20000)
+#    lm=g.LoadMessages(list_id,basedir=dpath)
     ds=g.ListDataStructures(lm)
     foo=G.triplifyList.makeRepo(ds,fpath,dpath+list_id,"Linked data of the email list with Gmane id: {}".format(list_id),scriptpath=scriptpath,list_id=list_id)
     mm= ds.messages
     ids=ds.message_ids
     print("first: ", mm[ids[0]][2], "last:", mm[ids[-1]][2])
  
+def hardClean(text):
+    return "".join(c for c in text if c.isalnum() or c in allowed)

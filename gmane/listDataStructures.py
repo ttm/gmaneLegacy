@@ -55,11 +55,14 @@ class ListDataStructures:
         self.spurious_authors=spurious_authors=[]
         self.n_empty=n_empty=0#messagesLoaded.n_empty
         self.bad_text_message_ids=[]
+        mcount=0
         for message in messagesLoaded:
             if not message.keys(): # if message is empty
                 #spurious_empty_ids.append(i)
                 self.n_empty+=1
             else:
+                mcount+=1
+                if mcount%300==0: c("struct +300: {}".format(mcount))
                 author_=message['from']
                 if "replace" not in dir(author_):
                     spurious_authors.append(message)
@@ -110,8 +113,9 @@ class ListDataStructures:
                     messages[message["message-id"]]=(author,id_ant,date)
                 elif text=="yes":
 #                    try:
-                    t=G.utils.getBody(message)
-                    t_=G.utils.cleanText(t)
+                    t=G.utils.getBody(message) # AQUI TTM
+                    t_=G.utils.cleanText(t) # AQUI TTM
+                    t_=G.utils.hardClean(t_) # AQUI TTM
                     messages[message["message-id"]]=(author,id_ant,date,t_)
 #                    except:
 #                        messages[message["message-id"]]=(author,id_ant,date,"")

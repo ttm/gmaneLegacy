@@ -1,5 +1,6 @@
 from .downloadMessages import DownloadGmaneData
-import mailbox, os
+import mailbox, os, percolation as P
+c=P.utils.check
 
 class LoadMessages:
     """Class that loads Gmane messages saved locally
@@ -45,7 +46,10 @@ class LoadMessages:
             tend=self.offset+self.n_messages
         else:
             tend=None
+        mcount=0
         for mfile in mfiles[self.offset:tend]:
+            mcount+=1
+            if mcount%300==0: c("load +300: {}".format(mcount))
             mbox = mailbox.mbox(self._BASE_DIR+self.list_id+"/"+mfile)
             if mbox.keys():
                 messages.append(mbox[0])
