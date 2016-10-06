@@ -203,7 +203,7 @@ def makeGeneralTable(generalMeasures_instance, table_dir="/home/r/repos/artigoTe
     Gamma=sum(Gammas)
     data=[[N]+Ns,[100]+Ns_,[M]+Ms,[100]+Ms_,[Gamma]+Gammas,[100]+Gammas_,[100*Gamma/M]+G_,[mt_]+mt,[st_]+st]
     caption=r"""Distribution of participants, messages and threads among each Erd\"os sector ({{\bf p.}} for periphery, {{\bf i.}} for intermediary, 
-    {{\bf h.}} for hubs) in a total time period of {:.2f} years (from {} to {}). $N$ is the number of participants, $M$ is the number of messages, $\Gamma$ is the number of threads, and $\gamma$ is the number of messages in a thread.
+    {{\bf h.}} for hubs) in a total timespan of {:.2f} years (from {} to {}). $N$ is the number of participants, $M$ is the number of messages, $\Gamma$ is the number of threads, and $\gamma$ is the number of messages in a thread.
     The \% denotes the usual `per cent' with respecto to the total quantity ($100\%$ for {{\bf g.}})
     while $\mu$ and $\sigma$ denote mean and standard deviation.""".format(deltaAnos_,date1,date2)
     fname_=mkName(table_dir,fname,tag)
