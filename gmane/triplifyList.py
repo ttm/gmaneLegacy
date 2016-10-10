@@ -11,7 +11,7 @@ import percolation as P, gmane as G
 import html.parser
 parser=html.parser.HTMLParser()
 U=parser.unescape
-c=P.utils.check
+c=P.check
 
 def makeRepo(list_data_struct,fpath,fname,comment,aname=None,created_at=None,scriptpath=None,umbrella_dir=None):
     if not created_at:

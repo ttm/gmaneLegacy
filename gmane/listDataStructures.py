@@ -1,7 +1,7 @@
 import dateutil.parser, parsedatetime as pdt, pytz
 import percolation as P, gmane as G
 parser=pdt.Calendar()
-c=P.utils.check
+c=P.check
 class ListDataStructures:
     """Basic datastructures driven from Gmane email messages.
 

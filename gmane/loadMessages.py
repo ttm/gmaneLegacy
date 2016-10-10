@@ -1,6 +1,6 @@
 from .downloadMessages import DownloadGmaneData
 import mailbox, os, percolation as P
-c=P.utils.check
+c=P.check
 
 class LoadMessages:
     """Class that loads Gmane messages saved locally

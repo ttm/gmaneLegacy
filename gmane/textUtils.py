@@ -1385,8 +1385,6 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
             fnames=("ksAdjs","ksSubs","ksPuns","ksVerbs","ksChars"),
             tags=("use of adjectives on sentences","use of substantives on sentences","use of punctuations on sentences","use of verbs in each 100 tokens","use of number of characters in messages"),tag=tag)
 
-
-
     # correlação pierson e spearman (tem necessidade das duas?)
     medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__); check("medidas pca") # retorna medidas para plotar e tabelas
     g.textUtils.makeCorrelationTable_(medidas_pca,TDIR,"correlationInline.tex",tag=tag)
@@ -1405,4 +1403,3 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     pDump(vdict,TDIR+"vdict-{}.pickle".format(tag))
     check("escrito pickle, {}, {}".format(lid, TDIR))
     del B.tag
-
