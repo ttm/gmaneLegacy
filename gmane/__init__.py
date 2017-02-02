@@ -31,6 +31,7 @@ from .timeStatistics import circularStatistics, TimeStatistics
 from .agentStatistics import AgentStatistics
 from .evolutionTimelines import EvolutionTimelines
 from . import tableHelpers
+from .tableHelpers import *
 #from .tableHelpers import makeTables, partialSums, pcaTable, writeTex, markEntries, lTable, encapsulateTable, markEntries_, doubleLines, fSize
 # from .evolutionMusic import EvolutionMusic
 from .textUtils import EmailStructures, generalMeasures, makeText, medidasLetras, medidasTokens, medidasTamanhosTokens, medidasTamanhosSentencas, medidasTamanhosMensagens, medidasPOS, medidasWordnet, medidasWordnet2, tfIdf, WL_,medidasTokensQ,medidasTokensQ_, perc, digRoot, makeGeneralTable

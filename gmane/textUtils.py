@@ -12,6 +12,7 @@ B.me=[]
 B.tt_=[]
 B.tt=[]
 B.degen=[]
+B.nonenglish=[]
 puncts=set(string.punctuation)
 #w=open("./wordsEn.txt","r")
 #w=w.read()
@@ -66,6 +67,10 @@ R=REPLACER.replace
 def pDump(tobject,tfilename):
     with open(tfilename,"wb") as f:
         pickle.dump(tobject,f,-1)
+
+class EmptyClass:
+    pass
+    
 class EmailStructures:
     """Class that makes all basic structures for a given email list"""
     def __init__(self,list_id,n_messages,text="yes",offset=0,basedir="~/.gmane3/"):
@@ -81,8 +86,14 @@ class EmailStructures:
         iN=g.InteractionNetwork(ds)
         nm=g.NetworkMeasures(iN,exclude=["rich_club"])
         print("{0:.2f} for network measures".format(time.time()-TT)); TT=time.time()
-        np2_=g.NetworkPartitioning(nm,2,"g")
-        del np2_.binomial
+        if nm.N < 5:
+            # network is too small
+            # so make it disposable by makeTables_
+            np2_ = EmptyClass()
+            np2_.sectorialized_agents__ = [[], [], []]
+        else:
+            np2_=g.NetworkPartitioning(nm,2,"g")
+            del np2_.binomial
         print("{0:.2f} for network partition".format(time.time()-TT)); TT=time.time()
         self.structs=lm, ds, ts, iN, nm, np2_
 def perc_(alist):
@@ -207,7 +218,7 @@ def makeGeneralTable(generalMeasures_instance, table_dir="/home/r/repos/artigoTe
     The \% denotes the usual `per cent' with respecto to the total quantity ($100\%$ for {{\bf g.}})
     while $\mu$ and $\sigma$ denote mean and standard deviation.""".format(deltaAnos_,date1,date2)
     fname_=mkName(table_dir,fname,tag)
-    g.lTable(labels,labelsh,data,caption,fname_,"textGeral")
+    g.tableHelpers.lTable(labels,labelsh,data,caption,fname_,"textGeral")
     dl=g.tableHelpers.dl
     me=g.tableHelpers.me
     me(fname_[:-4],"\\bf",[(0,i) for i in range(1,5)])
@@ -1319,15 +1330,38 @@ def uniteTables(TDIR,tag):
     g.tableHelpers.vstackTables(foo,tt[4],foo)
 
 
-def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0,basedir="~./gmane3/"):
-    if not tags:
-        tags=[str(i) for i in range(len(lids))]
-    for lid,tag in zip(lids,tags):
+def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0,basedir="~/.gmane3/"):
+    # if not tags:
+    #     tags=[str(i) for i in range(len(lids))]
+    # for lid,tag in zip(lids,tags):
+    #     es=g.EmailStructures(lid,TOTAL,offset=offset,basedir=basedir)
+    #     if sum([len(i)>4 for i in es.structs[-1].sectorialized_agents__])<3:
+    #         B.degen.append(lid)
+    #         continue
+    #     isenglish = makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
+    #     if isenglish == 'nonenglish':
+    #         B.nonenglish.append(lid)
+    tag = 0
+    for lid in lids:
         es=g.EmailStructures(lid,TOTAL,offset=offset,basedir=basedir)
         if sum([len(i)>4 for i in es.structs[-1].sectorialized_agents__])<3:
             B.degen.append(lid)
             continue
-        makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
+        isenglish = makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
+        if isenglish == 'nonenglish':
+            B.nonenglish.append(lid)
+        else:
+            tag += 1
+    tags = list(range(tag))
+    lids_ = [i for i in lids if i not in B.degen and i not in
+            B.nonenglish]
+    labelsh = ('tag', 'gmane id')
+    labels = [str(i) for i in tags]
+    data = lids_
+    caption = 'Numerical tags with respective list ids used throughout tables in this supporting information document.'
+    fname_ = TDIR+'labelsIDs.tex'
+    g.tableHelpers.lTable(labels,labelsh,data,caption,fname_,"strings")
+
 def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     #TDIR="/home/r/repos/artigoTextoNasRedes/tables/"
     #TDIRf="/home/r/repos/artigoTextoNasRedes/figs/"
@@ -1338,11 +1372,14 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     B.LANG=[]
     B.tag=tag
 
-    gmeasures=g.generalMeasures(ds,pr,timest)
-    g.makeGeneralTable(gmeasures,TDIR,tag=tag)
-
     ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
     B.LANG+=[langid.classify(ts[0])]
+    if B.LANG[-1] != 'en':
+        print("NON ENGLISH LIST")
+        return 'nonenglish'
+
+    gmeasures=g.generalMeasures(ds,pr,timest)
+    g.makeGeneralTable(gmeasures,TDIR,tag=tag)
 
     char_measures=g.textUtils.medidasLetras_(ts); check("medidas letras")
     g.textUtils.makeCharTable(char_measures,TDIR,tag=tag)
@@ -1389,7 +1426,7 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     medidas_pca=g.textUtils.medidasPCA2_(ds,nm,pr.sectorialized_agents__); check("medidas pca") # retorna medidas para plotar e tabelas
     g.textUtils.makeCorrelationTable_(medidas_pca,TDIR,"correlationInline.tex",tag=tag)
     g.textUtils.makePCATable_(medidas_pca,TDIR,tag=tag)
-    medidas_pca[0]["pca"].plot("plot_pca-{}.png".format(tag),pr,labels="sym",tdir=FDIR)
+    # medidas_pca[0]["pca"].plot("plot_pca-{}.png".format(tag),pr,labels="sym",tdir=FDIR)
     es.structs=es.structs[1:]
     ftags=[i["ftags"] for i in wn_measures]
     LANG=B.LANG
@@ -1403,3 +1440,5 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     pDump(vdict,TDIR+"vdict-{}.pickle".format(tag))
     check("escrito pickle, {}, {}".format(lid, TDIR))
     del B.tag
+
+    return 0
