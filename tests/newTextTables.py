@@ -28,19 +28,20 @@ PDIR="pickledir/"
 # pDump(dl,"{}dl.pickle".format(PDIR))
 dl=pRead("{}dl.pickle".format(PDIR))
  
-TOTAL=1000
 # lids=[i[0] for i in dl.lists[:20]][3:] # as 20 com maior numero de mensagens
 # lids=[i[0] for i in dl.lists[:20]][5:25] # as 20 com maior numero de mensagens
-lids=[i[0] for i in dl.lists[5:25]] # as 20 com maior numero de mensagens
+lids=[i[0] for i in dl.lists[12:32]] # as 20 com maior numero de mensagens
 lids=[i[0] for i in dl.lists[21:25]] # as 20 com maior numero de mensagens
-TDIR="/home/r/repos/artigoTextoNasRedes2/tables/SI/"
-FDIR="/home/r/repos/artigoTextoNasRedes2/figs/SI/"
+lids=[i[0] for i in dl.lists[5:30]] # as 20 com maior numero de mensagens
+TOTAL=1000
+TDIR="/home/r/repos/artigoTextoNasRedes3/tables/SI/"
+FDIR="/home/r/repos/artigoTextoNasRedes3/figs/SI/"
 #g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,0,5)
 g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,0,5,basedir=basedir)
 
-print("FEITAS TODAS AS ANALISES COM 1000 mensagens")
+print("\n\nFEITAS TODAS AS ANALISES COM 1000 mensagens\n\n")
 
 TOTAL=2000
-TDIR="/home/r/repos/artigoTextoNasRedes2/tables/SI2/"
-FDIR="/home/r/repos/artigoTextoNasRedes2/figs/SI2/"
+TDIR="/home/r/repos/artigoTextoNasRedes3/tables/SI2/"
+FDIR="/home/r/repos/artigoTextoNasRedes3/figs/SI2/"
 g.textUtils.makeTables_(lids,TOTAL,TDIR,FDIR,offset=1000,basedir=basedir)

@@ -35,6 +35,10 @@ Ideally, this package should ease:
 
 PS.
 Implemented measures of symmetry in network agents activity by hand (not found in network and numeric packages) according to [1].
+PS2.
+ongoing research in 
+tests/newTextTables.py and
+tests/makeOverallTextAnalysis.py
 
 Usage example
 =================

@@ -1341,23 +1341,26 @@ def makeTables_(lids,TOTAL,TDIR,FDIR,tags=None,offset=0,start_from=0,basedir="~/
     #     isenglish = makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
     #     if isenglish == 'nonenglish':
     #         B.nonenglish.append(lid)
+    B.degen=[]
+    B.nonenglish=[]
     tag = 0
     for lid in lids:
         es=g.EmailStructures(lid,TOTAL,offset=offset,basedir=basedir)
         if sum([len(i)>4 for i in es.structs[-1].sectorialized_agents__])<3:
             B.degen.append(lid)
-            continue
-        isenglish = makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
-        if isenglish == 'nonenglish':
-            B.nonenglish.append(lid)
+            print("------- >       > Degenerated structure <")
         else:
-            tag += 1
+            isenglish = makeTable(lid,es,TOTAL,TDIR,FDIR,tag)
+            if isenglish == 'nonenglish':
+                B.nonenglish.append(lid)
+            else:
+                tag += 1
     tags = list(range(tag))
     lids_ = [i for i in lids if i not in B.degen and i not in
             B.nonenglish]
     labelsh = ('tag', 'gmane id')
     labels = [str(i) for i in tags]
-    data = lids_
+    data = [[i] for i in lids_]
     caption = 'Numerical tags with respective list ids used throughout tables in this supporting information document.'
     fname_ = TDIR+'labelsIDs.tex'
     g.tableHelpers.lTable(labels,labelsh,data,caption,fname_,"strings")
@@ -1373,10 +1376,12 @@ def makeTable(lid,es,TOTAL,TDIR,FDIR,tag,offset=0):
     B.tag=tag
 
     ts,ncontractions,msg_ids=g.textUtils.makeText_(ds,pr); check("make text")
-    B.LANG+=[langid.classify(ts[0])]
-    if B.LANG[-1] != 'en':
-        print("NON ENGLISH LIST")
+    B.LANG+=[langid.classify(" ".join(ts))]
+    if B.LANG[-1][0] != 'en':
+        print("NON ENGLISH LIST", B.LANG[-1])
         return 'nonenglish'
+    else:
+        print("IS ENGLISH!!!! <<<<<<<<<=================>>>>>>>>>>> !!!!!!!")
 
     gmeasures=g.generalMeasures(ds,pr,timest)
     g.makeGeneralTable(gmeasures,TDIR,tag=tag)
