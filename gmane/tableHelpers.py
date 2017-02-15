@@ -146,8 +146,8 @@ def encapsulateTable(string_table,column_labels, caption,ttype=None):
         footer="\\end{{tabular}}\n{}\\end{{center}}\n\\end{{table}}".format(caption_)
     table=header+string_table+footer
     return table
-def lTable(labels,labelsh,data,caption,filename,ttype="kolmNull"):
-    t1=makeTables(labels,data,True,ttype)
+def lTable(labels,labelsh,data,caption,filename,ttype="kolmNull",two_decimal=True):
+    t1=makeTables(labels,data,two_decimal,ttype)
     t1_=t1.split("\\hline")[:-1]
     #tvals=[int(float(tt.split("&")[-1].split(" \\\\")[0])) for tt in t1_]
     #print("AQUIIII!!!B",tvals)
