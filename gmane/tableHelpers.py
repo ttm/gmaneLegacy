@@ -172,7 +172,7 @@ def makeTables(labels,data,two_decimal=False,ttype=None):
         print("input one label per data row")
         return
     if not two_decimal:
-        data="".join([(labels[i]+" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow) for i, datarow in enumerate(data)])
+        data="".join([(labels[i]+(" & {} "*len(datarow)+"\\\\\\hline\n").format(*datarow)) for i, datarow in enumerate(data)])
     else:
         if ttype in ("textCorr","textPCA","allFloat"):
             data="".join([str(labels[i])+((" & %.2f "*(len(datarow))+"\\\\\\hline\n")%tuple(datarow)) for i, datarow in enumerate(data)])
