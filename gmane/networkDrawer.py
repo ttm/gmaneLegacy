@@ -77,7 +77,7 @@ class NetworkDrawer:
         min_out=max(out_measures.values())/3+.1
 
         self.clustering=clustering=network_measures.weighted_clusterings
-        A=x.to_agraph(network.g)
+        A=x.drawing.nx_agraph.to_agraph(network.g)
         A.node_attr['style']='filled'
         A.graph_attr["bgcolor"]="black"
         A.graph_attr["pad"]=.1
@@ -97,7 +97,7 @@ class NetworkDrawer:
             n_=A.get_node(node)
             ind_author=self.authors.index(n_)
             inds.append(inds)
-            colors.append(        '#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]]))
+            colors.append(        '#%02x%02x%02x' % tuple([int(255*i) for i in cm[int(clustering[n_]*255)][:-1]]))
             #n_.attr['fillcolor']= '#%02x%02x%02x' % tuple([255*i for i in cm[int(clustering[n_]*255)][:-1]])
             n_.attr['fillcolor']= colors[-1]
             n_.attr['fixedsize']=True

@@ -4,7 +4,7 @@ class NetworkMeasures:
 
     Both overall measures and measures of each vertex are taken.
     """
-    def __init__(self,network=None,exclude=["unweghted_undirected_betweenness","weighted_undirected_betweenness","unweighted_directed_betweenness"]):
+    def __init__(self,network=None,exclude=["unweghted_undirected_betweenness","weighted_undirected_betweenness","unweighted_directed_betweenness", "rich_club"]):
         if not network:
             network=g.InteractionNetwork()
 
@@ -31,22 +31,22 @@ class NetworkMeasures:
         timings.append((t.time()-T,"edges and nodes"))
 
         T=t.time()
-        self.degrees=g.degree()
+        self.degrees=dict(g.degree())
         self.nodes_= sorted(g.nodes(), key=lambda x : self.degrees[x])
         self.degrees_=[self.degrees[i] for i in self.nodes_]
-        self.in_degrees=g.in_degree()
+        self.in_degrees=dict(g.in_degree())
         self.in_degrees_=[self.in_degrees[i] for i in self.nodes_]
-        self.out_degrees=g.out_degree()
+        self.out_degrees=dict(g.out_degree())
         self.out_degrees_=[self.out_degrees[i] for i in self.nodes_]
         timings.append((t.time()-T,"in_out_total_degrees"))
 
         T=t.time()
-        self.strengths=     g.degree(weight="weight")
+        self.strengths=     dict(g.degree(weight="weight"))
         self.nodes__= sorted(g.nodes(), key=lambda x : self.strengths[x])
         self.strengths_=[self.strengths[i] for i in self.nodes_]
-        self.in_strengths= g.in_degree(weight="weight")
+        self.in_strengths= dict(g.in_degree(weight="weight"))
         self.in_strengths_=[self.in_strengths[i] for i in self.nodes_]
-        self.out_strengths=g.out_degree(weight="weight")
+        self.out_strengths=dict(g.out_degree(weight="weight"))
         self.out_strengths_=[self.out_strengths[i] for i in self.nodes_]
         timings.append((t.time()-T,"in_out_total_strengths"))
 
@@ -111,9 +111,9 @@ class NetworkMeasures:
             T=t.time()
             self.weighted_undirected_betweenness=x.betweenness_centrality(gu)
             timings.append((t.time()-T,"unweighted_undirected_betweenness"))
-        if "weiner" not in exclude:
+        if "wiener" not in exclude:
             T=t.time()
-            self.weiner=x.vitality.weiner_index(g,weight="weight")
+            self.wiener=x.wiener_index(g,weight="weight")
             timings.append((t.time()-T,"weiner"))
         if "closeness" not in exclude:
             T=t.time()
