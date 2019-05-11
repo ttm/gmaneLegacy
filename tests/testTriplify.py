@@ -1,7 +1,7 @@
 import  importlib, os
 import multiprocessing as mp
 from IPython.lib.deepreload import reload as dreload
-import gmane as g, percolation as P
+import gmaneLegacy as g, percolation as P
 G=g
 importlib.reload(g.listDataStructures)
 importlib.reload(g.loadMessages)

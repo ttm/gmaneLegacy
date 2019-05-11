@@ -1,4 +1,4 @@
-import gmane as g, mass as m, os
+import gmaneLegacy as g, mass as m, os
 ENV=os.environ["PATH"]
 import  importlib
 #from IPython.lib.deepreload import reload as dreload

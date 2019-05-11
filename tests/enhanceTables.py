@@ -1,6 +1,6 @@
 # this file is dedicated to
 # enhance already finished latex tables.
-import gmane as g, importlib, re, os
+import gmaneLegacy as g, importlib, re, os
 ENV=os.environ["PATH"]
 importlib.reload(g.tableHelpers)
 dreload(g,exclude="pytz")

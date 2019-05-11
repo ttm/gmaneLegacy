@@ -1,5 +1,5 @@
 from music21 import *
-import gmane as g, numpy as n, time
+import gmaneLegacy as g, numpy as n, time
 TDIR="/home/r/repos/kolmogorov-smirnov/tables/"
 TT=time.time()
 def check(amsg="string message"):

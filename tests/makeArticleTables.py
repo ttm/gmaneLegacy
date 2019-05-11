@@ -1,4 +1,4 @@
-import gmane as g, os, pickle, time as T, numpy as n
+import gmaneLegacy as g, os, pickle, time as T, numpy as n
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload

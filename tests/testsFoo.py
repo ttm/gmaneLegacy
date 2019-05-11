@@ -1,4 +1,4 @@
-import gmane as g, importlib
+import gmaneLegacy as g, importlib
 importlib.reload(g)
 importlib.reload(g.download)
 

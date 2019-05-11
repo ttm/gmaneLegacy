@@ -1,4 +1,4 @@
-import gmane as g, importlib
+import gmaneLegacy as g, importlib
 dl=g.DownloadGmaneData('~/.gmane2/')
 dl.downloadListIDS()
 #dl.getDownloadedLists()

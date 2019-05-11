@@ -1,4 +1,4 @@
-import gmane as g, os, pickle, time, numpy as n, nltk as k, sys
+import gmaneLegacy as g, os, pickle, time, numpy as n, nltk as k, sys
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload
@@ -76,7 +76,7 @@ calfas=[1.22,1.36,1.48,1.63,1.73,1.95]
 preambule1=r"""The number of comparisons is $N_c={}$,
 each with the sample size of $n=n'={}$.
 Each histogram have $N_b={}$ equally spaced bins.""".format(ND,NA,300)
-with f=open(TDIR2+"preambule1.tex","w"):
+with open(TDIR2+"preambule1.tex","w") as f:
     f.write(preambule1)
 
 check("antes")

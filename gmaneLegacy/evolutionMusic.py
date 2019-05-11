@@ -1,4 +1,4 @@
-import music as m, numpy as n, os, pickle
+import musicLegacy as m, numpy as n, os, pickle
 from .networkPartitioning import *
 UTILS=m.Utils()
 bt=m.BasicTables()

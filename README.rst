@@ -5,7 +5,7 @@ Python utilities for the analysis of the GMANE email list database
 This project delivers helper classes for the analysis of the GMANE
 email database. Install with:
 
-    $ pip install gmane
+    $ pip install gmaneLegacy
 
 or
 
@@ -13,7 +13,7 @@ or
 
 For greater control of customization (and debugging), clone the repo and install with pip with -e:
 
-    $ git clone https://github.com/ttm/gmane.git
+    $ git clone https://github.com/ttm/gmaneLegacy.git
 
     $ pip install -e <path_to_repo>
 
@@ -39,6 +39,9 @@ PS2.
 ongoing research in 
 tests/newTextTables.py and
 tests/makeOverallTextAnalysis.py
+PS.
+Also check the gmane Python package https://github.com/ttm/gmane
+
 
 Usage example
 =================

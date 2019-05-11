@@ -1,7 +1,7 @@
 # função que faz todas as etapas
 # de construção da rede
 # e entrega os objetos certinho
-import gmane as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os, langid, shutil
+import gmaneLegacy as g, time, numpy as n, re, nltk as k, collections as c, string, pickle, os, langid, shutil
 from nltk.corpus import wordnet as wn
 import builtins as B
 TT=time.time()

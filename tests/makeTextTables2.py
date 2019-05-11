@@ -19,7 +19,7 @@
 # renderizar 4 listas
 # avaliar fazer para mais listas para tirar médias e desvios
 
-import gmane as g, os, pickle, time, numpy as n, nltk as k, sys
+import gmaneLegacy as g, os, pickle, time, numpy as n, nltk as k, sys
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload

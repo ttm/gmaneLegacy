@@ -1,5 +1,5 @@
 import os
-import gmane as g
+import gmaneLegacy as g
 
 TDIR="/home/r/repos/artigoTextoNasRedes3/tables/SI2/"
 files=os.listdir(TDIR)

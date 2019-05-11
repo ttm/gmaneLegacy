@@ -1,4 +1,4 @@
-import time, numpy as n, gmane as g
+import time, numpy as n, gmaneLegacy as g
 from scipy import stats as st
 from .tableHelpers import lTable
 TT=time.time()

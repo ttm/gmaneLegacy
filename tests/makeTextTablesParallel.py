@@ -1,4 +1,4 @@
-import gmane as g, pickle, time, os, shutil
+import gmaneLegacy as g, pickle, time, os, shutil
 TT=time.time()
 def check(amsg="string message"):
     global TT

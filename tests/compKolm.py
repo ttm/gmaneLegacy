@@ -1,4 +1,4 @@
-import gmane as g, numpy as n
+import gmaneLegacy as g, numpy as n
 from scipy.stats import ks_2samp
 
 a=n.random.random(1000)

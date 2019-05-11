@@ -1,4 +1,4 @@
-import gmane as g, numpy as n, os, pylab as p
+import gmaneLegacy as g, numpy as n, os, pylab as p
 ENV=os.environ["PATH"]
 import  importlib
 from IPython.lib.deepreload import reload as dreload

@@ -1,4 +1,4 @@
-import gmane as g#, importlib
+import gmaneLegacy as g#, importlib
 import multiprocessing as mp
 from IPython.lib.deepreload import reload as dreload
 #importlib.reload(g)

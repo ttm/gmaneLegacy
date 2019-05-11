@@ -13,12 +13,12 @@ keys=tuple(sys.modules.keys())
 for key in keys:
     if ("gmane" in key):
         del sys.modules[key]
-    if ("music" in key):
+    if ("musicLegagy" in key):
         try:
             del sys.modules[key]
         except:
             pass
-import gmane as g, os, music as m
+import gmaneLegacy as g, os, musicLegacy as m
 
 #dl=g.DownloadGmaneData('/disco/.gmane2/')
 #dl.downloadedStats() # might take a while

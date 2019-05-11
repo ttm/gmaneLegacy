@@ -7,7 +7,7 @@
 #import percolation as P
 
 import datetime, os, shutil
-import percolation as P, gmane as G
+import percolation as P, gmaneLegacy as G
 import html.parser
 parser=html.parser.HTMLParser()
 U=parser.unescape

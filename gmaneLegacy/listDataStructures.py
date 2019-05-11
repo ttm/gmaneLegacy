@@ -1,5 +1,5 @@
 import dateutil.parser, parsedatetime as pdt, pytz
-import percolation as P, gmane as G
+import percolation as P, gmaneLegacy as G
 parser=pdt.Calendar()
 c=P.check
 class ListDataStructures:

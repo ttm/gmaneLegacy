@@ -1,5 +1,5 @@
 import os
-import gmane as g
+import gmaneLegacy as g
 from collections import OrderedDict
 
 TDIR="/home/r/repos/artigoTextoNasRedes3/tables/SI2/"

@@ -1,7 +1,7 @@
 import  importlib
 import multiprocessing as mp
 from IPython.lib.deepreload import reload as dreload
-import gmane as g
+import gmaneLegacy as g
 importlib.reload(g.listDataStructures)
 importlib.reload(g.loadMessages)
 importlib.reload(g.interactionNetwork)
